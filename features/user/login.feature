@@ -1,6 +1,9 @@
 @admin
 Feature: User logs in
   
+  As a user I want to be able to login with my email and password, so that I 
+  don't need to remember yet another account name.
+  
   Background:
     Given user A with email "test@tester.com" and password "tester" exists
   

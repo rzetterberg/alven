@@ -1,6 +1,10 @@
 @admin
 Feature: User logs out
   
+  As a user I want to be able to log out from the admin interface when I'm 
+  done using it, so that no unauthorized person can edit my website on my 
+  computer.
+  
   Background:
     Given user A exists
   

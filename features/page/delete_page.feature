@@ -1,5 +1,8 @@
 @admin
 Feature: Delete page
+  
+  As a user I want to be able to delete pages so that obsolete ones doesn't
+  remains as clutter.
 
   Background:
     Given page A with slug "page_a" exists
