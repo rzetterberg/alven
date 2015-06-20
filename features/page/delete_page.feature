@@ -1,19 +1,17 @@
+@admin
 Feature: Delete page
 
   Background:
-    Given a page with slug "test", title "Test" and content "Testtest" exists
+    Given page A with slug "page_a" exists
   
   @todo
-  Scenario: Delete page
-    When I try to delete the "test" page 
-    Then I should see a confirm delete prompt
+  Scenario: Confirm delete page
+    When I try to delete page A
+    And I confirm the delete prompt
+    Then I should see a successful delete message
 
   @todo
-  Scenario: Accept confirm delete prompt
-    When I accept a delete confirm prompt
-    Then I should see a success message
-
-  @todo
-  Scenario: Cancel confirm delete prompt 
-    When I cancel a delete confirm prompt
-    Then I should be redirected to the list page
+  Scenario: Confirm delete page
+    When I try to delete page A
+    And I cancel the delete prompt
+    Then I be redirected to the page list

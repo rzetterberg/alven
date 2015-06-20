@@ -1,3 +1,4 @@
+@admin
 Feature: User logs out
   
   Background:

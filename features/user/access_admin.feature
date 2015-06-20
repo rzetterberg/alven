@@ -1,3 +1,4 @@
+@admin
 Feature: User accesses admin interface
   
   Background:
