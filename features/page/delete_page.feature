@@ -9,11 +9,11 @@ Feature: Delete page
     Then I should see a confirm delete prompt
 
   @todo
-  Scenario: Confirm delete page
+  Scenario: Accept confirm delete prompt
     When I accept a delete confirm prompt
     Then I should see a success message
 
   @todo
-  Scenario: Cancel delete page
+  Scenario: Cancel confirm delete prompt 
     When I cancel a delete confirm prompt
     Then I should be redirected to the list page
