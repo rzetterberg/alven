@@ -13,4 +13,4 @@ Feature: User logs in
   Scenario: Authenticated visits login page
     Given I am authenticated as user A
     When I visit the login page
-    Then I should be redirected to the amdin index page
+    Then I should be redirected to the admin index page
