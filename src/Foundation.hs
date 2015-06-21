@@ -189,8 +189,6 @@ instance YesodAuthEmail App where
 
     afterPasswordRoute _ = HomeR
 
-    registerHandler = lift $ redirect HomeR
-
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.
 instance RenderMessage App FormMessage where
