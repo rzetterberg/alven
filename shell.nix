@@ -8,7 +8,7 @@ let
   env    = pkgs.haskellngPackages.ghcWithPackages (p: with p; [
     aeson base bytestring cabal-install classy-prelude classy-prelude-conduit
     classy-prelude-yesod conduit containers data-default directory esqueleto
-    fast-logger file-embed hjsmin hspec http-conduit markdown monad-control
+    fast-logger file-embed hjsmin hslua hspec http-conduit markdown monad-control
     monad-logger persistent persistent-postgresql persistent-template process
     resourcet safe shakespeare template-haskell text time unordered-containers
     vector wai-extra wai-logger warp yaml yesod yesod-auth yesod-bin yesod-core
