@@ -1,0 +1,34 @@
+<h2>_{MsgPages}
+
+<p>
+    <a ."btn btn-success" href=@{PageCreateR}>
+      _{MsgNewPage}
+
+<hr>
+
+$if null allPages
+  <p>_{MsgNoPages}
+$else
+  <table ."table table-striped">
+    <thead>
+      <tr>
+        <th ."col-lg-1 visible-lg visible-md">_{MsgId}
+        <th ."col-lg-8 col-xs-6">_{MsgName}
+        <th ."col-lg-1 col-xs-2">
+        <th ."col-lg-1 col-xs-2">
+        <th ."col-lg-1 col-xs-2">
+    <tbody>
+      $forall Entity itemId item <- allPages
+        <tr>
+          <td ."visible-lg visible-md">#{fromSqlKey itemId}
+          <td>#{textPageName item}
+          <td>
+            <a ."btn btn-default btn-block" href=@{PageViewR (textPagePermalink item)}>
+              _{MsgView}
+          <td>
+            <a ."btn btn-info btn-block" href=@{PageEditR itemId}>
+              _{MsgEdit}
+          <td>
+            $if itemId /= firstPageId
+              <form method=post action=@{PageRemoveConfirmR itemId}>
+                <input type="submit" ."btn btn-danger btn-block" value="_{MsgRemove}">

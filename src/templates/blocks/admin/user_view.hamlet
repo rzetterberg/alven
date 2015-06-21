@@ -1,0 +1,28 @@
+<h2>_{MsgUser}
+
+<p>
+    <a ."btn btn-info" href=@{UserEditR userId}>
+      _{MsgEditUser}
+
+<table ."table responsive">
+  <tbody>
+    <tr>
+      <td>  
+        <strong>_{MsgEmail}
+      <td>#{userEmail user}
+    <tr>
+      <td>  
+        <strong>_{MsgIsVerified}
+      <td>
+        $if (userVerified user)
+            _{MsgYes}
+        $else
+            _{MsgNo}
+    <tr>
+      <td>  
+        <strong>_{MsgIsAdmin}
+      <td>
+        $if (userAdmin user)
+            _{MsgYes}
+        $else
+            _{MsgNo}

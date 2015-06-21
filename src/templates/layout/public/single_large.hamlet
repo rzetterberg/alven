@@ -1,0 +1,14 @@
+<div #wrapper>
+  <div #content>
+    <div .container>
+      <div .row>
+        <div .col-lg-12>
+          ^{content}
+  <div #footer>
+    <div .container>
+      <div .row>
+        <div .col-lg-12>
+          $maybe _ <- userM
+            <a ."btn btn-info" href=@{AdminR}>_{MsgAdmin}
+          $nothing
+            <a ."btn btn-info" href=@{AuthR LoginR}>_{MsgLogin}

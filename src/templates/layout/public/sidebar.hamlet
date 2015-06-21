@@ -1,0 +1,22 @@
+<div #wrapper>
+  <div #header>
+    <div .container>
+      <div .row>
+        <div .col-lg-12>
+          <h1>
+            <a href=@{HomeR}>Logotype
+  <div #content>
+    <div .container>
+      <div .row>
+        <div .col-lg-8>
+          ^{content}
+        <div .col-lg-4>
+          Sidebar not implemented yet
+  <div #footer>
+    <div .container>
+      <div .row>
+        <div .col-lg-12>
+          $maybe _ <- userM
+            <a ."btn btn-info" href=@{AdminR}>_{MsgAdmin}
+          $nothing
+            <a ."btn btn-info" href=@{AuthR LoginR}>_{MsgLogin}

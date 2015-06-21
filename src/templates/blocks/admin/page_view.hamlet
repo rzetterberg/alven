@@ -1,0 +1,14 @@
+<h2>_{MsgPage}
+
+<p>
+    <a ."btn btn-info" href=@{PageEditR pageId}>
+      _{MsgEditPage}
+
+<p>
+  <strong>_{MsgName}:
+  #{textPageName page}
+
+<hr>
+    
+<div ."#{previewClass} well">
+  #{textPageBody page}

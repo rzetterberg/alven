@@ -1,0 +1,146 @@
+name:              kael
+version:           0.1.0
+cabal-version:     >= 1.8
+build-type:        Simple
+
+Flag dev
+    Description:   Turn on development settings, like auto-reload templates.
+    Default:       False
+
+Flag library-only
+    Description:   Build for use with "yesod devel"
+    Default:       False
+
+library
+    hs-source-dirs: ., app
+    exposed-modules: Application
+                     Foundation
+                     Handler.Admin
+                     Handler.Admin.Page
+                     Handler.Admin.User
+                     Handler.Common
+                     Handler.Public.Home
+                     Handler.Public.Page
+                     Import
+                     Import.NoFoundation
+                     Layout.Admin
+                     Layout.Public
+                     Layout.Util
+                     Model
+                     Settings
+                     Settings.StaticFiles
+
+    if flag(dev) || flag(library-only)
+        cpp-options:   -DDEVELOPMENT
+        ghc-options:   -Wall -fwarn-tabs -O0
+    else
+        ld-options:    -static -pthread
+        ghc-options:   -Wall -fwarn-tabs -O2
+
+    extensions: CPP
+                DeriveDataTypeable
+                EmptyDataDecls
+                FlexibleContexts
+                FlexibleInstances
+                GADTs
+                GeneralizedNewtypeDeriving
+                MultiParamTypeClasses
+                NoImplicitPrelude
+                NoMonomorphismRestriction
+                OverloadedStrings
+                QuasiQuotes
+                RecordWildCards
+                ScopedTypeVariables
+                TemplateHaskell
+                TupleSections
+                TypeFamilies
+                ViewPatterns
+
+    build-depends: base                          
+                 , aeson
+                 , bytestring
+                 , blaze-markup
+                 , classy-prelude
+                 , classy-prelude-conduit
+                 , classy-prelude-yesod
+                 , conduit
+                 , containers
+                 , data-default
+                 , directory
+                 , esqueleto
+                 , fast-logger
+                 , file-embed
+                 , hjsmin
+                 , http-conduit
+                 , markdown
+                 , monad-control
+                 , monad-logger
+                 , persistent
+                 , persistent-postgresql
+                 , persistent-template
+                 , process
+                 , safe
+                 , shakespeare
+                 , template-haskell
+                 , text
+                 , time
+                 , unordered-containers
+                 , vector
+                 , wai-extra
+                 , wai-logger
+                 , warp
+                 , yaml
+                 , yesod
+                 , yesod-auth
+                 , yesod-core
+                 , yesod-form
+                 , yesod-text-markdown
+                 , yesod-static
+
+executable kael
+    if flag(library-only)
+        Buildable: False
+
+    main-is:           main.hs
+    hs-source-dirs:    app
+    build-depends:     base, kael
+
+    ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
+
+test-suite test
+    type:              exitcode-stdio-1.0
+    main-is:           Spec.hs
+    hs-source-dirs:    test
+    ghc-options:       -Wall
+
+    extensions: TemplateHaskell
+                QuasiQuotes
+                OverloadedStrings
+                NoImplicitPrelude
+                CPP
+                MultiParamTypeClasses
+                TypeFamilies
+                GADTs
+                GeneralizedNewtypeDeriving
+                FlexibleContexts
+                EmptyDataDecls
+                NoMonomorphismRestriction
+                DeriveDataTypeable
+                ViewPatterns
+                TupleSections
+
+    build-depends: aeson
+                 , base
+                 , classy-prelude
+                 , classy-prelude-yesod
+                 , hspec
+                 , monad-logger
+                 , persistent
+                 , persistent-postgresql
+                 , resourcet
+                 , kael
+                 , transformers
+                 , wai-extra
+                 , yesod
+                 , yesod-core
+                 , yesod-test

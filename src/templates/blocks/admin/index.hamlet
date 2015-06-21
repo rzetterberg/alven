@@ -1,0 +1,5 @@
+<h2>_{MsgAdmin}
+
+<p>
+    <a ."btn btn-default" href=@{UserListR}>_{MsgUsers}
+    <a ."btn btn-default" href=@{PageListR}>_{MsgPages}

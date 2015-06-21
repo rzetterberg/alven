@@ -1,0 +1,21 @@
+<div #wrapper>
+  <div #header>
+    <div .container>
+      <div .row>
+        <div .col-lg-6>
+          <h1>
+            <a href=@{AdminR}>Logotype
+        <div .col-lg-6>
+          <a ."btn btn-info pull-right" href=@{AuthR LogoutR}>_{MsgLogout}
+  <div #content>
+    <div .container>
+      <div .row>
+        <div .col-lg-12>
+          <ol .breadcrumb>
+            $forall bc <- parentCrumbs
+              <li>
+                <a href=@{fst bc}>#{snd bc}
+            <li ."active">
+              #{currCrumb}
+          ^{alert}
+          ^{content}

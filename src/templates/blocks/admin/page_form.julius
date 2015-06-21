@@ -1,0 +1,143 @@
+/* Provides preview functionality for all markdown textareas on the current 
+ * page with the class name PREVIEW_CLS.
+ * 
+ * Does so by adding a small navbar just above each textarea with a "Write" and
+ * "Preview" button. When the "Preview" button is pressed the textarea is hidden
+ * and a Bootstrap well with the rendered HTML is shown. And the opposite when 
+ * the "Write" button is pressed.
+ */
+
+/* =============================================================================
+   | Constants
+*/
+
+// Class name of textareas that functionality will be applied to
+var PREVIEW_CLS  = "markdown-preview";
+
+// Class name of the rendered HTML container
+var RENDERED_CLS = PREVIEW_CLS + "-rendered";
+
+// Translations
+var MsgWrite   = #{msgRender MsgWrite};
+var MsgPreview = #{msgRender MsgPreview};
+
+/* =============================================================================
+   | DOM manipulators
+*/
+
+/* Changes activated button in the given ul to the given li
+ */
+function activate_nav_btn(ul, li) {
+    for (var i = 0; i < ul.childNodes.length; i++)
+        ul.childNodes[i].removeAttribute("class");
+
+    li.className = "active";
+}
+
+/* Removes all rendered preview containers that belongs to the given markdown 
+ * textarea.
+ */
+function destroy_rendered_preview(md_textarea) {
+    var previews = md_textarea.parentNode.getElementsByClassName(RENDERED_CLS);
+
+    while (previews[0])
+        previews[0].parentNode.removeChild(previews[0]);
+}
+
+/* =============================================================================
+   | Event handlers
+*/
+
+/* Event handler for when the write button is clicked. Wraps the event handler
+ * to supply the relevant markdown textarea and the ul navbar.
+ * 
+ * Hides the well with the rendered HTML (if it exists) and shows the markdown 
+ * textarea. 
+ */
+function click_write(md_textarea, ul) {
+    return function(e) {
+        e.preventDefault();
+        activate_nav_btn(ul, e.target.parentNode);
+
+        destroy_rendered_preview(md_textarea);
+
+        md_textarea.style.display = "block";
+    }
+}
+
+/* Event handler for when the preview button is clicked. Wraps the event handler
+ * to supply the relevant markdown textarea and the ul navbar.
+ * 
+ * Hides the markdown textarea, renders the markdown and shows a well with the 
+ * rendered HTML.
+ */
+function click_preview(md_textarea, ul) {
+    return function(e) {
+        e.preventDefault();
+        activate_nav_btn(ul, e.target.parentNode);
+
+        add_rendered_preview(md_textarea);
+
+        md_textarea.style.display = "none";
+    }
+}
+
+/* =============================================================================
+   | DOM renderers
+*/
+
+function add_rendered_preview(md_textarea) {
+    var div = document.createElement("div");
+
+    // provided by the marked plugin: https://github.com/chjj/marked
+    div.innerHTML = marked(md_textarea.value);
+    div.className = RENDERED_CLS + " well";
+
+    md_textarea.parentNode.insertBefore(div, md_textarea);
+}
+
+/* Adds a navigation button to the given ul, along with a label, a callback for 
+ * when the button is clicked and whether the button should be marked as active.
+ */
+function add_nav_btn(ul, label, click_callback, is_active) {
+    var li = document.createElement("li");
+    var a  = document.createElement("a");
+
+    li.className = is_active ? "active" : "";
+    li.setAttribute("role", "presentation");
+
+    a.setAttribute("href", "#");
+    a.innerHTML = label;
+    a.addEventListener("click", click_callback, false);
+
+    li.appendChild(a);
+    ul.appendChild(li);
+}
+
+/* Adds a navigation bar between writing markdown and previewing it. The bar
+ * will be added just above the markdown textarea.
+ */
+function add_nav(md_textarea) {
+    var ul = document.createElement("ul");
+
+    ul.className = "nav nav-pills";
+
+    add_nav_btn(ul, MsgWrite, click_write(md_textarea, ul), true);
+    add_nav_btn(ul, MsgPreview, click_preview(md_textarea, ul), false);
+
+    md_textarea.parentNode.insertBefore(ul, md_textarea);
+}
+
+/* =============================================================================
+   | Init
+*/
+
+var previews = document.getElementsByClassName(PREVIEW_CLS);
+
+for (var i = 0; i < previews.length; i++) {
+    previews[i].style.minHeight = "0px";
+    add_nav(previews[i]);
+}
+
+// Provided by the autosize plugin: https://github.com/jackmoore/autosize
+autosize(previews);

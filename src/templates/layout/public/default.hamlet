@@ -1,0 +1,12 @@
+<div #wrapper>
+  <div #header>
+    <div .container>
+      <div .row>
+        <div .col-lg-12>
+          <h1>
+            <a href=@{HomeR}>Logotype
+  <div #content>
+    <div .container>
+      <div .row>
+        <div .col-lg-12>
+          ^{content}

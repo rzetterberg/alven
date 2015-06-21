@@ -1,0 +1,18 @@
+User
+    email Text
+    password Text Maybe
+    verkey Text Maybe
+    verified Bool
+    admin Bool
+    UniqueUser email
+    deriving Typeable
+
+TextPage
+    name Text
+    permalink Text
+    body Markdown
+    public Bool
+    parent TextPageId Maybe
+    UniquePageName name
+    UniquePageLink permalink
+    deriving Typeable

@@ -1,0 +1,12 @@
+table { table-layout: fixed; }
+table th, table td { overflow: hidden; }
+
+#header {
+  background: #efefef;
+  padding: 10px 0 10px 0;
+  border-bottom: 1px solid #eeeeee;
+
+  h1 {
+    margin: 0;
+  }
+}

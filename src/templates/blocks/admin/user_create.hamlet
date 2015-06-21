@@ -1,0 +1,4 @@
+<h2>_{MsgCreateUser}
+
+<form role=form method=post action=@{UserCreateR} enctype=#{encType}>
+  ^{form}

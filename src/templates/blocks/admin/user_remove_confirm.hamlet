@@ -1,0 +1,6 @@
+<h2>_{MsgRemoveUser}
+
+<p>_{MsgSureRemoveUser (userEmail user)}
+
+<form method=post action=@{UserRemoveR userId}>
+  <input type="submit" ."btn btn-danger" value="_{MsgYes}">
