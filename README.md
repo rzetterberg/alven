@@ -2,14 +2,13 @@
 
 `Kael` is a CMS which core functionality is written in
 [Haskell](https://www.haskell.org) and exposes a [Lua](http://www.lua.org) API
-that allows users to define user interface and business logic in Lua, HTML,
-Javacript and CSS.
+that allows users to write themes in Lua, HTML, CSS and Javascript.
 
 The main goals of the project are:
 
-- Performant
-- Well documented
-- Stable
+- Is fun to use
+- Is stable
+- Built using modern technology
 
 ## Features
 
