@@ -1,17 +1,10 @@
 module Handler.Public.Page where
 
-import           Control.Concurrent (forkFinally)
 import qualified Data.Text as T
 import           Foreign.C.Types (CInt)
 import           Import
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
-
-data ThemeResult
-    = ThemeSuccess String
-    | ThemeFailure String
-    | ThemeRunning
-      deriving (Show)
 
 -------------------------------------------------------------------------------
 
@@ -25,40 +18,32 @@ getPageViewR permalink = do
 
     when (isNotPublic && isNotLoggedIn) notFound
 
-    result <- liftIO $ do
-        tres <- newEmptyMVar
-
-        void $ forkFinally (runThemeScript page tres) (checkResult tres)
-
-        readMVar tres
+    result <- liftIO $ runThemeScript page
 
     return $ case result of
-        ThemeSuccess outp -> toHtml outp
-        ThemeFailure errm -> error errm
-        ThemeRunning      -> error "Thread error"
-
-  where
-    checkResult tres (Left e) = putMVar tres $ ThemeFailure (show e)
-    checkResult _ (Right _)   = return ()
+        Left errm  -> error errm
+        Right outp -> toHtml outp
 
 --------------------------------------------------------------------------------
 -- * Lua functionality
 
 -- | Runs a theme script and puts the result in the given result MVar. Should be
 --   run as a separate thread since the working directory is changed.
-runThemeScript :: TextPage -> MVar ThemeResult -> IO ()
-runThemeScript page result = do
+runThemeScript :: TextPage -> IO (Either String String)
+runThemeScript page = do
     outputRef <- newIORef ""
     lstate    <- Lua.newstate
 
     Lua.openlibs lstate
+
+    addThemePaths lstate
     
     Lua.registerrawhsfunction lstate "print"
         (collectPrint outputRef)
     Lua.registerrawhsfunction lstate "get_current_page"
         (getCurrentPage page)
 
-    Lua.loadfile lstate "output.lua"
+    Lua.loadfile lstate "test/lua/output.lua"
         >>= runScript lstate outputRef
   where
     runScript lstate outputRef loadResult
@@ -66,17 +51,16 @@ runThemeScript page result = do
                             >>= handleResult lstate outputRef
         | otherwise = do
            Lua.close lstate
-           putMVar result $ ThemeFailure "Could not load theme file"
+           return $ Left "Could not load theme file"
     handleResult lstate outputRef runResult
         | runResult == 0 = do
             Lua.close lstate
-            output <- readIORef outputRef
-            putMVar result $ ThemeSuccess output
+            readIORef outputRef >>= return . Right
         | otherwise = do
             errorMessage <- Lua.tostring lstate 1
             Lua.pop lstate 1
             Lua.close lstate
-            putMVar result $ ThemeFailure errorMessage
+            return $ Left errorMessage
 
 -- | Used to redefine Luas global print function to save output into a buffer
 -- instead, so that the data can be accessed later via an `IORef`.
@@ -102,3 +86,16 @@ getCurrentPage TextPage{..} lstate = do
     Lua.setfield lstate (-2) "body"
 
     return 1
+
+addThemePaths :: LuaState -> IO ()
+addThemePaths lstate = do
+    Lua.getglobal lstate "package"
+    Lua.getfield lstate (-1) "path"
+
+    currPath <- Lua.tostring lstate (-1)
+
+    Lua.pop lstate 1
+
+    Lua.pushstring lstate $ currPath ++ ";./test/lua/?.lua;./test/lua/?/?.lua"
+    Lua.setfield lstate (-2) "path"
+    Lua.pop lstate 1
