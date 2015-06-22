@@ -21,10 +21,10 @@ getPageViewR permalink = do
         res <- liftIO $ runPageTheme page
 
         return $ case res of
-            Nothing -> toHtml ("Error in Lua!" :: String)
-            Just d  -> toHtml d
+            Left errMsg -> error errMsg
+            Right outp  -> toHtml outp
 
-runPageTheme :: TextPage -> IO (Maybe String)
+runPageTheme :: TextPage -> IO (Either String String)
 runPageTheme page = do
     outputRef <- newIORef ""
     lstate    <- Lua.newstate
@@ -35,16 +35,26 @@ runPageTheme page = do
     Lua.registerrawhsfunction lstate "get_current_page"
         (getCurrentPage page)
 
-    res <- Lua.loadfile lstate "test/lua/output.lua" >>= go lstate
+    loadRes <- Lua.loadfile lstate "test/lua/output.lua" 
+
+    when (loadRes /= 0) $ Lua.close lstate >> error "Could not load file"
+
+    callRes <- Lua.pcall lstate 0 0 0
+
+    ret <- if callRes /= 0
+       then extractErrorMessage lstate
+       else readIORef outputRef >>= return . Right
 
     Lua.close lstate
-       
-    if res /= 0
-       then return Nothing
-       else readIORef outputRef >>= return . Just
+
+    return ret
   where
-    go lstate 0 = Lua.pcall lstate 0 Lua.multret 0
-    go _ _      = return 1
+    extractErrorMessage lstate = do
+        errMsg <- Lua.tostring lstate 1
+
+        Lua.pop lstate 1
+
+        return $ Left errMsg
 
 --------------------------------------------------------------------------------
 -- * Lua functions
