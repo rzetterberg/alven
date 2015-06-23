@@ -1,4 +1,4 @@
-FROM haskell:7.8
+FROM debian:jessie
 
 RUN mkdir /opt/kael
 ADD ./src/cabal.config /opt/kael/
@@ -13,3 +13,5 @@ RUN cd /opt/kael && cabal install yesod-bin -j --verbose=3
 ENV PATH /root/.cabal/bin:$PATH
 
 WORKDIR /opt/kael
+
+EXPOSE 3000
