@@ -2,6 +2,7 @@ module Foundation where
 
 import           Import.NoFoundation
 import           Database.Persist.Sql (ConnectionPool, runSqlPool)
+import           Control.Monad.Logger (LoggingT, runLoggingT)
 import           Text.Hamlet          (hamletFile)
 import           Text.Lucius          (luciusFile)
 import           Text.Jasmine         (minifym)
@@ -236,3 +237,16 @@ buildLayout widget = do
         widget
 
     withUrlRenderer $(hamletFile "templates/base.hamlet")
+
+type IORunner =  forall (m :: * -> *) a. MonadBaseControl IO m
+              => SqlPersistT (Control.Monad.Logger.LoggingT m) a
+              -> m a
+
+runIO :: forall (m :: * -> *) a. MonadBaseControl IO m
+      => App
+      -> SqlPersistT (Control.Monad.Logger.LoggingT m) a
+      -> m a
+runIO master@App{..} action = do
+    let logFunc = messageLoggerSource master appLogger
+
+    runLoggingT (runSqlPool action appConnPool) logFunc

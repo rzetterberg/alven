@@ -1,12 +1,8 @@
-{-# LANGUAGE RankNTypes #-}
-
 module Handler.Public.Page where
 
-import           Control.Monad.Logger (LoggingT, runLoggingT)
-import           Database.Persist.Sql (runSqlPool)
 import qualified Data.Text as T
 import           Foreign.C.Types (CInt)
-import           Import hiding (DBRunner)
+import           Import 
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 
@@ -15,31 +11,18 @@ import           Scripting.Lua (LuaState)
 getPageViewR :: Text -> Handler Html
 getPageViewR permalink = do
     master <- getYesod
-    result <- liftIO $ runThemeScript permalink (runIODB master)
+    result <- liftIO $ runThemeScript permalink (runIO master)
 
     return $ case result of
         Left errm  -> error errm
         Right outp -> toHtml outp
-
-type DBRunner =  forall (m :: * -> *) a. MonadBaseControl IO m
-              => SqlPersistT (Control.Monad.Logger.LoggingT m) a
-              -> m a
-
-runIODB :: forall (m :: * -> *) a. MonadBaseControl IO m
-        => App
-        -> SqlPersistT (Control.Monad.Logger.LoggingT m) a
-        -> m a
-runIODB master@App{..} action = do
-    let logFunc = messageLoggerSource master appLogger
-
-    runLoggingT (runSqlPool action appConnPool) logFunc
 
 --------------------------------------------------------------------------------
 -- * Lua functionality
 
 -- | Runs a theme script and puts the result in the given result MVar. Should be
 --   run as a separate thread since the working directory is changed.
-runThemeScript :: Text -> DBRunner -> IO (Either String String)
+runThemeScript :: Text -> IORunner -> IO (Either String String)
 runThemeScript permalink dbRunner = do
     outputRef <- newIORef ""
     lstate    <- Lua.newstate
@@ -82,7 +65,7 @@ collectPrint outputRef lstate = do
 
     return 0
 
-getCurrentPage :: DBRunner -> Text -> LuaState -> IO CInt
+getCurrentPage :: IORunner -> Text -> LuaState -> IO CInt
 getCurrentPage dbRunner permalink lstate = do
     pageM <- dbRunner $ getBy (UniquePageLink permalink)
 

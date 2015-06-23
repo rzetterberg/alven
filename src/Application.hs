@@ -147,10 +147,16 @@ appMain = do
     -- Run the application with Warp
     runSettings (warpSettings foundation) app
 
+--------------------------------------------------------------
+-- Database interaction outside handlers
+--------------------------------------------------------------
+
+    
 
 --------------------------------------------------------------
 -- Functions for DevelMain.hs (a way to run the app from GHCi)
 --------------------------------------------------------------
+
 getApplicationRepl :: IO (Int, App, Application)
 getApplicationRepl = do
     settings <- getAppSettings
