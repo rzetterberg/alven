@@ -8,7 +8,7 @@ if page == nil then
    }
 end
    
-template = load_template("base.mustache")
+template = read_theme_file("base.mustache")
 output   = lustache:render(template, page)
 
 print(output)

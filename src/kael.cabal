@@ -26,6 +26,8 @@ library
                      Layout.Admin
                      Layout.Public
                      Layout.Util
+                     Lua.API
+                     Lua.Run
                      Model
                      Settings
                      Settings.StaticFiles
