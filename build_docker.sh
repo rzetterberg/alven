@@ -17,4 +17,5 @@ function build_container {
 }
 
 build_container "kael/builder" "builder.docker"
+build_container "kael/tester" "tester.docker"
 build_container "kael/db" "db.docker"
