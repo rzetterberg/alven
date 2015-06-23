@@ -4,6 +4,7 @@ import           Import
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 import qualified Lua.API as API
+import           Filesystem.Path.CurrentOS (encodeString)
 
 -------------------------------------------------------------------------------
 
@@ -21,20 +22,16 @@ runThemeScript permalink dbRunner = do
     Lua.openlibs lstate
 
     addThemePaths lstate
+    registerAPIFunctions lstate permalink dbRunner outputRef
 
-    let exports = [ ("print"           , API.collectPrint outputRef)
-                  , ("get_current_page", API.getCurrentPage dbRunner permalink)
-                  , ("read_theme_file" , API.readThemeFile)
-                  ]
+    let mainScript = themeDir </> "main.lua"
 
-    forM_ exports $ \(n, f) -> Lua.registerrawhsfunction lstate n f
-
-    Lua.loadfile lstate (themeDir ++ "main.lua")
+    Lua.loadfile lstate (encodeString mainScript)
         >>= runScript lstate outputRef
   where
     runScript lstate outputRef loadResult
-        | loadResult == 0 = Lua.pcall lstate 0 0 0
-                            >>= handleResult lstate outputRef
+        | loadResult == 0 =   Lua.pcall lstate 0 0 0
+                          >>= handleResult lstate outputRef
         | otherwise = do
            Lua.close lstate
            return $ Left "Could not load theme file"
@@ -63,10 +60,33 @@ addThemePaths lstate = do
 
     currPath <- Lua.tostring lstate (-1)
 
+    let tdir    = encodeString themeDir
+        newPath =  currPath ++ ";"
+                ++ "./" ++ tdir ++ "/?.lua;"
+                ++ "./" ++ tdir ++ "/?/?.lua"
+
+    print newPath
+
     Lua.pop lstate 1
-    Lua.pushstring lstate $  currPath ++ ";"
-                          ++ "./" ++ themeDir ++ "/?.lua;"
-                          ++ "./" ++ themeDir ++ "/?/?.lua"
+    Lua.pushstring lstate newPath
 
     Lua.setfield lstate (-2) "path"
     Lua.pop lstate 1
+
+{-|
+Register all API functions in the current state see "Lua.API" for each
+function registered.
+-}
+registerAPIFunctions :: LuaState
+                     -> Text
+                     -> IORunner
+                     -> IORef String
+                     -> IO ()
+registerAPIFunctions lstate permalink dbRunner outputRef
+    = forM_ funcs $ \(n, f) -> Lua.registerrawhsfunction lstate n f
+  where
+    funcs = [ ("print"           , API.collectPrint outputRef)
+            , ("get_current_page", API.getCurrentPage dbRunner permalink)
+            , ("read_theme_file" , API.readThemeFile)
+            ]
+

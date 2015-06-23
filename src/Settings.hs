@@ -133,5 +133,6 @@ combineScripts = combineScripts'
     (appSkipCombining compileTimeAppSettings)
     combineSettings
 
-themeDir :: String
-themeDir = "./static/theme/"
+-- | The dir where the current Lua theme is situated
+themeDir :: FilePath
+themeDir = "static/theme"

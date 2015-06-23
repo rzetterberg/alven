@@ -65,9 +65,9 @@ readThemeFile :: LuaState -> IO CInt
 readThemeFile lstate = do
     relPath <- Lua.tostring lstate 1
 
-    let absPath = themeDir ++ relPath
+    let absPath = themeDir </> (fromString relPath)
     
-    templateM <- try $ readFile (fromString absPath)
+    templateM <- try $ readFile absPath
 
     checkResult templateM
   where

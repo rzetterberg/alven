@@ -86,6 +86,7 @@ library
                  , process
                  , safe
                  , shakespeare
+                 , system-filepath
                  , template-haskell
                  , text
                  , time
