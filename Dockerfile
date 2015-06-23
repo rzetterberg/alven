@@ -1,0 +1,15 @@
+FROM haskell:7.8
+
+RUN mkdir /opt/kael
+ADD ./src/cabal.config /opt/kael/
+ADD ./src/kael.cabal /opt/kael/
+
+RUN apt-get update --fix-missing && apt-get install libpq-dev -y
+
+RUN cabal update
+RUN cd /opt/kael && cabal install --only-dependencies -j --verbose=3
+RUN cd /opt/kael && cabal install yesod-bin -j --verbose=3
+
+ENV PATH /root/.cabal/bin:$PATH
+
+WORKDIR /opt/kael
