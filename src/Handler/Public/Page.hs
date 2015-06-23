@@ -36,6 +36,8 @@ runThemeScript permalink dbRunner = do
         (collectPrint outputRef)
     Lua.registerrawhsfunction lstate "get_current_page"
         (getCurrentPage dbRunner permalink)
+    Lua.registerrawhsfunction lstate "load_template"
+        loadTemplate
 
     Lua.loadfile lstate "test/lua/output.lua"
         >>= runScript lstate outputRef
@@ -90,6 +92,17 @@ getCurrentPage dbRunner permalink lstate = do
         Lua.setfield lstate (-2) "body"
 
         return 1
+
+loadTemplate :: LuaState -> IO CInt
+loadTemplate lstate = do
+    templatePath <- Lua.tostring lstate 1
+    templateM    <- try $ readFile (fromString templatePath)
+
+    checkResult templateM
+  where
+    checkResult :: Either SomeException String -> IO CInt
+    checkResult (Left _)  = return 0
+    checkResult (Right t) = Lua.pushstring lstate t >> return 1
 
 addThemePaths :: LuaState -> IO ()
 addThemePaths lstate = do

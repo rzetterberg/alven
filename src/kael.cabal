@@ -55,7 +55,7 @@ library
                 TupleSections
                 TypeFamilies
                 ViewPatterns
-                RankNTypes
+                Rank2Types
 
     build-depends: base                          
                  , aeson

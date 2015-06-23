@@ -1,7 +1,7 @@
 local lustache = require "lustache"
 
-p = get_current_page()
-
-output = lustache:render("<h1>{{name}}</h1>{{&body}}", p)
+page     = get_current_page()
+template = load_template("test/lua/base.mustache")
+output   = lustache:render(template, page)
 
 print(output)
