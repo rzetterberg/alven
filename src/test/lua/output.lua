@@ -1,21 +1,7 @@
-print("Sending data back to haskell\n")
-print("Hello!\n")
-print("How are you today?")
+local lustache = require "lustache"
 
 p = get_current_page()
 
-print(p["name"])
-print(p["body"])
-
-local lustache = require "lustache"
-
-view_model = {
-  title = "Joe",
-  calc = function ()
-    return 2 + 4
-  end
-}
-
-output = lustache:render("{{title}} spends {{calc}}", view_model)
+output = lustache:render("<h1>{{name}}</h1>{{&body}}", p)
 
 print(output)
