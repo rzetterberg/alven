@@ -3,6 +3,7 @@ module Handler.Public.Page where
 import qualified Data.Text as T
 import           Foreign.C.Types (CInt)
 import           Import 
+import           Text.Blaze.Html.Renderer.String (renderHtml)
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 
@@ -15,7 +16,7 @@ getPageViewR permalink = do
 
     return $ case result of
         Left errm  -> error errm
-        Right outp -> toHtml outp
+        Right outp -> preEscapedToMarkup outp
 
 --------------------------------------------------------------------------------
 -- * Lua functionality
@@ -83,7 +84,9 @@ getCurrentPage dbRunner permalink lstate = do
         Lua.pushstring lstate (T.unpack textPagePermalink)
         Lua.setfield lstate (-2) "permalink"
 
-        Lua.pushstring lstate "Not implemented yet"
+        let tbody = renderHtml $ toHtml textPageBody
+
+        Lua.pushstring lstate tbody
         Lua.setfield lstate (-2) "body"
 
         return 1

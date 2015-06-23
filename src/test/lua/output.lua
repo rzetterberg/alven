@@ -5,6 +5,7 @@ print("How are you today?")
 p = get_current_page()
 
 print(p["name"])
+print(p["body"])
 
 local lustache = require "lustache"
 

@@ -61,6 +61,7 @@ library
                  , aeson
                  , bytestring
                  , blaze-markup
+                 , blaze-html
                  , classy-prelude
                  , classy-prelude-conduit
                  , classy-prelude-yesod
