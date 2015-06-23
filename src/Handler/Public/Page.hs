@@ -101,11 +101,14 @@ loadTemplate lstate = do
     templateM <- try $ readFile (fromString absPath)
 
     checkResult templateM
-    return 1
   where
-    checkResult :: Either SomeException String -> IO ()
-    checkResult (Left _)  = Lua.pushnil lstate
-    checkResult (Right t) = Lua.pushstring lstate t
+    checkResult :: Either SomeException String -> IO CInt
+    checkResult (Left e)  = do
+        let errMsg = "load_template failed with:\n" ++ show e
+
+        Lua.pushstring lstate errMsg
+        return (-1)
+    checkResult (Right t) = Lua.pushstring lstate t >> return 1
 
 addThemePaths :: LuaState -> IO ()
 addThemePaths lstate = do
@@ -115,7 +118,6 @@ addThemePaths lstate = do
     currPath <- Lua.tostring lstate (-1)
 
     Lua.pop lstate 1
-
     Lua.pushstring lstate $  currPath ++ ";"
                           ++ "./" ++ templateDir ++ "/?.lua;"
                           ++ "./" ++ templateDir ++ "/?/?.lua"
