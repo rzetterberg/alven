@@ -39,7 +39,7 @@ runThemeScript permalink dbRunner = do
     Lua.registerrawhsfunction lstate "load_template"
         loadTemplate
 
-    Lua.loadfile lstate "test/lua/output.lua"
+    Lua.loadfile lstate (templateDir ++ "main.lua")
         >>= runScript lstate outputRef
   where
     runScript lstate outputRef loadResult
@@ -73,9 +73,10 @@ getCurrentPage dbRunner permalink lstate = do
     pageM <- dbRunner $ getBy (UniquePageLink permalink)
 
     case pageM of
-        Nothing           -> return 0
+        Nothing           -> Lua.pushnil lstate
         Just (Entity _ p) -> returnPage p
 
+    return 1
   where
     returnPage TextPage{..} = do
         Lua.createtable lstate 0 3
@@ -91,18 +92,20 @@ getCurrentPage dbRunner permalink lstate = do
         Lua.pushstring lstate tbody
         Lua.setfield lstate (-2) "body"
 
-        return 1
-
 loadTemplate :: LuaState -> IO CInt
 loadTemplate lstate = do
-    templatePath <- Lua.tostring lstate 1
-    templateM    <- try $ readFile (fromString templatePath)
+    relPath <- Lua.tostring lstate 1
+
+    let absPath = templateDir ++ relPath
+    
+    templateM <- try $ readFile (fromString absPath)
 
     checkResult templateM
+    return 1
   where
-    checkResult :: Either SomeException String -> IO CInt
-    checkResult (Left _)  = return 0
-    checkResult (Right t) = Lua.pushstring lstate t >> return 1
+    checkResult :: Either SomeException String -> IO ()
+    checkResult (Left _)  = Lua.pushnil lstate
+    checkResult (Right t) = Lua.pushstring lstate t
 
 addThemePaths :: LuaState -> IO ()
 addThemePaths lstate = do
@@ -113,6 +116,12 @@ addThemePaths lstate = do
 
     Lua.pop lstate 1
 
-    Lua.pushstring lstate $ currPath ++ ";./test/lua/?.lua;./test/lua/?/?.lua"
+    Lua.pushstring lstate $  currPath ++ ";"
+                          ++ "./" ++ templateDir ++ "/?.lua;"
+                          ++ "./" ++ templateDir ++ "/?/?.lua"
+
     Lua.setfield lstate (-2) "path"
     Lua.pop lstate 1
+
+templateDir :: String
+templateDir = "test/lua/"
