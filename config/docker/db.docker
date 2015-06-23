@@ -2,7 +2,7 @@
 
 FROM debian:jessie
 
-RUN apt-get update --fix-missing & apt-get install -y postgresql-common postgresql-9.4
+RUN apt-get update --fix-missing && apt-get install -y postgresql-common postgresql-9.4
 
 USER postgres
 

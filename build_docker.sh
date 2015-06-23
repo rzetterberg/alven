@@ -1,7 +1,4 @@
-docker build -f config/docker/builder.docker -t kael/builder . 
-docker build -f config/docker/db.docker -t kael/db . 
-
-echo "> All images built! Use ./start_docker.sh to start them"
+#!/bin/bash
 
 set -e
 

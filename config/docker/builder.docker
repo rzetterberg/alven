@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM haskell:7.8
 
 RUN mkdir /opt/kael
 ADD ./src/cabal.config /opt/kael/
