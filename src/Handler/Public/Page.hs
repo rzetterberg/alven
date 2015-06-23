@@ -1,8 +1,12 @@
+{-# LANGUAGE RankNTypes #-}
+
 module Handler.Public.Page where
 
+import           Control.Monad.Logger (LoggingT, runLoggingT)
+import           Database.Persist.Sql (runSqlPool)
 import qualified Data.Text as T
 import           Foreign.C.Types (CInt)
-import           Import
+import           Import hiding (DBRunner)
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 
@@ -10,27 +14,33 @@ import           Scripting.Lua (LuaState)
 
 getPageViewR :: Text -> Handler Html
 getPageViewR permalink = do
-    (Entity _ page) <- runDB $ getBy404 (UniquePageLink permalink)
-    userM           <- maybeAuthId
-
-    let isNotPublic   = not (textPagePublic page) 
-        isNotLoggedIn = not (isJust userM)
-
-    when (isNotPublic && isNotLoggedIn) notFound
-
-    result <- liftIO $ runThemeScript page
+    master <- getYesod
+    result <- liftIO $ runThemeScript permalink (runIODB master)
 
     return $ case result of
         Left errm  -> error errm
         Right outp -> toHtml outp
+
+type DBRunner =  forall (m :: * -> *) a. MonadBaseControl IO m
+              => SqlPersistT (Control.Monad.Logger.LoggingT m) a
+              -> m a
+
+runIODB :: forall (m :: * -> *) a. MonadBaseControl IO m
+        => App
+        -> SqlPersistT (Control.Monad.Logger.LoggingT m) a
+        -> m a
+runIODB master@App{..} action = do
+    let logFunc = messageLoggerSource master appLogger
+
+    runLoggingT (runSqlPool action appConnPool) logFunc
 
 --------------------------------------------------------------------------------
 -- * Lua functionality
 
 -- | Runs a theme script and puts the result in the given result MVar. Should be
 --   run as a separate thread since the working directory is changed.
-runThemeScript :: TextPage -> IO (Either String String)
-runThemeScript page = do
+runThemeScript :: Text -> DBRunner -> IO (Either String String)
+runThemeScript permalink dbRunner = do
     outputRef <- newIORef ""
     lstate    <- Lua.newstate
 
@@ -41,7 +51,7 @@ runThemeScript page = do
     Lua.registerrawhsfunction lstate "print"
         (collectPrint outputRef)
     Lua.registerrawhsfunction lstate "get_current_page"
-        (getCurrentPage page)
+        (getCurrentPage dbRunner permalink)
 
     Lua.loadfile lstate "test/lua/output.lua"
         >>= runScript lstate outputRef
@@ -72,20 +82,28 @@ collectPrint outputRef lstate = do
 
     return 0
 
-getCurrentPage :: TextPage -> LuaState -> IO CInt
-getCurrentPage TextPage{..} lstate = do
-    Lua.createtable lstate 0 3
+getCurrentPage :: DBRunner -> Text -> LuaState -> IO CInt
+getCurrentPage dbRunner permalink lstate = do
+    pageM <- dbRunner $ getBy (UniquePageLink permalink)
 
-    Lua.pushstring lstate (T.unpack textPageName)
-    Lua.setfield lstate (-2) "name"
+    case pageM of
+        Nothing           -> return 0
+        Just (Entity _ p) -> returnPage p
 
-    Lua.pushstring lstate (T.unpack textPagePermalink)
-    Lua.setfield lstate (-2) "permalink"
+  where
+    returnPage TextPage{..} = do
+        Lua.createtable lstate 0 3
 
-    Lua.pushstring lstate "Not implemented yet"
-    Lua.setfield lstate (-2) "body"
+        Lua.pushstring lstate (T.unpack textPageName)
+        Lua.setfield lstate (-2) "name"
 
-    return 1
+        Lua.pushstring lstate (T.unpack textPagePermalink)
+        Lua.setfield lstate (-2) "permalink"
+
+        Lua.pushstring lstate "Not implemented yet"
+        Lua.setfield lstate (-2) "body"
+
+        return 1
 
 addThemePaths :: LuaState -> IO ()
 addThemePaths lstate = do

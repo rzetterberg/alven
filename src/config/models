@@ -15,4 +15,4 @@ TextPage
     parent TextPageId Maybe
     UniquePageName name
     UniquePageLink permalink
-    deriving Typeable
+    deriving Typeable Show
