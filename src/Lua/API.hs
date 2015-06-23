@@ -78,6 +78,3 @@ readThemeFile lstate = do
         Lua.pushstring lstate errMsg
         return (-1)
     checkResult (Right t) = Lua.pushstring lstate t >> return 1
-
-themeDir :: String
-themeDir = "test/lua/"

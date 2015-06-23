@@ -1,14 +1,14 @@
 module Handler.Public.Page where
 
 import           Import 
-import           Lua.Run (runThemeScript)
+import qualified Lua.Run as Lua
 
 -------------------------------------------------------------------------------
 
 getPageViewR :: Text -> Handler Html
 getPageViewR permalink = do
     master <- getYesod
-    result <- liftIO $ runThemeScript permalink (runIO master)
+    result <- liftIO $ Lua.runThemeScript permalink (runIO master)
 
     return $ case result of
         Left errm  -> error errm

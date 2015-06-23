@@ -4,7 +4,6 @@ import           Import
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 import qualified Lua.API as API
-import           Lua.API (themeDir)
 
 -------------------------------------------------------------------------------
 

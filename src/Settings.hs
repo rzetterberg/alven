@@ -132,3 +132,6 @@ combineScripts :: Name -> [Route Static] -> Q Exp
 combineScripts = combineScripts'
     (appSkipCombining compileTimeAppSettings)
     combineSettings
+
+themeDir :: String
+themeDir = "./static/theme/"
