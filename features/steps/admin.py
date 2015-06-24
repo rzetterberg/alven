@@ -22,14 +22,15 @@ def get_page_row(table, slug):
 
     return None
 
-# ==============================================================================
-# General
- 
-@given(u'I am authorized')
-def step_impl(context):
+def login(context):
     b = context.browser
 
     context.open_url("auth/login")
+
+    soup = context.get_soup()
+
+    if soup.title.string == "Admin":
+        return
 
     b.select_form(nr = 0)
 
@@ -37,6 +38,13 @@ def step_impl(context):
     b.form["password"] = "devpass"
 
     b.submit()
+
+# ==============================================================================
+# General
+ 
+@given(u'I am authorized')
+def step_impl(context):
+    login(context)
 
 @given(u'I am not authorized')
 def step_impl(context):
@@ -70,6 +78,13 @@ def step_impl(context, page_title):
     soup = context.get_soup()
 
     assert soup.title.string == page_title
+
+# ==============================================================================
+# User related
+
+@when(u'I login')
+def step_impl(context):
+    login(context)
 
 # ==============================================================================
 # Page related
