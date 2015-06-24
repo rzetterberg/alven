@@ -14,4 +14,7 @@ The main goals of the project are:
 
 The project functionality is described by Cucumber feature files in the folder
 `features`. The features should be focused on describing user functionality, and
-avoid describing internal functionality. 
+avoid describing internal functionality.
+
+The acceptance tests that use those features shoudle be simple and show that a
+minimal client (no javascript, no css) can use those features.
