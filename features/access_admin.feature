@@ -6,13 +6,13 @@ Feature: User accesses admin interface
   make changes to my website.
   
   @todo
-  Scenario: Authorized user visits admin interface
-    Given I am authorized as user A
-    When I visit any page in the admin interface
-    Then I should see the requested page
+  Scenario: Authorized users have access
+    Given I am authorized as the test user
+    When I visit "/admin"
+    Then I should see the "Admin" page
 
   @todo
-  Scenario: Unauthorized user visits admin interface
-    Given I am not authorized as a user
-    When I visit any page in the admin interface
-    Then I should see the login page
+  Scenario: Unauthorized users does not have access
+    Given I am not authorized
+    When I visit "/admin"
+    Then I should see the "Login" page
