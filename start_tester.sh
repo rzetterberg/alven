@@ -9,5 +9,5 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $script_dir
 
 echo "> Starting tester"
-docker run --rm -i -t --link kael-builder:builder -v $PWD:/opt/kael \
+docker run --rm -i -t --link kael-builder:builder --link kael-database:db -v $PWD:/opt/kael \
        kael/tester /bin/bash

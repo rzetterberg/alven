@@ -1,9 +1,9 @@
 FROM debian:jessie
 
-RUN apt-get update && apt-get install -y python-pip
+RUN apt-get update && apt-get install -y python-pip python-psycopg2
 RUN pip install mechanize
 RUN pip install behave
 RUN pip install BeautifulSoup4
-RUN pip install cookielib
+RUN pip install PyYaml
 
 WORKDIR /opt/kael
