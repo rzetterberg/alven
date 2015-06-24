@@ -34,7 +34,7 @@ Users: Users
 NoUsers: No users found
 EditUser: Edit user
 UserCreated: New user was created
-CreateUser: Create new user
+CreateUser: Create user
 UserUpdated: User updated
 Confirm: Confirm
 PasswordsDidntMatch: Passwords didin't match

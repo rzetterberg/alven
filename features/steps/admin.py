@@ -25,7 +25,7 @@ def get_page_row(table, slug):
 # ==============================================================================
 # General
  
-@given(u'I am authorized as the test user')
+@given(u'I am authorized')
 def step_impl(context):
     b = context.browser
 
@@ -44,6 +44,11 @@ def step_impl(context):
 
     context.open_url("admin")
 
+    soup = context.get_soup()
+
+    if soup.title.string != "Admin":
+        return
+
     b.select_form(name = "logout")
     b.submit()
 
@@ -55,9 +60,6 @@ def step_impl(context, slug):
 
     context.db.commit()
     curs.close()
-
-# ==============================================================================
-# Access related
 
 @when(u'I visit "{path}"')
 def step_impl(context, path):

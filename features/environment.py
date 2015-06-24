@@ -91,10 +91,10 @@ def setup_browser():
 def reset_db(context):
     curs = context.db.cursor()
 
-    curs.execute("TRUNCATE TABLE text_page RESTART IDENTITY;")
+    curs.execute("TRUNCATE TABLE public.text_page RESTART IDENTITY;")
 
     curs.execute(
-        "INSERT INTO text_page " +
+        "INSERT INTO public.text_page " +
         "(name, permalink, body, public) " +
         "VALUES ('Index', 'index', '', true);"
     )

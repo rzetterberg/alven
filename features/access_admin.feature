@@ -6,13 +6,29 @@ Feature: User accesses admin interface
   make changes to my website.
   
   @todo
-  Scenario: Authorized users have access
-    Given I am authorized as the test user
-    When I visit "/admin"
-    Then I should see the "Admin" page
+  Scenario Outline: Authorized users have access
+    Given I am authorized
+    When I visit "<path>"
+    Then I should see the "<title>" page
+    
+    Examples: Main pages
+    | path         | title       |
+    | /admin       | Admin       |
+    | /page        | Pages       |
+    | /page/create | Create page |
+    | /user        | Users       |
+    | /user/create | Create user |
 
   @todo
-  Scenario: Unauthorized users does not have access
+  Scenario Outline: Unauthorized users does not have access
     Given I am not authorized
-    When I visit "/admin"
+    When I visit "<path>"
     Then I should see the "Login" page
+
+    Examples: Main pages
+    | path         |
+    | /admin       |
+    | /page        |
+    | /page/create |
+    | /user        |
+    | /user/create |
