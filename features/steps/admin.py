@@ -49,7 +49,12 @@ def step_impl(context):
 
 @given(u'a page with slug "{slug}" does not exist')
 def step_impl(context, slug):
-    pass
+    curs = context.db.cursor()
+
+    curs.execute("DELETE FROM text_page WHERE permalink = '%s';" % slug)
+
+    context.db.commit()
+    curs.close()
 
 # ==============================================================================
 # Access related
@@ -83,6 +88,7 @@ def step_impl(context, slug):
     context.assign_hident(fields, "is_public", ["yes"])
 
     b.submit()
+
 @then(u'I should see the page list with the page "{slug}" among the pages')
 def step_impl(context, slug):
     b = context.browser
