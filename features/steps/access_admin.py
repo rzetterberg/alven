@@ -1,37 +1,34 @@
 from behave import *
-
-@given(u'user A exists')
-def step_impl(context):
-    pass
-
+ 
 @given(u'I am authorized as user A')
-def step_impl(context):
-    b   = context.browser
-    url = context.base_url + "/auth/login"
-
-    b.get(url)
-
-    email = b.find_element_by_name("email")
-    email.send_keys("tester@test.com")
-
-    passwd = b.find_element_by_name("password")
-    passwd.send_keys("devpass")
-    passwd.submit()
-
-@when(u'I visit any page in the admin interface')
 def step_impl(context):
     b = context.browser
 
-    b.get("http://localhost:3000/admin")
+    context.open_url("auth/login")
+
+    b.select_form(nr = 0)
+
+    b.form["email"] = "tester@test.com"
+    b.form["password"] = "devpass"
+
+    b.submit()
+
+@when(u'I visit any page in the admin interface')
+def step_impl(context):
+    context.open_url("admin")
 
 @then(u'I should see the requested page')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then I should see the requested page')
+    soup = context.get_soup()
+
+    assert soup.title.string == "Admin"
 
 @given(u'I am not authorized as a user')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Given I am not authorized as a user')
+    context.open_url("auth/logout")
 
-@then(u'I should see a "authorization needed" message on the login page')
+@then(u'I should see the login page')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then I should see a "authorization needed" message on the login page')
+    soup = context.get_soup()
+
+    assert soup.title.string == "Login"

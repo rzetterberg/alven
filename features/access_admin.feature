@@ -5,9 +5,6 @@ Feature: User accesses admin interface
   when I am logged in, so that only people with user accounts can
   make changes to my website.
   
-  Background:
-    Given user A exists
-  
   @todo
   Scenario: Authorized user visits admin interface
     Given I am authorized as user A
@@ -18,4 +15,4 @@ Feature: User accesses admin interface
   Scenario: Unauthorized user visits admin interface
     Given I am not authorized as a user
     When I visit any page in the admin interface
-    Then I should see a "authorization needed" message on the login page
+    Then I should see the login page

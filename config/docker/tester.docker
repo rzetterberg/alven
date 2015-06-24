@@ -1,10 +1,9 @@
-FROM google/nodejs
+FROM debian:jessie
 
-RUN apt-get -y install python-pip libfreetype6 libfontconfig
-RUN pip install selenium
+RUN apt-get update && apt-get install -y python-pip
+RUN pip install mechanize
 RUN pip install behave
-RUN npm install phantomjs
+RUN pip install BeautifulSoup4
+RUN pip install cookielib
 
 WORKDIR /opt/kael
-
-ENV PATH $PATH:/node_modules/.bin/

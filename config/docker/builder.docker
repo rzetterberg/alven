@@ -11,6 +11,7 @@ RUN cd /opt/kael && cabal install --only-dependencies -j --verbose=3
 RUN cd /opt/kael && cabal install yesod-bin -j --verbose=3
 
 ENV PATH /root/.cabal/bin:$PATH
+RUN echo "export APPROOT=http://\`hostname --ip-address\`:3000" >> ~/.bashrc
 
 WORKDIR /opt/kael
 
