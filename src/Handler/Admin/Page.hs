@@ -101,10 +101,17 @@ postPageCreateR = do
     pageTitle = MsgCreatePage
     formUrl   = PageCreateR
     save (PageEdit name plink body public) = do
-        _ <- runDB $ insert $ TextPage name plink body public Nothing
+        pageM <- runDB $ getBy (UniquePageLink plink)
+
+        case pageM of
+            Just _  -> do
+                setAlertI Danger (MsgPageSlugExists plink)
+                return ()
+            Nothing -> do
+                _ <- runDB $ insert $ TextPage name plink body public Nothing
         
-        setAlertI Success MsgPageCreated
-        redirect PageListR
+                setAlertI Success MsgPageCreated
+                redirect PageListR
 
 postPageRemoveConfirmR :: TextPageId -> Handler Html
 postPageRemoveConfirmR pageId = do

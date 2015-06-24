@@ -62,3 +62,4 @@ CantRemoveFirstPage: Can't remove the first page
 PageRemoved: Page removed
 ViewPage: View page
 Permalink: Permalink
+PageSlugExists slug@Text: Page with slug "#{slug}" exists already

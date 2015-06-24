@@ -101,3 +101,11 @@ def step_impl(context, slug):
     table = soup.find("table")
 
     assert page_exists(table, slug)
+
+@then(u'I should see a duplicate error message')
+def step_impl(context):
+    soup = context.get_soup()
+
+    alert = soup.find("div", {"id" : "alert-holder"})
+
+    assert "exists already" in alert.text
