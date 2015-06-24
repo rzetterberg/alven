@@ -40,7 +40,16 @@ def step_impl(context):
 
 @given(u'I am not authorized')
 def step_impl(context):
-    context.open_url("auth/logout")
+    b = context.browser
+
+    context.open_url("admin")
+
+    b.select_form(name = "logout")
+    b.submit()
+
+@given(u'a page with slug "{slug}" does not exist')
+def step_impl(context, slug):
+    pass
 
 # ==============================================================================
 # Access related
@@ -58,17 +67,13 @@ def step_impl(context, page_title):
 # ==============================================================================
 # Page related
 
-@given(u'a page with slug "{slug}" does not exist')
-def step_impl(context, slug):
-    pass
-
 @when(u'I create a page with slug "{slug}"')
 def step_impl(context, slug):
     b = context.browser
 
     context.open_url("page/create")
 
-    b.select_form(nr = 0)
+    b.select_form(name = "page")
 
     fields = context.get_hident_fields()
 
@@ -78,8 +83,7 @@ def step_impl(context, slug):
     context.assign_hident(fields, "is_public", ["yes"])
 
     b.submit()
-
-@then(u'I should see a page with the slug "{slug}" in the page list')
+@then(u'I should see the page list with the page "{slug}" among the pages')
 def step_impl(context, slug):
     b = context.browser
 

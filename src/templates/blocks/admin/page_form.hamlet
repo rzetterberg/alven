@@ -1,4 +1,4 @@
 <h2>_{pageTitle}
 
-<form role=form method=post action=@{formUrl} enctype=#{encType}>
+<form name="page" role=form method=post action=@{formUrl} enctype=#{encType}>
   ^{form}
