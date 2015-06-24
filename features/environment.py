@@ -126,4 +126,5 @@ def before_all(context):
     context.assign_hident = lambda fs, k, v: assign_hident(context, fs, k, v)
 
 def after_all(context):
+    reset_db(context)
     context.db.close()
