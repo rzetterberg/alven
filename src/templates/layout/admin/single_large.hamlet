@@ -6,7 +6,8 @@
           <h1>
             <a href=@{AdminR}>Logotype
         <div .col-lg-6>
-          <a ."btn btn-info pull-right" href=@{AuthR LogoutR}>_{MsgLogout}
+          <form method=post action=@{AuthR LogoutR}>
+            <input type="submit" ."btn btn-info pull-right" value="_{MsgLogout}">
   <div #content>
     <div .container>
       <div .row>
