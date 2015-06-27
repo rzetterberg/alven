@@ -19,7 +19,7 @@ page.
 
 ## API reference
 
-### get_current_page()
+### table get_current_page(void)
 
 This function retrieves the page that the user is currently visiting. The core
 handles the routing and selects the current page from the database.
@@ -27,7 +27,13 @@ handles the routing and selects the current page from the database.
 A `table` that represents the current page is returned, or `nil` if no page was
 found.
 
-### get_navigation()
+### list get_navigation(void)
 
 This function retrieves a `list` of pages that represents the navigation of the
 website.
+
+### string read_theme_file(string)
+
+Reads a file using the relative path where the root is the theme directory.
+Returns a `string` with the file contents on success and throws an error on
+failure.
