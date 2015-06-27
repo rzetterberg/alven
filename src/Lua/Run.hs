@@ -87,6 +87,7 @@ registerAPIFunctions lstate permalink dbRunner outputRef
   where
     funcs = [ ("print"           , API.collectPrint outputRef)
             , ("get_current_page", API.getCurrentPage dbRunner permalink)
+            , ("get_pages"       , API.getPages dbRunner)
             , ("read_theme_file" , API.readThemeFile)
             ]
 

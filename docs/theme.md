@@ -27,10 +27,9 @@ handles the routing and selects the current page from the database.
 A `table` that represents the current page is returned, or `nil` if no page was
 found.
 
-### list get_navigation(void)
+### list get_pages(void)
 
-This function retrieves a `list` of pages that represents the navigation of the
-website.
+This function retrieves a `list` of all pages in the database.
 
 ### string read_theme_file(string)
 

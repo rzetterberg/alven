@@ -31,29 +31,43 @@ if the page was not found in the database.
 
 Lua prototype: table get_current_page(void)
 -}
-getCurrentPage :: IORunner -> Text -> LuaState -> IO CInt
+getCurrentPage :: IORunner -- ^ Database runner for usage in IO
+               -> Text     -- ^ Page permalink
+               -> LuaState -- ^ Current state
+               -> IO CInt
 getCurrentPage dbRunner permalink lstate = do
     pageM <- dbRunner $ getBy (UniquePageLink permalink)
 
     case pageM of
         Nothing           -> Lua.pushnil lstate
-        Just (Entity _ p) -> returnPage p
+        Just (Entity _ p) -> textPageToLua lstate p
+
+    return 1
+
+{-|
+Retrieves a list of all pages in the database. Can be used to render site
+navigation.
+-}
+getPages :: IORunner -- ^ Database runner for usage in IO
+         -> LuaState -- ^ Current state
+         -> IO CInt
+getPages dbRunner lstate = do
+    pages <- dbRunner (selectList [] [])
+
+    Lua.newtable lstate
+
+    go pages 0
 
     return 1
   where
-    returnPage TextPage{..} = do
-        Lua.createtable lstate 0 3
+    go :: [Entity TextPage] -> Int -> IO ()
+    go [] _              = return ()
+    go ((Entity _ p):ps) n = do
+        textPageToLua lstate p
 
-        Lua.pushstring lstate (T.unpack textPageName)
-        Lua.setfield lstate (-2) "name"
+        Lua.rawseti lstate (-2) (n + 1)
 
-        Lua.pushstring lstate (T.unpack textPagePermalink)
-        Lua.setfield lstate (-2) "permalink"
-
-        let tbody = renderHtml $ toHtml textPageBody
-
-        Lua.pushstring lstate tbody
-        Lua.setfield lstate (-2) "body"
+        go ps (n + 1)
 
 {-|
 Reads a file in the theme folder and returns it as a string, throws error if
@@ -61,7 +75,8 @@ read failed.
 
 Lua prototype: string read_theme_file(string)
 -}
-readThemeFile :: LuaState -> IO CInt
+readThemeFile :: LuaState
+              -> IO CInt
 readThemeFile lstate = do
     relPath <- Lua.tostring lstate 1
 
@@ -78,3 +93,27 @@ readThemeFile lstate = do
         Lua.pushstring lstate errMsg
         return (-1)
     checkResult (Right t) = Lua.pushstring lstate t >> return 1
+
+--------------------------------------------------------------------------------
+-- * Data type marshalling
+
+{-|
+Converts the given `TextPage` into a Lua table with fields name, permalink
+and body.
+-}
+textPageToLua :: LuaState -- ^ The current state
+              -> TextPage -- ^ Text page to marshall
+              -> IO ()
+textPageToLua lstate TextPage{..} = do
+    Lua.createtable lstate 0 3
+
+    Lua.pushstring lstate (T.unpack textPageName)
+    Lua.setfield lstate (-2) "name"
+
+    Lua.pushstring lstate (T.unpack textPagePermalink)
+    Lua.setfield lstate (-2) "permalink"
+
+    let tbody = renderHtml $ toHtml textPageBody
+
+    Lua.pushstring lstate tbody
+    Lua.setfield lstate (-2) "body"

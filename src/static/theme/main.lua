@@ -7,8 +7,15 @@ if page == nil then
             body  = "The page could not be found"
    }
 end
-   
+
+pages = get_pages()
+
+data = {
+   page  = page,
+   pages = pages
+}
+
 template = read_theme_file("base.mustache")
-output   = lustache:render(template, page)
+output   = lustache:render(template, data)
 
 print(output)

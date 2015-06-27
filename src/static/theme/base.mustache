@@ -3,13 +3,19 @@
   <head>
     <meta charset="UTF-8"/>
 
-    <title>{{ title }}</title>
+    <title>{{page.title}}</title>
     <meta name="description" content="" />
     <meta name="author" content="" />
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
   </head>
   <body>
-    {{{ body }}}
+    {{{page.body}}}
+
+    <ul>
+      {{#pages}}
+        <li>{{name}}</li>
+      {{/pages}}
+    </ul>
   </body>
 </html>
