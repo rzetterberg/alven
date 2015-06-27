@@ -24,7 +24,9 @@ instance Arbitrary Text where
 {-|
 Property that makes sure the added class is removed when using a single class.
 -}
-prop_checkRemove_single :: Text -> [(Text, Text)] -> Bool
+prop_checkRemove_single :: Text           -- ^ Class to add and remove
+                        -> [(Text, Text)] -- ^ All other attributes
+                        -> Bool
 prop_checkRemove_single classn based = (removeClass classn inp) == outp
   where
     inp  = ("class", classn) : based
@@ -33,7 +35,10 @@ prop_checkRemove_single classn based = (removeClass classn inp) == outp
 {-|
 Property that makes sure the added class is removed when using multiple classes.
 -}
-prop_checkRemove_multi :: Text -> [Text] -> [(Text, Text)] -> Bool
+prop_checkRemove_multi :: Text           -- ^ Class to add and remove
+                       -> [Text]         -- ^ All other class names
+                       -> [(Text, Text)] -- ^ All other attributes
+                       -> Bool
 prop_checkRemove_multi classn classes based = (removeClass classn inp) == outp
   where
     inpClasses  = T.strip $ T.intercalate " " (classn : classes)
