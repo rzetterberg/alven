@@ -128,15 +128,8 @@ def step_impl(context, slug):
 def step_impl(context):
     b = context.browser
 
-    soup         = context.get_soup()
-    container    = soup.find("div", {"id" : "content"})
-    confirm_form = container.find("form")
-    confirm_url  = confirm_form["action"]
-
-    for form in b.forms():
-        if form.action == confirm_url:
-            b.form = form
-            b.submit()
+    b.select_form(name = "page_remove")
+    b.submit()
 
 @then(u'I should see the page list with the page "{slug}"')
 def step_impl(context, slug):

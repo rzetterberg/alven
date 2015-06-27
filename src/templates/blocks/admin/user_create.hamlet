@@ -1,4 +1,4 @@
 <h2>_{MsgCreateUser}
 
-<form role=form method=post action=@{UserCreateR} enctype=#{encType}>
+<form name="user_create" role=form method=post action=@{UserCreateR} enctype=#{encType}>
   ^{form}

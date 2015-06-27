@@ -2,5 +2,5 @@
 
 <p>_{MsgSureRemovePage (textPageName page)}
 
-<form method=post action=@{PageRemoveR pageId}>
+<form name="page_remove" method=post action=@{PageRemoveR pageId}>
   <input type="submit" ."btn btn-danger" value="_{MsgYes}">

@@ -1,4 +1,4 @@
 <h2>_{MsgEditUser}
 
-<form role=form method=post action=@{UserEditR userId} enctype=#{encType}>
+<form name="user_edit" role=form method=post action=@{UserEditR userId} enctype=#{encType}>
   ^{form}
