@@ -17,4 +17,6 @@ The project functionality is described by Cucumber feature files in the folder
 avoid describing internal functionality.
 
 The acceptance tests that use those features shoudle be simple and show that a
-minimal client (no javascript, no css) can use those features.
+minimal client (no javascript, no css) can use those features. The project is
+built with progressive enhancement in mind to be able to serve all types of
+users.
