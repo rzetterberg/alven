@@ -1,18 +1,39 @@
 FROM haskell:7.8
 
-RUN mkdir /opt/kael
-ADD ./src/cabal.config /opt/kael/
-ADD ./src/kael.cabal /opt/kael/
+RUN apt-get update --fix-missing && apt-get install libpq-dev gzip -y
 
-RUN apt-get update --fix-missing && apt-get install libpq-dev -y
+# ==============================================================================
+# | User setup
+# ==============================================================================
 
-RUN cabal update
-RUN cd /opt/kael && cabal install --only-dependencies -j --verbose=3
-RUN cd /opt/kael && cabal install yesod-bin -j --verbose=3
+RUN useradd -m -d /home/kael -s /bin/bash kael
+RUN apt-get update && apt-get install -y sudo locales
+RUN usermod -a -G sudo kael
+RUN echo " kael      ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-ENV PATH /root/.cabal/bin:$PATH
-RUN echo "export APPROOT=http://\`hostname --ip-address\`:3000" >> ~/.bashrc
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+RUN mkdir /opt/kael && chown kael:kael /opt/kael
+
+ENV PROJECT_ROOT /opt/kael
+
+RUN echo "export APPROOT=http://\`hostname --ip-address\`:3000" >> /home/kael/.bashrc
 
 WORKDIR /opt/kael
+USER kael
+
+# ==============================================================================
+# | Haskell package setup
+# ==============================================================================
+
+ADD ./src/cabal.config /opt/kael/
+ADD ./src/kael.cabal /opt/kael/
+ADD ./src/stack.yaml /opt/kael/
+
+RUN cabal update
+RUN cd /opt/kael && cabal install yesod-bin -j && cabal install --only-dep -j
 
 EXPOSE 3000
