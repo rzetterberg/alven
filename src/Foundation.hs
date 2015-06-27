@@ -51,11 +51,7 @@ instance Yesod App where
     -- default session idle timeout is 120 minutes
     makeSessionBackend _ = fmap Just $ defaultClientSessionBackend
         120    -- timeout in minutes
-#if DEVELOPMENT
         "config/client_session_key.aes"
-#else
-        "/var/lib/makerspace/client_session_key.aes"
-#endif
 
     defaultLayout content = buildLayout $ do 
         toWidgetHead $(luciusFile "templates/layout/public/global.lucius")
