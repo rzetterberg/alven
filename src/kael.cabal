@@ -150,3 +150,5 @@ test-suite test
                  , yesod
                  , yesod-core
                  , yesod-test
+                 , QuickCheck
+                 , text

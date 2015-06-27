@@ -23,7 +23,7 @@ be written using QuickCheck.
 
 These tests prove that different subsystems of the project works together as
 expected. For example check that database functions produce the expected output
-from a known state.
+from a known state. They should be written using HSpec.
 
 ### Acceptance
 
@@ -32,3 +32,5 @@ These tests prove that the project works as expected from a users perspective.
 The user perspective is considered the web interface by using a minimal browser
 that does not support javascript, css, flash etc. The project is built with
 progressive enhancement in mind to be able to serve all types of users.
+
+They should be written using behave, cucumber and mechanize.

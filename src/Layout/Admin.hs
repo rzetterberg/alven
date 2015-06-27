@@ -54,6 +54,10 @@ $newline never
     }
 
 removeClass :: Text -> [(Text, Text)] -> [(Text, Text)]
-removeClass _     []                    = []
-removeClass klass (("class", cur):rest) = ("class", T.replace klass "" cur) : rest
-removeClass klass (other         :rest) = other : removeClass klass rest
+removeClass "" a                      = a
+removeClass _  []                     = []
+removeClass klass (("class", v):rest)
+    = let klasses = T.splitOn " " v
+          outp    = T.intercalate " " $ filter (/= klass) klasses
+      in ("class", outp) : rest
+removeClass klass (other:rest)        = other : removeClass klass rest
