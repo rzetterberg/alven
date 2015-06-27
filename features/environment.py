@@ -99,6 +99,19 @@ def reset_db(context):
         "VALUES ('Index', 'index', '', true);"
     )
 
+    curs.execute("TRUNCATE TABLE public.user RESTART IDENTITY;")
+
+    user_data = (
+        "tester@test.com",
+        "sha256|14|pTLLjljaxlzLasmYpK4/fQ==|C6ns0+mgIZkxRIf7FLJE0VcHKBNIOeEjqNP0JWlDzx0="
+    )
+
+    curs.execute(
+        "INSERT INTO public.user " +
+        "(email, password, verkey, verified, admin) " +
+        "VALUES ('%s', '%s', '', true, true);" % user_data
+    )
+
     context.db.commit()
     curs.close()
 
