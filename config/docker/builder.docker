@@ -35,4 +35,6 @@ ADD ./src/kael.cabal /opt/kael/
 RUN cabal update
 RUN cd /opt/kael && cabal install yesod-bin -j && cabal install --only-dep -j
 
+ENV PATH $PATH:/home/kael/.cabal/bin
+
 EXPOSE 3000
