@@ -58,6 +58,6 @@ removeClass "" a                      = a
 removeClass _  []                     = []
 removeClass klass (("class", v):rest)
     = let klasses = T.splitOn " " v
-          outp    = T.intercalate " " $ filter (/= klass) klasses
+          outp    = T.strip $ T.intercalate " " $ filter (/= klass) klasses
       in ("class", outp) : rest
 removeClass klass (other:rest)        = other : removeClass klass rest

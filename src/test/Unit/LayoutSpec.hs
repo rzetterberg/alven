@@ -2,7 +2,7 @@
 
 module Unit.LayoutSpec (spec) where
 
-import           Data.Char (isAlphaNum)
+import           Data.Char (isLetter, isNumber)
 import qualified Data.Text as T
 import           TestImport
 
@@ -17,7 +17,9 @@ spec = describe "removeClass" $ do
   where
 
 instance Arbitrary Text where
-    arbitrary = fromString <$> listOf (suchThat (arbitrary :: Gen Char) isAlphaNum)
+    arbitrary = fromString <$> listOf (suchThat (arbitrary :: Gen Char) constraint)
+      where
+        constraint c = isLetter c || isNumber c || c == '-'
     
 {-|
 Property that makes sure the added class is removed when using a single class.
@@ -34,7 +36,7 @@ Property that makes sure the added class is removed when using multiple classes.
 prop_checkRemove_multi :: Text -> [Text] -> [(Text, Text)] -> Bool
 prop_checkRemove_multi classn classes based = (removeClass classn inp) == outp
   where
-    outpClasses = T.intercalate " " classes
-    inpClasses  = T.intercalate " " [classn, outpClasses]
+    inpClasses  = T.strip $ T.intercalate " " (classn : classes)
+    outpClasses = T.strip $ T.intercalate " " classes
     inp  = ("class", inpClasses)  : based
     outp = ("class", outpClasses) : based
