@@ -10,13 +10,25 @@ The main goals of the project are:
 - Is stable
 - Built using modern technology
 
-## Features
+## Testing
 
-The project functionality is described by Cucumber feature files in the folder
-`features`. The features should be focused on describing user functionality, and
-avoid describing internal functionality.
+The project is tested in 3 different levels: unit, integration and acceptance. 
 
-The acceptance tests that use those features shoudle be simple and show that a
-minimal client (no javascript, no css) can use those features. The project is
-built with progressive enhancement in mind to be able to serve all types of
-users.
+### Unit
+
+These tests prove that pure functions produce the expected output. They should
+be written using QuickCheck.
+
+### Integration
+
+These tests prove that different subsystems of the project works together as
+expected. For example check that database functions produce the expected output
+from a known state.
+
+### Acceptance
+
+These tests prove that the project works as expected from a users perspective.
+
+The user perspective is considered the web interface by using a minimal browser
+that does not support javascript, css, flash etc. The project is built with
+progressive enhancement in mind to be able to serve all types of users.
