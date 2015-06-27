@@ -31,7 +31,6 @@ USER kael
 
 ADD ./src/cabal.config /opt/kael/
 ADD ./src/kael.cabal /opt/kael/
-ADD ./src/stack.yaml /opt/kael/
 
 RUN cabal update
 RUN cd /opt/kael && cabal install yesod-bin -j && cabal install --only-dep -j
