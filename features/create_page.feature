@@ -10,7 +10,7 @@ Feature: Create page
   Scenario: Create a new page
     Given a page with slug "page_a" does not exist
     When I create a page with slug "page_a"
-    Then I should see the page list with the page "page_a" among the pages
+    Then I should see the page list with the page "page_a"
 
   @todo
   Scenario: Create a new duplicate page

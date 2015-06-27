@@ -106,7 +106,39 @@ def step_impl(context, slug):
 
     b.submit()
 
-@then(u'I should see the page list with the page "{slug}" among the pages')
+@when(u'I press delete on a page with slug "{slug}"')
+def step_impl(context, slug):
+    b = context.browser
+
+    context.open_url("page")
+
+    soup        = context.get_soup()
+    table       = soup.find("table")
+    row         = get_page_row(table, slug)
+    cols        = row.find_all("td")
+    remove_link = cols[4].find("form")
+    remove_url  = remove_link["action"]
+
+    for form in b.forms():
+        if form.action == remove_url:
+            b.form = form
+            b.submit()
+
+@when(u'I press confirm')
+def step_impl(context):
+    b = context.browser
+
+    soup         = context.get_soup()
+    container    = soup.find("div", {"id" : "content"})
+    confirm_form = container.find("form")
+    confirm_url  = confirm_form["action"]
+
+    for form in b.forms():
+        if form.action == confirm_url:
+            b.form = form
+            b.submit()
+
+@then(u'I should see the page list with the page "{slug}"')
 def step_impl(context, slug):
     b = context.browser
 
@@ -116,6 +148,17 @@ def step_impl(context, slug):
     table = soup.find("table")
 
     assert page_exists(table, slug)
+
+@then(u'I should see the page list without the page "{slug}"')
+def step_impl(context, slug):
+    b = context.browser
+
+    context.open_url("page")
+
+    soup  = context.get_soup()
+    table = soup.find("table")
+
+    assert not page_exists(table, slug)
 
 @then(u'I should see a duplicate error message')
 def step_impl(context):
