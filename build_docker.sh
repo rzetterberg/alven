@@ -1,5 +1,3 @@
-#!/bin/bash
-
 set -e
 
 script_path=${BASH_SOURCE[0]}
