@@ -7,7 +7,7 @@ import Application           (makeFoundation)
 import ClassyPrelude         as X
 import Database.Persist      as X hiding (get)
 import Database.Persist.Sql  (SqlPersistM, SqlBackend, runSqlPersistMPool, rawExecute, rawSql, unSingle, connEscapeName)
-import Foundation            as X hiding (runIO)
+import Foundation            as X
 import Model                 as X
 import Test.Hspec            as X
 import Test.QuickCheck       as X

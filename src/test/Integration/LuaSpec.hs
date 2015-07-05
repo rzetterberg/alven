@@ -16,29 +16,28 @@ spec = withApp $ describe "lua theme output" $ do
     it "outputs a simple 'hello'" $
         checkTheme "test/static/lua/hello" "hello"
     it "outputs page name from db" $ do
-        let tmpPage = TextPage "Test page" "test-page" "" True Nothing
-            expOutp = T.unpack (textPageName tmpPage)
+        let expOutp = T.unpack (textPageName tmpPage1)
 
-        void $ runDB $ insert tmpPage 
+        void $ runDB $ insert tmpPage1
     
         checkTheme "test/static/lua/page_name" expOutp
-    it "outputs html page list from db" $ do
-        let tmpPage1  = TextPage "Test page 1" "test-page1" "" True Nothing
-            tmpPage2  = TextPage "Test page 2" "test-page2" "" True Nothing
-            expOutp   = T.unpack $ pagesToHTMLList [tmpPage1, tmpPage2]
+    it "outputs html page list from db using lustache template engine" $ do
+        let expOutp = T.unpack $ pagesToHTMLList [tmpPage1, tmpPage2]
 
         runDB $ do
             void $ insert tmpPage1
             void $ insert tmpPage2
     
-        checkTheme "test/static/lua/page_list" expOutp
+        checkTheme "test/static/lua/lustache_page_list" expOutp
   where
+    tmpPage1  = TextPage "Test page 1" "test-page1" "" True Nothing
+    tmpPage2  = TextPage "Test page 2" "test-page2" "" True Nothing
     checkTheme themeDir expOutp = do
         yesod        <- getTestYesod
         outputBuffer <- liftIO $ newIORef ""
 
         let urlRenderer _ = "nop"
-            lextra        = LuaExtra themeDir "test-page" (runDBIO yesod)
+            lextra        = LuaExtra themeDir "" (runDBIO yesod)
                                      outputBuffer urlRenderer
 
         liftIO $ do

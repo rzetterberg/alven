@@ -1,3 +1,3 @@
-page = kael.get_current_page()
+pages = kael.get_pages()
 
-kael.output(page["name"])
+kael.output(pages[1]["name"])
