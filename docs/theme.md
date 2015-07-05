@@ -16,6 +16,10 @@ This file is ran when a user visists a page on the website.
 
 ## API reference
 
+All API functions can be accessed via the `kael` module. If you want to
+call the function `output` with input `hello` you do this:
+`kael.output("hello")`.
+
 ### void output(string)
 
 Outputs the given string to the buffer that is sent to the browser.
