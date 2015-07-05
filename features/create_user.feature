@@ -6,7 +6,6 @@ Feature: Create user
   Background:
     Given I am authorized
   
-  @todo
   Scenario: Create a new user
     Given a user with email "new@test.com" does not exist
     When I create a user with email "new@test.com"

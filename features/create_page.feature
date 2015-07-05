@@ -6,13 +6,11 @@ Feature: Create page
   Background:
     Given I am authorized
   
-  @todo
   Scenario: Create a new page
     Given a page with slug "page_a" does not exist
     When I create a public page with slug "page_a"
     Then I should see the page list with the page "page_a"
 
-  @todo
   Scenario: Create a new duplicate page
     Given a page with slug "page_a" does not exist
     When I create a public page with slug "page_a"

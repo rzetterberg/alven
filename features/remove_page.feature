@@ -6,7 +6,6 @@ Feature: Remove page
   Background:
     Given I am authorized
   
-  @todo
   Scenario: Delete a page
     Given a page with slug "page_a" does not exist
     When I create a public page with slug "page_a"

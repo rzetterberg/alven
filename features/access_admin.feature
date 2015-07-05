@@ -4,7 +4,6 @@ Feature: User accesses admin interface
   logged in, so that only persons with authorized accounts can make changes to
   my website.
   
-  @todo
   Scenario Outline: Authorized users have access
     Given I am authorized
     When I visit "<path>"
@@ -18,7 +17,6 @@ Feature: User accesses admin interface
     | /user        | Users       |
     | /user/create | Create user |
 
-  @todo
   Scenario Outline: Unauthorized users does not have access
     Given I am not authorized
     When I visit "<path>"
