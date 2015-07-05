@@ -1,9 +1,8 @@
 @admin
 Feature: User accesses admin interface
-  
-  As a user I want to be able to access the admin interface only
-  when I am logged in, so that only people with user accounts can
-  make changes to my website.
+  As a user I want to be able to access the admin interface only when I am
+  logged in, so that only persons with authorized accounts can make changes to
+  my website.
   
   @todo
   Scenario Outline: Authorized users have access

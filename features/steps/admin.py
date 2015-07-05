@@ -86,6 +86,23 @@ def step_impl(context, page_title):
 def step_impl(context):
     login(context)
 
+@when(u'I login with wrong credentials')
+def step_impl(context):
+    b = context.browser
+
+    context.open_url("auth/login")
+
+    soup = context.get_soup()
+
+    assert soup.title.string == "Login"
+
+    b.select_form(nr = 0)
+
+    b.form["email"] = "blablabla@asd.com"
+    b.form["password"] = "wrongpassword"
+
+    b.submit()
+
 # ==============================================================================
 # Page related
 
