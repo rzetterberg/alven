@@ -1,3 +1,7 @@
 database:
-  user:     "kael_test"
-  database: "kael_test"
+  user:     "_env:PGUSER:docker"
+  password: "_env:PGPASS:docker"
+  host:     "_env:DB_PORT_5432_TCP_ADDR:localhost"
+  port:     "_env:DB_PORT_5432_TCP_PORT:5432"
+  database: "_env:PGDATABASE:docker"
+  poolsize: "_env:PGPOOLSIZE:10"

@@ -11,7 +11,7 @@ import Foundation            as X hiding (runIO)
 import Model                 as X
 import Test.Hspec            as X
 import Test.QuickCheck       as X
-import Yesod.Default.Config2 (ignoreEnv, loadAppSettings)
+import Yesod.Default.Config2 (useEnv, loadAppSettings)
 import Yesod.Test            as X
 
 runDB :: SqlPersistM a -> YesodExample App a
@@ -27,7 +27,7 @@ withApp = before $ do
     settings <- loadAppSettings
         ["config/test-settings.yml", "config/settings.yml"]
         []
-        ignoreEnv
+        useEnv
 
     foundation <- makeFoundation settings
     wipeDB foundation

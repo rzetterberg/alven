@@ -12,7 +12,8 @@ getPageViewR permalink = do
     outputBuffer <- newIORef ""
     urlRenderer  <- getUrlRender
 
-    let lextra = LuaExtra permalink (runIO yesod) outputBuffer urlRenderer
+    let lextra = LuaExtra themeDir permalink (runDBIO yesod)
+                          outputBuffer urlRenderer
     
     result <- liftIO $ Lua.runThemeScript lextra
 

@@ -12,9 +12,10 @@ import           Layout.Admin (removeClass)
 
 spec :: Spec
 spec = describe "removeClass" $ do
-    it "removes with single class" $ property prop_checkRemove_single
-    it "removes with multiple classes" $ property prop_checkRemove_multi
-  where
+    it "removes with single class" $
+        property prop_checkRemove_single
+    it "removes with multiple classes" $
+        property prop_checkRemove_multi
 
 instance Arbitrary Text where
     arbitrary = fromString <$> listOf (suchThat (arbitrary :: Gen Char) constraint)

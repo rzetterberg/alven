@@ -24,7 +24,7 @@ runThemeScript lextra = do
     addThemePaths lstate
     registerAPIFunctions lstate lextra
 
-    let mainScript = themeDir </> "main.lua"
+    let mainScript = (runDir lextra) </> "main.lua"
 
     Lua.loadfile lstate (encodeString mainScript)
         >>= runScript lstate

@@ -5,8 +5,9 @@ import           Import
 -------------------------------------------------------------------------------
 
 data LuaExtra = LuaExtra
-    { permaLink    :: Text
-    , dbRunner     :: IORunner
+    { runDir       :: FilePath
+    , permaLink    :: Text
+    , dbRunner     :: DBRunnerIO
     , outputBuffer :: IORef String
     , urlRenderer  :: (Route App -> Text)
     }

@@ -141,15 +141,16 @@ test-suite test
                  , classy-prelude
                  , classy-prelude-yesod
                  , hspec
+                 , HUnit
+                 , kael
                  , monad-logger
                  , persistent
                  , persistent-postgresql
                  , resourcet
-                 , kael
+                 , QuickCheck
+                 , text
                  , transformers
                  , wai-extra
                  , yesod
                  , yesod-core
                  , yesod-test
-                 , QuickCheck
-                 , text
