@@ -1,4 +1,4 @@
-module Lua.API where
+module Lua.API (funcTable) where
 
 import qualified Data.Text as T
 import           Foreign.C.Types (CInt)
@@ -8,6 +8,20 @@ import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 
 --------------------------------------------------------------------------------
+
+{-|
+All functions exported to Lua and the name they will be exported as.
+-}
+funcTable :: Text                              -- ^ Current page permalink
+          -> IORunner                          -- ^ The database runner
+          -> IORef String                      -- ^ Reference to haskell output
+          -> [(String, (LuaState -> IO CInt))] -- ^ Names and defs
+funcTable permalink dbRunner outputRef
+    = [ ("print"           , collectPrint outputRef)
+      , ("get_current_page", getCurrentPage dbRunner permalink)
+      , ("get_pages"       , getPages dbRunner)
+      , ("read_theme_file" , readThemeFile)
+      ]
 
 {-|
 Appends a string to an output buffer. Is used to replace Lua's standard print

@@ -65,8 +65,6 @@ addThemePaths lstate = do
                 ++ "./" ++ tdir ++ "/?.lua;"
                 ++ "./" ++ tdir ++ "/?/?.lua"
 
-    print newPath
-
     Lua.pop lstate 1
     Lua.pushstring lstate newPath
 
@@ -74,20 +72,26 @@ addThemePaths lstate = do
     Lua.pop lstate 1
 
 {-|
-Register all API functions in the current state see "Lua.API" for each
-function registered.
+Register all API functions in the current state as the module "kael".
+
+See "API.exportedLuaFunctions" for the list of functions exported and the names
+they are exported as.
+
+For example the Haskell function `collectPrint` will be exported as `print`,
+which means you access it in Lua using `kael:print("Hello, testing output")`.
 -}
 registerAPIFunctions :: LuaState
                      -> Text
                      -> IORunner
                      -> IORef String
                      -> IO ()
-registerAPIFunctions lstate permalink dbRunner outputRef
-    = forM_ funcs $ \(n, f) -> Lua.registerrawhsfunction lstate n f
-  where
-    funcs = [ ("print"           , API.collectPrint outputRef)
-            , ("get_current_page", API.getCurrentPage dbRunner permalink)
-            , ("get_pages"       , API.getPages dbRunner)
-            , ("read_theme_file" , API.readThemeFile)
-            ]
+registerAPIFunctions lstate permalink dbRunner outputRef = do
+    Lua.createtable lstate 0 (length funcs)
+    
+    forM_ funcs $ \(name, f) -> do
+        Lua.pushrawhsfunction lstate f
+        Lua.setfield lstate (-2) name
 
+    Lua.setglobal lstate "kael"
+  where
+    funcs = API.funcTable permalink dbRunner outputRef
