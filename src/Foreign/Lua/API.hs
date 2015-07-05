@@ -18,6 +18,7 @@ funcTable :: LuaExtra
           -> [(String, (LuaState -> IO CInt))]
 funcTable lextra 
     = [ ("output"          , output lextra)
+      , ("get_theme_url"   , getThemeURL lextra)
       , ("get_current_page", getCurrentPage lextra)
       , ("get_pages"       , getPages lextra)
       , ("read_theme_file" , readThemeFile lextra)
@@ -39,6 +40,25 @@ output LuaExtra{..} lstate = do
     modifyIORef' outputBuffer (++ luaData)
 
     return 0
+
+{-|
+Retrives the absolute URL to a file within the current theme.
+
+Can be used to link to static content such as images, css, javascript.
+-}
+getThemeURL :: LuaExtra
+            -> LuaState
+            -> IO CInt
+getThemeURL LuaExtra{..} lstate = do
+    fname <- Lua.tostring lstate 1
+
+    let pieces  = T.splitOn "/" (T.pack fname)
+        route = StaticRoute ("theme" : pieces) []
+        url   = urlRenderer $ StaticR route
+
+    Lua.pushstring lstate (T.unpack url)
+
+    return 1
 
 --------------------------------------------------------------------------------
 -- * Page retrieval
