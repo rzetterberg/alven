@@ -1,4 +1,4 @@
-module Lua.API (funcTable) where
+module Foreign.Lua.API where
 
 import qualified Data.Text as T
 import           Foreign.C.Types (CInt)
@@ -7,50 +7,68 @@ import           Text.Blaze.Html.Renderer.String (renderHtml)
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 
+import           Foreign.Lua.Types (LuaExtra(..))
+
 --------------------------------------------------------------------------------
 
 {-|
 All functions exported to Lua and the name they will be exported as.
 -}
-funcTable :: Text                              -- ^ Current page permalink
-          -> IORunner                          -- ^ The database runner
-          -> IORef String                      -- ^ Reference to haskell output
+funcTable :: LuaExtra
           -> [(String, (LuaState -> IO CInt))] -- ^ Names and defs
-funcTable permalink dbRunner outputRef
-    = [ ("print"           , collectPrint outputRef)
-      , ("get_current_page", getCurrentPage dbRunner permalink)
-      , ("get_pages"       , getPages dbRunner)
+funcTable lextra 
+    = [ ("output"          , output lextra)
+      , ("get_current_page", getCurrentPage lextra)
+      , ("get_pages"       , getPages lextra)
       , ("read_theme_file" , readThemeFile)
       ]
+
+--------------------------------------------------------------------------------
+-- * Core
 
 {-|
 Appends a string to an output buffer. Is used to replace Lua's standard print
 to collect all output into a buffer that can later be used in Haskell.
-
-Lua prototype: void print(string)
 -}
-collectPrint :: IORef String
-             -> LuaState
-             -> IO CInt
-collectPrint outputRef lstate = do
+output :: LuaExtra
+       -> LuaState
+       -> IO CInt
+output LuaExtra{..} lstate = do
     luaData <- Lua.tostring lstate 1
 
-    modifyIORef' outputRef (++ luaData)
+    modifyIORef' outputBuffer (++ luaData)
 
     return 0
+
+--------------------------------------------------------------------------------
+-- * URL handling
+
+{-|
+Builds an absolute URL to a page by using the given permalink.
+
+Note: Does not check if the page actually exists, just builds the URL string.
+-}
+getPageURL :: LuaState
+           -> IO CInt
+getPageURL lstate = do
+    pagePermalink <- Lua.tostring lstate 1
+
+    print pagePermalink
+
+    return 0
+
+--------------------------------------------------------------------------------
+-- * Page retrieval
 
 {-|
 Retrieves the current page by permalink. Returns the page as a table or nil
 if the page was not found in the database.
-
-Lua prototype: table get_current_page(void)
 -}
-getCurrentPage :: IORunner -- ^ Database runner for usage in IO
-               -> Text     -- ^ Page permalink
+getCurrentPage :: LuaExtra
                -> LuaState -- ^ Current state
                -> IO CInt
-getCurrentPage dbRunner permalink lstate = do
-    pageM <- dbRunner $ getBy (UniquePageLink permalink)
+getCurrentPage LuaExtra{..} lstate = do
+    pageM <- dbRunner $ getBy (UniquePageLink permaLink)
 
     case pageM of
         Nothing           -> Lua.pushnil lstate
@@ -62,10 +80,10 @@ getCurrentPage dbRunner permalink lstate = do
 Retrieves a list of all pages in the database. Can be used to render site
 navigation.
 -}
-getPages :: IORunner -- ^ Database runner for usage in IO
+getPages :: LuaExtra
          -> LuaState -- ^ Current state
          -> IO CInt
-getPages dbRunner lstate = do
+getPages LuaExtra{..} lstate = do
     pages <- dbRunner (selectList [] [])
 
     Lua.newtable lstate
@@ -83,11 +101,12 @@ getPages dbRunner lstate = do
 
         go ps (n + 1)
 
+--------------------------------------------------------------------------------
+-- * File access
+
 {-|
 Reads a file in the theme folder and returns it as a string, throws error if
 read failed.
-
-Lua prototype: string read_theme_file(string)
 -}
 readThemeFile :: LuaState
               -> IO CInt

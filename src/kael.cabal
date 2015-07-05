@@ -14,6 +14,9 @@ Flag library-only
 library
     hs-source-dirs: ., app
     exposed-modules: Application
+                     Foreign.Lua
+                     Foreign.Lua.API
+                     Foreign.Lua.Types
                      Foundation
                      Handler.Admin
                      Handler.Admin.Page
@@ -26,8 +29,6 @@ library
                      Layout.Admin
                      Layout.Public
                      Layout.Util
-                     Lua.API
-                     Lua.Run
                      Model
                      Settings
                      Settings.StaticFiles

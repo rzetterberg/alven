@@ -1,10 +1,12 @@
-module Lua.Run where
+module Foreign.Lua where
 
 import           Import 
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
-import qualified Lua.API as API
 import           Filesystem.Path.CurrentOS (encodeString)
+
+import qualified Foreign.Lua.API as API
+import           Foreign.Lua.Types (LuaExtra(..))
 
 -------------------------------------------------------------------------------
 
@@ -12,33 +14,32 @@ import           Filesystem.Path.CurrentOS (encodeString)
 Runs a theme script and returns the resulting output buffer or an error message
 that consists of a Lua stack trace.
 -}
-runThemeScript :: Text
-               -> IORunner
+runThemeScript :: LuaExtra
                -> IO (Either String String)
-runThemeScript permalink dbRunner = do
-    outputRef <- newIORef ""
-    lstate    <- Lua.newstate
+runThemeScript lextra = do
+    lstate <- Lua.newstate
 
     Lua.openlibs lstate
 
     addThemePaths lstate
-    registerAPIFunctions lstate permalink dbRunner outputRef
+    registerAPIFunctions lstate lextra
 
     let mainScript = themeDir </> "main.lua"
 
     Lua.loadfile lstate (encodeString mainScript)
-        >>= runScript lstate outputRef
+        >>= runScript lstate
   where
-    runScript lstate outputRef loadResult
-        | loadResult == 0 =   Lua.pcall lstate 0 0 0
-                          >>= handleResult lstate outputRef
+    runScript lstate loadResult
+        | loadResult == 0 = do
+            res <- Lua.pcall lstate 0 0 0
+            handleResult lstate res
         | otherwise = do
-           Lua.close lstate
-           return $ Left "Could not load theme file"
-    handleResult lstate outputRef runResult
+            Lua.close lstate
+            return $ Left "Could not load theme file"
+    handleResult lstate runResult
         | runResult == 0 = do
             Lua.close lstate
-            readIORef outputRef >>= return . Right
+            readIORef (outputBuffer lextra) >>= return . Right
         | otherwise = do
             errorMessage <- Lua.tostring lstate 1
             Lua.pop lstate 1
@@ -81,11 +82,9 @@ For example the Haskell function `collectPrint` will be exported as `print`,
 which means you access it in Lua using `kael:print("Hello, testing output")`.
 -}
 registerAPIFunctions :: LuaState
-                     -> Text
-                     -> IORunner
-                     -> IORef String
+                     -> LuaExtra
                      -> IO ()
-registerAPIFunctions lstate permalink dbRunner outputRef = do
+registerAPIFunctions lstate lextra = do
     Lua.createtable lstate 0 (length funcs)
     
     forM_ funcs $ \(name, f) -> do
@@ -94,4 +93,4 @@ registerAPIFunctions lstate permalink dbRunner outputRef = do
 
     Lua.setglobal lstate "kael"
   where
-    funcs = API.funcTable permalink dbRunner outputRef
+    funcs = API.funcTable lextra

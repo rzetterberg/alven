@@ -18,4 +18,4 @@ data = {
 template = kael.read_theme_file("base.mustache")
 output   = lustache:render(template, data)
 
-kael.print(output)
+kael.output(output)
