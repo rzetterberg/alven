@@ -114,8 +114,10 @@ readThemeFile lstate = do
 -- * Data type marshalling
 
 {-|
-Converts the given `TextPage` into a Lua table with fields name, permalink
-and body.
+Converts the given `TextPage` into a Lua table with fields name, permalink, body
+and url.
+
+Note: Url is not part of the original `TextPage`, but is added for convinience.
 -}
 textPageToLua :: LuaExtra
               -> LuaState
