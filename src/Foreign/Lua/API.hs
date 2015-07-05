@@ -20,7 +20,7 @@ funcTable lextra
     = [ ("output"          , output lextra)
       , ("get_current_page", getCurrentPage lextra)
       , ("get_pages"       , getPages lextra)
-      , ("read_theme_file" , readThemeFile)
+      , ("read_theme_file" , readThemeFile lextra)
       ]
 
 --------------------------------------------------------------------------------
@@ -91,12 +91,13 @@ getPages lextra@LuaExtra{..} lstate = do
 Reads a file in the theme folder and returns it as a string, throws error if
 read failed.
 -}
-readThemeFile :: LuaState
+readThemeFile :: LuaExtra
+              -> LuaState
               -> IO CInt
-readThemeFile lstate = do
+readThemeFile lextra lstate = do
     relPath <- Lua.tostring lstate 1
 
-    let absPath = themeDir </> (fromString relPath)
+    let absPath = (runDir lextra) </> (fromString relPath)
     
     templateM <- try $ readFile absPath
 
@@ -104,7 +105,7 @@ readThemeFile lstate = do
   where
     checkResult :: Either SomeException String -> IO CInt
     checkResult (Left e)  = do
-        let errMsg = "load_template failed with:\n" ++ show e
+        let errMsg = "readThemeFile with:\n" ++ show e
 
         Lua.pushstring lstate errMsg
         return (-1)

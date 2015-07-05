@@ -51,7 +51,7 @@ spec = withApp $ describe "lua theme output" $ do
 -- * Utils
 
 pagesToHTMLList :: [TextPage] -> Text
-pagesToHTMLList ps = T.intercalate "" $ "<ul>" : li ++ ["</ul>"]
+pagesToHTMLList ps = T.intercalate "" $ "<ul>" : li ++ ["</ul>", "\n"]
   where
     li     = map toLi ps
     toLi p = T.intercalate "" ["<li>", textPageName p, "</li>"]

@@ -21,7 +21,7 @@ runThemeScript lextra = do
 
     Lua.openlibs lstate
 
-    addThemePaths lstate
+    addThemePaths lextra lstate
     registerAPIFunctions lstate lextra
 
     let mainScript = (runDir lextra) </> "main.lua"
@@ -52,15 +52,16 @@ Lua script uses require it will find the scripts in the same directory.
 This is needed since the actual directory where the theme files are situated
 is not the working directory of the application.
 -}
-addThemePaths :: LuaState
+addThemePaths :: LuaExtra
+              -> LuaState
               -> IO ()
-addThemePaths lstate = do
+addThemePaths lextra lstate = do
     Lua.getglobal lstate "package"
     Lua.getfield lstate (-1) "path"
 
     currPath <- Lua.tostring lstate (-1)
 
-    let tdir    = encodeString themeDir
+    let tdir    = encodeString (runDir lextra)
         newPath =  currPath ++ ";"
                 ++ "./" ++ tdir ++ "/?.lua;"
                 ++ "./" ++ tdir ++ "/?/?.lua"
