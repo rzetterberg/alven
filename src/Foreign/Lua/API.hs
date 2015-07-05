@@ -15,7 +15,7 @@ import           Foreign.Lua.Types (LuaExtra(..))
 All functions exported to Lua and the name they will be exported as.
 -}
 funcTable :: LuaExtra
-          -> [(String, (LuaState -> IO CInt))] -- ^ Names and defs
+          -> [(String, (LuaState -> IO CInt))]
 funcTable lextra 
     = [ ("output"          , output lextra)
       , ("get_current_page", getCurrentPage lextra)
@@ -65,7 +65,7 @@ Retrieves the current page by permalink. Returns the page as a table or nil
 if the page was not found in the database.
 -}
 getCurrentPage :: LuaExtra
-               -> LuaState -- ^ Current state
+               -> LuaState
                -> IO CInt
 getCurrentPage LuaExtra{..} lstate = do
     pageM <- dbRunner $ getBy (UniquePageLink permaLink)
@@ -81,7 +81,7 @@ Retrieves a list of all pages in the database. Can be used to render site
 navigation.
 -}
 getPages :: LuaExtra
-         -> LuaState -- ^ Current state
+         -> LuaState
          -> IO CInt
 getPages LuaExtra{..} lstate = do
     pages <- dbRunner (selectList [] [])
@@ -134,8 +134,8 @@ readThemeFile lstate = do
 Converts the given `TextPage` into a Lua table with fields name, permalink
 and body.
 -}
-textPageToLua :: LuaState -- ^ The current state
-              -> TextPage -- ^ Text page to marshall
+textPageToLua :: LuaState
+              -> TextPage
               -> IO ()
 textPageToLua lstate TextPage{..} = do
     Lua.createtable lstate 0 3
