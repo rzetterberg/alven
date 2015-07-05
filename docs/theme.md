@@ -8,16 +8,28 @@ routing, connecting to the database, marshalling data etc.
 
 A theme should consist of 1 Lua file to function:
 
- - page.lua
+ - main.lua
 
-### page.lua
+### main.lua
 
-This file is ran when a user visists a page on the website that is found in the
-database. To render the view this file can use the
-[get_current_page](#get_current_page()) API function to retrieve the current
-page. 
+This file is ran when a user visists a page on the website.
 
 ## API reference
+
+### void output(string)
+
+Outputs the given string to the buffer that is sent to the browser.
+Can be used multiple times.
+
+### string get_theme_url(string)
+
+Returns an absolute path to the given theme file. The input argument expects
+a path relative to the theme root.
+
+For example if the website domain is `example.com` and the file `logotype.png`
+inside the `img` directory should be loaded, and you call
+`get_theme_url("img/logotype.png)` you will recieve
+`http://example.com/static/theme/img/logotype.png`.
 
 ### table get_current_page(void)
 
@@ -27,9 +39,9 @@ handles the routing and selects the current page from the database.
 A `table` that represents the current page is returned, or `nil` if no page was
 found.
 
-### list get_pages(void)
+### table get_pages(void)
 
-This function retrieves a `list` of all pages in the database.
+This function retrieves a `table` (list) of all pages in the database.
 
 ### string read_theme_file(string)
 
