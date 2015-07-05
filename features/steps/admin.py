@@ -106,8 +106,8 @@ def step_impl(context):
 # ==============================================================================
 # Page related
 
-@when(u'I create a page with slug "{slug}"')
-def step_impl(context, slug):
+@when(u'I create a {visibility} page with slug "{slug}"')
+def step_impl(context, visibility, slug):
     b = context.browser
 
     context.open_url("page/create")
@@ -119,7 +119,11 @@ def step_impl(context, slug):
     context.assign_hident(fields, "name", slug)
     context.assign_hident(fields, "permalink", slug)
     context.assign_hident(fields, "body", "Is this my body?")
-    context.assign_hident(fields, "is_public", ["yes"])
+
+    if visibility == "public":
+        context.assign_hident(fields, "is_public", ["yes"])
+    else:
+        context.assign_hident(fields, "is_public", ["no"])
 
     b.submit()
 
@@ -148,8 +152,8 @@ def step_impl(context):
     b.select_form(name = "page_remove")
     b.submit()
 
-@then(u'I should see the page list with the page "{slug}"')
-def step_impl(context, slug):
+@then(u'I should see the page list {inclusion} the page "{slug}"')
+def step_impl(context, inclusion, slug):
     b = context.browser
 
     context.open_url("page")
@@ -157,18 +161,10 @@ def step_impl(context, slug):
     soup  = context.get_soup()
     table = soup.find("table")
 
-    assert page_exists(table, slug)
-
-@then(u'I should see the page list without the page "{slug}"')
-def step_impl(context, slug):
-    b = context.browser
-
-    context.open_url("page")
-
-    soup  = context.get_soup()
-    table = soup.find("table")
-
-    assert not page_exists(table, slug)
+    if inclusion == "with":
+        assert page_exists(table, slug)
+    else:
+        assert not page_exists(table, slug)
 
 @then(u'I should see a duplicate error message')
 def step_impl(context):

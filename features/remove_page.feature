@@ -9,7 +9,7 @@ Feature: Remove page
   @todo
   Scenario: Delete a page
     Given a page with slug "page_a" does not exist
-    When I create a page with slug "page_a"
+    When I create a public page with slug "page_a"
     And I press delete on a page with slug "page_a"
     And I press confirm
     Then I should see the page list without the page "page_a"
