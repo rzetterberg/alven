@@ -33,18 +33,17 @@ runThemeScript lextra = do
         | loadResult == 0 = do
             res <- Lua.pcall lstate 0 0 0
             handleResult lstate res
-        | otherwise = do
-            Lua.close lstate
-            return $ Left "Could not load theme file"
+        | otherwise = returnError lstate
     handleResult lstate runResult
         | runResult == 0 = do
             Lua.close lstate
             readIORef (outputBuffer lextra) >>= return . Right
-        | otherwise = do
-            errorMessage <- Lua.tostring lstate 1
-            Lua.pop lstate 1
-            Lua.close lstate
-            return $ Left errorMessage
+        | otherwise = returnError lstate
+    returnError lstate = do
+        errorMessage <- Lua.tostring lstate 1
+        Lua.pop lstate 1
+        Lua.close lstate
+        return $ Left errorMessage
 
 {-|
 Adds search path to the directory where the theme is situated so that when a
