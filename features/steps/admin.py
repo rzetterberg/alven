@@ -22,6 +22,22 @@ def get_page_row(table, slug):
 
     return None
 
+def user_exists(table, email):
+    return get_user_row(table, email) is not None
+
+def get_user_row(table, email):
+    tbody = table.find("tbody")
+    rows  = tbody.find_all("tr")
+
+    for row in rows:
+        cols       = row.find_all("td")
+        curr_email = cols[1]
+
+        if curr_email.text == email:
+            return row
+
+    return None
+
 def login(context):
     b = context.browser
 
@@ -69,6 +85,15 @@ def step_impl(context, slug):
     context.db.commit()
     curs.close()
 
+@given(u'a user with email "{email}" does not exist')
+def step_impl(context, email):
+    curs = context.db.cursor()
+
+    curs.execute("DELETE FROM public.user WHERE email = '%s';" % email)
+
+    context.db.commit()
+    curs.close()
+
 @when(u'I visit "{path}"')
 def step_impl(context, path):
     context.open_url(path)
@@ -102,6 +127,35 @@ def step_impl(context):
     b.form["password"] = "wrongpassword"
 
     b.submit()
+
+@when(u'I create a user with email "{email}"')
+def step_impl(context, email):
+    b = context.browser
+
+    context.open_url("user/create")
+
+    b.select_form(name = "user_create")
+
+    fields = context.get_hident_fields()
+
+    context.assign_hident(fields, "email", email)
+    context.assign_hident(fields, "is_admin", ["no"])
+
+    b.submit()
+
+@then(u'I should see the user list {inclusion} the user "{email}"')
+def step_impl(context, inclusion, email):
+    b = context.browser
+
+    context.open_url("user")
+
+    soup  = context.get_soup()
+    table = soup.find("table")
+
+    if inclusion == "with":
+        assert user_exists(table, email)
+    else:
+        assert not user_exists(table, email)
 
 # ==============================================================================
 # Page related
