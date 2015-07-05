@@ -143,6 +143,27 @@ def step_impl(context, email):
 
     b.submit()
 
+@when(u'I delete user with email "{email}"')
+def step_impl(context, email):
+    b = context.browser
+
+    context.open_url("user")
+
+    soup        = context.get_soup()
+    table       = soup.find("table")
+    row         = get_user_row(table, email)
+    cols        = row.find_all("td")
+    remove_link = cols[4].find("form")
+    remove_url  = remove_link["action"]
+
+    for form in b.forms():
+        if form.action == remove_url:
+            b.form = form
+            b.submit()
+
+    b.select_form(name = "user_remove")
+    b.submit()
+
 @then(u'I should see the user list {inclusion} the user "{email}"')
 def step_impl(context, inclusion, email):
     b = context.browser
@@ -181,7 +202,7 @@ def step_impl(context, visibility, slug):
 
     b.submit()
 
-@when(u'I press delete on a page with slug "{slug}"')
+@when(u'I delete page with slug "{slug}"')
 def step_impl(context, slug):
     b = context.browser
 
@@ -198,10 +219,6 @@ def step_impl(context, slug):
         if form.action == remove_url:
             b.form = form
             b.submit()
-
-@when(u'I press confirm')
-def step_impl(context):
-    b = context.browser
 
     b.select_form(name = "page_remove")
     b.submit()
