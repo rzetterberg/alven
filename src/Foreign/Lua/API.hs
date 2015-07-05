@@ -158,6 +158,9 @@ textPageToLua LuaExtra{..} lstate TextPage{..} = do
     Lua.pushstring lstate tbody
     Lua.setfield lstate (-2) "body"
 
+    Lua.pushboolean lstate textPagePublic
+    Lua.setfield lstate (-2) "is_public"
+
     let absPageURL = urlRenderer (PageViewR textPagePermalink)
 
     Lua.pushstring lstate (T.unpack absPageURL)

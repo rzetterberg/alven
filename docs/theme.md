@@ -14,7 +14,7 @@ A theme should consist of 1 Lua file to function:
 
 This file is ran when a user visists a page on the website.
 
-## API reference
+## API functions
 
 All API functions can be accessed via the `kael` module. If you want to
 call the function `output` with input `hello` you do this:
@@ -35,7 +35,7 @@ inside the `img` directory should be loaded, and you call
 `get_theme_url("img/logotype.png)` you will recieve
 `http://example.com/static/theme/img/logotype.png`.
 
-### table get_current_page(void)
+### page get_current_page(void)
 
 This function retrieves the page that the user is currently visiting. The core
 handles the routing and selects the current page from the database.
@@ -43,7 +43,7 @@ handles the routing and selects the current page from the database.
 A `table` that represents the current page is returned, or `nil` if no page was
 found.
 
-### table get_pages(void)
+### [Page] get_pages(void)
 
 This function retrieves a `table` (list) of all pages in the database.
 
@@ -52,3 +52,17 @@ This function retrieves a `table` (list) of all pages in the database.
 Reads a file using the relative path where the root is the theme directory.
 Returns a `string` with the file contents on success and throws an error on
 failure.
+
+## API types
+
+### Page
+
+Page is a table that represents a normal text page created in the admin panel.
+
+It consists of the following fields:
+
+ - string name
+ - string permalink
+ - string body
+ - boolean is_public
+ - string url
