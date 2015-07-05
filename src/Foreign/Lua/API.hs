@@ -43,20 +43,6 @@ output LuaExtra{..} lstate = do
 --------------------------------------------------------------------------------
 -- * URL handling
 
-{-|
-Builds an absolute URL to a page by using the given permalink.
-
-Note: Does not check if the page actually exists, just builds the URL string.
--}
-getPageURL :: LuaState
-           -> IO CInt
-getPageURL lstate = do
-    pagePermalink <- Lua.tostring lstate 1
-
-    print pagePermalink
-
-    return 0
-
 --------------------------------------------------------------------------------
 -- * Page retrieval
 
@@ -67,12 +53,12 @@ if the page was not found in the database.
 getCurrentPage :: LuaExtra
                -> LuaState
                -> IO CInt
-getCurrentPage LuaExtra{..} lstate = do
+getCurrentPage lextra@LuaExtra{..} lstate = do
     pageM <- dbRunner $ getBy (UniquePageLink permaLink)
 
     case pageM of
         Nothing           -> Lua.pushnil lstate
-        Just (Entity _ p) -> textPageToLua lstate p
+        Just (Entity _ p) -> textPageToLua lextra lstate p
 
     return 1
 
@@ -83,7 +69,7 @@ navigation.
 getPages :: LuaExtra
          -> LuaState
          -> IO CInt
-getPages LuaExtra{..} lstate = do
+getPages lextra@LuaExtra{..} lstate = do
     pages <- dbRunner (selectList [] [])
 
     Lua.newtable lstate
@@ -95,7 +81,7 @@ getPages LuaExtra{..} lstate = do
     go :: [Entity TextPage] -> Int -> IO ()
     go [] _              = return ()
     go ((Entity _ p):ps) n = do
-        textPageToLua lstate p
+        textPageToLua lextra lstate p
 
         Lua.rawseti lstate (-2) (n + 1)
 
@@ -134,10 +120,11 @@ readThemeFile lstate = do
 Converts the given `TextPage` into a Lua table with fields name, permalink
 and body.
 -}
-textPageToLua :: LuaState
+textPageToLua :: LuaExtra
+              -> LuaState
               -> TextPage
               -> IO ()
-textPageToLua lstate TextPage{..} = do
+textPageToLua LuaExtra{..} lstate TextPage{..} = do
     Lua.createtable lstate 0 3
 
     Lua.pushstring lstate (T.unpack textPageName)
@@ -150,3 +137,8 @@ textPageToLua lstate TextPage{..} = do
 
     Lua.pushstring lstate tbody
     Lua.setfield lstate (-2) "body"
+
+    let absPageURL = urlRenderer (PageViewR textPagePermalink)
+
+    Lua.pushstring lstate (T.unpack absPageURL)
+    Lua.setfield lstate (-2) "url"
