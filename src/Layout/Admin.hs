@@ -5,8 +5,8 @@ import           Import
 
 -------------------------------------------------------------------------------
 
-singleLarge :: Widget -> Handler Html
-singleLarge content = do
+singleLarge :: Text -> Widget -> Handler Html
+singleLarge pageIdentifier content = do
     alertM                    <- getAlertT
     (currCrumb, parentCrumbs) <- breadcrumbs
 

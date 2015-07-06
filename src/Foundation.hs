@@ -119,6 +119,8 @@ instance YesodAuth App where
     type AuthId App = UserId
 
     authLayout content = buildLayout $ do 
+        let pageIdentifier = "login" :: Text
+
         toWidgetHead $(luciusFile "templates/layout/public/global.lucius")
 
         $(widgetFile "layout/public/auth")

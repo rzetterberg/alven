@@ -7,20 +7,20 @@ Feature: User accesses admin interface
   Scenario Outline: Authorized users have access
     Given I am authorized
     When I visit "<path>"
-    Then I should see the "<title>" page
+    Then I should see the "<identifier>" page
     
     Examples: Main pages
-    | path         | title       |
-    | /admin       | Admin       |
-    | /page        | Pages       |
-    | /page/create | Create page |
-    | /user        | Users       |
-    | /user/create | Create user |
+    | path         | identifier  |
+    | /admin       | admin-index |
+    | /page        | page-list   |
+    | /page/create | page-create |
+    | /user        | user-list   |
+    | /user/create | user-create |
 
   Scenario Outline: Unauthorized users does not have access
     Given I am not authorized
     When I visit "<path>"
-    Then I should see the "Login" page
+    Then I should see the "login" page
 
     Examples: Main pages
     | path         |

@@ -1,4 +1,4 @@
-<div #wrapper>
+<div id="wrapper #{pageIdentifier}">
   <div #header>
     <div .container>
       <div .row>

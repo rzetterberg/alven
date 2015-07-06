@@ -13,7 +13,7 @@ getPageListR :: Handler Html
 getPageListR = do
     allPages :: [Entity TextPage] <- runDB $ selectList [] [Asc TextPageId]
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "page-list" $ do
         setTitleI MsgPages
 
         $(widgetFile "blocks/admin/page_list")
@@ -24,7 +24,7 @@ getPageEditR pageId = do
     (form, encType) <- generateFormPost $ pageEditForm page
     msgRender       <- getJSMessageRender
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "page-edit" $ do
         setTitleI pageTitle
 
         addScript $ StaticR js_marked_js
@@ -45,7 +45,7 @@ postPageEditR pageId = do
         FormSuccess changes -> save changes
         _                   -> return ()
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "page-edit" $ do
         setTitleI pageTitle
 
         addScript $ StaticR js_marked_js
@@ -70,7 +70,7 @@ getPageCreateR = do
     (form, encType) <- generateFormPost pageCreateForm 
     msgRender       <- getJSMessageRender
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "page-create" $ do
         setTitleI pageTitle
 
         addScript $ StaticR js_marked_js
@@ -90,7 +90,7 @@ postPageCreateR = do
         FormSuccess new -> save new
         _               -> return ()
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "page-create" $ do
         setTitleI pageTitle
 
         addScript $ StaticR js_marked_js
@@ -117,7 +117,7 @@ postPageRemoveConfirmR :: TextPageId -> Handler Html
 postPageRemoveConfirmR pageId = do
     page <- runDB $ get404 pageId
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "page-remove-confirm" $ do
         setTitleI MsgRemovePage
         $(widgetFile "blocks/admin/page_remove_confirm")
 

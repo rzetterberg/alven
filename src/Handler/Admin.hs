@@ -7,7 +7,7 @@ import qualified Layout.Admin as Layout
 -------------------------------------------------------------------------------
 
 getAdminR :: Handler Html
-getAdminR = Layout.singleLarge $ do
+getAdminR = Layout.singleLarge "admin-index" $ do
     setTitleI MsgAdmin
 
     $(widgetFile "blocks/admin/index")

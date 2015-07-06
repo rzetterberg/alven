@@ -12,7 +12,7 @@ getUserListR :: Handler Html
 getUserListR = do
     allUsers :: [Entity User] <- runDB $ selectList [] [Asc UserId]
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "user-list" $ do
         setTitleI MsgUsers
 
         $(widgetFile "blocks/admin/user_list")
@@ -21,7 +21,7 @@ getUserViewR :: UserId -> Handler Html
 getUserViewR userId = do
     user <- runDB $ get404 userId
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "user-view" $ do
         setTitleI MsgUser
         $(widgetFile "blocks/admin/user_view")
 
@@ -30,7 +30,7 @@ getUserEditR userId = do
     user            <- runDB $ get404 userId
     (form, encType) <- generateFormPost $ userEditForm user
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "user-edit" $ do
         setTitleI MsgEditUser
         $(widgetFile "blocks/admin/user_edit")
 
@@ -43,7 +43,7 @@ postUserEditR userId = do
         FormSuccess changes -> save changes
         _                   -> return ()
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "user-edit" $ do
         setTitleI MsgEditUser
         $(widgetFile "blocks/admin/user_edit")
   where
@@ -66,7 +66,7 @@ getUserCreateR :: Handler Html
 getUserCreateR = do
     (form, encType) <- generateFormPost userCreateForm 
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "user-create" $ do
         setTitleI MsgCreateUser
         $(widgetFile "blocks/admin/user_create")
 
@@ -78,7 +78,7 @@ postUserCreateR = do
         FormSuccess u -> save u
         _             -> return ()
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "user-create" $ do
         setTitleI MsgCreateUser
         $(widgetFile "blocks/admin/user_create")
   where
@@ -99,7 +99,7 @@ postUserRemoveConfirmR :: UserId -> Handler Html
 postUserRemoveConfirmR userId = do
     user <- runDB $ get404 userId
 
-    Layout.singleLarge $ do
+    Layout.singleLarge "user-remove-confirm" $ do
         setTitleI MsgRemoveUser
         $(widgetFile "blocks/admin/user_remove_confirm")
 

@@ -1,3 +1,4 @@
+import re
 from behave import *
 
 # ==============================================================================
@@ -98,11 +99,18 @@ def step_impl(context, email):
 def step_impl(context, path):
     context.open_url(path)
 
-@then(u'I should see the "{page_title}" page')
-def step_impl(context, page_title):
+@then(u'I should see the "{page_identifier}" page')
+def step_impl(context, page_identifier):
     soup = context.get_soup()
 
-    assert soup.title.string == page_title
+    wrapper = soup.find(
+        "div",
+        {
+            "id" : re.compile(r'.*' + page_identifier + '.*')
+        }
+    )
+
+    assert wrapper is not None
 
 # ==============================================================================
 # User related
