@@ -3,10 +3,10 @@ module Main where
 import           Criterion.Main (defaultMain)
 import           Prelude
 
-import qualified Layout.AdminBench as AdminBench
+import qualified Layout.UtilBench as UtilBench
 
 --------------------------------------------------------------------------------
 
 main :: IO ()
-main = defaultMain [ AdminBench.benches
+main = defaultMain [ UtilBench.benches
                    ]

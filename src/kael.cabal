@@ -26,6 +26,7 @@ library
                      Handler.Public.Page
                      Import
                      Import.NoFoundation
+                     Layout.Component.Alert
                      Layout.Admin
                      Layout.Public
                      Layout.Util

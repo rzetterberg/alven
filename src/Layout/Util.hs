@@ -1,80 +1,39 @@
-{-# LANGUAGE RecordWildCards #-}
+module Layout.Util where
 
-module Layout.Util 
-    ( Level(..)
-    , Alert(..)
-    , setAlert
-    , setAlertI
-    , getAlert
-    , getAlertT) where
-
-import           Prelude               
 import           Data.Text (Text)
-import qualified Data.Text.Lazy as TextL
-import qualified Data.Text.Lazy.Encoding as TextLE
-import qualified Data.Text.Encoding as TextE
-import qualified Data.Aeson as Aeson
-import           Data.Aeson.TH
-import           Text.Blaze (ToMarkup(toMarkup))
-import           Yesod hiding (setMessage, getMessage)
+import qualified Data.Text as T
+import           Prelude
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-data Level
-    = Success 
-    | Info 
-    | Warning
-    | Danger
-      deriving Show
+{-|
+Removes a class name from the given list of attributes a HTML-tag has.
 
-instance ToMarkup Level where
-    toMarkup = toMarkup . textLevel
-      where
-        textLevel :: Level -> Text
-        textLevel lvl = case lvl of
-            Success -> "alert-success"
-            Info    -> "alert-info"
-            Warning -> "alert-warning"
-            Danger  -> "alert-danger"
+To represent a HTML-tags' attributes a list of tuples are used in yesod-form.
+Say we have link we want to remove the CSS class "btn-default" from
 
-data Alert = Alert
-    { alertLevel :: Level 
-    , alertMsg   :: Text
-    } deriving Show
+@
+<a href="http://google.com" class="btn btn-default">Google</a>
+@
 
-$(deriveJSON defaultOptions ''Level)
-$(deriveJSON defaultOptions ''Alert)
+This tag would be represented as
 
-sessKey :: Text
-sessKey = "_ALERT"
+@
+let glink = [("href", "http://google.com"), ("class", "btn btn-default")]
+@
 
-setAlertI :: (MonadHandler m, RenderMessage (HandlerSite m) msg)
-          => Level 
-          -> msg
-          -> m ()
-setAlertI lvl msg 
-    = getMessageRender >>= \renderer -> setAlert lvl $ renderer msg
+We can remove "btn-default" by calling this function like so:
 
-setAlert :: MonadHandler m => Level -> Text -> m ()
-setAlert lvl msg = setSession sessKey $ 
-    toSessionVal Alert{alertLevel = lvl, alertMsg = msg}
-  where
-    toSessionVal = TextL.toStrict . TextLE.decodeUtf8 . Aeson.encode
-
-getAlert :: MonadHandler m => m (Maybe Alert)
-getAlert = do
-    valM <- lookupSession sessKey
-    deleteSession sessKey
-
-    return $ case valM of
-                Nothing  -> Nothing
-                Just val -> Aeson.decodeStrict $ TextE.encodeUtf8 val
-
-getAlertT :: MonadHandler m => m (Maybe (Html, Html))
-getAlertT = do
-    alertM <- getAlert
-
-    return $ case alertM of
-                Nothing        -> Nothing
-                Just Alert{..} -> Just (toHtml alertLevel, toHtml alertMsg)
-
+>>> removeClass "btn-default" glink
+[("href", "http://google.com"), ("class", "btn")]
+-}
+removeClass :: Text           -- ^ Class to remove
+            -> [(Text, Text)] -- ^ The tag attributes
+            -> [(Text, Text)]
+removeClass "" a                      = a
+removeClass _  []                     = []
+removeClass klass (("class", v):rest)
+    = let klasses = T.splitOn " " v
+          outp    = T.strip $ T.intercalate " " $ filter (/= klass) klasses
+      in ("class", outp) : rest
+removeClass klass (other:rest)        = other : removeClass klass rest

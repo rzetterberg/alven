@@ -1,9 +1,9 @@
-module Layout.AdminBench (benches) where
+module Layout.UtilBench (benches) where
 
 import           Criterion.Types
 import           Prelude
 
-import           Layout.Admin (removeClass)
+import           Layout.Util (removeClass)
 
 --------------------------------------------------------------------------------
 

@@ -6,7 +6,7 @@ import           Data.Char (isLetter, isNumber)
 import qualified Data.Text as T
 import           TestImport
 
-import           Layout.Admin (removeClass)
+import           Layout.Util (removeClass)
 
 -------------------------------------------------------------------------------
 
