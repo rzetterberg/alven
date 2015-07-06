@@ -1,4 +1,32 @@
-module Foreign.Lua where
+{-|
+Provides functionality to setup the Lua environment and run Lua themes.
+
+To understand how a Lua theme is run you need to know:
+
+* How resources are passed into the runner
+* How information is passed between Lua and Haskell
+* What a theme should consist of
+
+This module provides a single function 'runThemeScript' that sets up the Lua
+environment and executes the theme in the theme dir 
+
+API functionality in this module refers to the functions that can be called in
+Lua that executes Haskell code.
+
+Some API functions needs to access the database and/or the output buffer
+therefor those resources are kept in a central data type called 'LuaExtra'.
+(See "Foreign.Lua.Types" for information about this data type contains).
+
+When a Lua theme is executed it can access the Lua module __kael__ to use
+all the API functions. All functions except for one are used to retrieve data
+from the system (such as list of pages, specific pages, URLs, etc.). The
+exception is the __output__ function that is used to append the given data to
+a buffer that becomes the HTTP body after the theme has finished executing.
+
+Currently this buffer is simply an "IORef" to a "Text" value that is appended
+each time __output__ is called. 
+-}
+module Foreign.Lua (runThemeScript) where
 
 import           Import 
 import qualified Scripting.Lua as Lua
@@ -13,6 +41,13 @@ import           Foreign.Lua.Types (LuaExtra(..))
 {-|
 Runs a theme script and returns the resulting output buffer or an error message
 that consists of a Lua stack trace.
+
+Adds right lua path to the given theme directory and registers all API functions
+that are used to interact with kael from Lua. See "Foreign.Lua.API" for more
+information.
+
+Note: Expects that the given 'LuaExtra' contain valid resources. Does not check
+whether the output buffer or db runner actually is setup correct.
 -}
 runThemeScript :: LuaExtra
                -> IO (Either String String)

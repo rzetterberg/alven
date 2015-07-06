@@ -1,3 +1,6 @@
+{-|
+Provies all the API functions that can be called from Lua to run Haskell code.
+-}
 module Foreign.Lua.API where
 
 import qualified Data.Text as T
@@ -13,6 +16,11 @@ import           Foreign.Lua.Types (LuaExtra(..))
 
 {-|
 All functions exported to Lua and the name they will be exported as.
+
+For exampe 'getThemeURL' will be exported as __get_theme_url__ and can be
+accessed in Lua such as:
+
+> kael.get_theme_url("main.css")
 -}
 funcTable :: LuaExtra
           -> [(String, (LuaState -> IO CInt))]
@@ -28,8 +36,8 @@ funcTable lextra
 -- * Core
 
 {-|
-Appends a string to an output buffer. Is used to replace Lua's standard print
-to collect all output into a buffer that can later be used in Haskell.
+Appends a string to the output buffer. This buffer will become the HTTP body of
+the current response.
 -}
 output :: LuaExtra
        -> LuaState
