@@ -14,6 +14,6 @@ function build_container {
     docker build -f config/docker/$docker_file -t $tag .
 }
 
-build_container "kael/builder" "builder.docker"
-build_container "kael/tester" "tester.docker"
-build_container "kael/db" "db.docker"
+build_container "alven/builder" "builder.docker"
+build_container "alven/tester" "tester.docker"
+build_container "alven/db" "db.docker"

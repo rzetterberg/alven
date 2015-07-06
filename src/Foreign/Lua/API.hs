@@ -20,7 +20,7 @@ All functions exported to Lua and the name they will be exported as.
 For exampe 'getThemeURL' will be exported as __get_theme_url__ and can be
 accessed in Lua such as:
 
-> kael.get_theme_url("main.css")
+> alven.get_theme_url("main.css")
 -}
 funcTable :: LuaExtra
           -> [(String, (LuaState -> IO CInt))]

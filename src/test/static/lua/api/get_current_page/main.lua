@@ -1,3 +1,3 @@
-page = kael.get_current_page()
+page = alven.get_current_page()
 
-kael.output(page["name"])
+alven.output(page["name"])

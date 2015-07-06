@@ -1,12 +1,12 @@
 local lustache = require "lustache"
 
-pages = kael.get_pages()
+pages = alven.get_pages()
 
 data = {
    pages = pages
 }
 
-template = kael.read_theme_file("base.mustache")
+template = alven.read_theme_file("base.mustache")
 output   = lustache:render(template, data)
 
-kael.output(output)
+alven.output(output)

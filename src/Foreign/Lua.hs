@@ -17,7 +17,7 @@ Some API functions needs to access the database and/or the output buffer
 therefor those resources are kept in a central data type called 'LuaExtra'.
 (See "Foreign.Lua.Types" for information about this data type contains).
 
-When a Lua theme is executed it can access the Lua module __kael__ to use
+When a Lua theme is executed it can access the Lua module __alven__ to use
 all the API functions. All functions except for one are used to retrieve data
 from the system (such as list of pages, specific pages, URLs, etc.). The
 exception is the __output__ function that is used to append the given data to
@@ -43,7 +43,7 @@ Runs a theme script and returns the resulting output buffer or an error message
 that consists of a Lua stack trace.
 
 Adds right lua path to the given theme directory and registers all API functions
-that are used to interact with kael from Lua. See "Foreign.Lua.API" for more
+that are used to interact with alven from Lua. See "Foreign.Lua.API" for more
 information.
 
 Note: Expects that the given 'LuaExtra' contain valid resources. Does not check
@@ -108,13 +108,13 @@ addThemePaths lextra lstate = do
     Lua.pop lstate 1
 
 {-|
-Register all API functions in the current state as the module "kael".
+Register all API functions in the current state as the module "alven".
 
 See "API.exportedLuaFunctions" for the list of functions exported and the names
 they are exported as.
 
 For example the Haskell function `collectPrint` will be exported as `print`,
-which means you access it in Lua using `kael:print("Hello, testing output")`.
+which means you access it in Lua using `alven:print("Hello, testing output")`.
 -}
 registerAPIFunctions :: LuaState
                      -> LuaExtra
@@ -126,6 +126,6 @@ registerAPIFunctions lstate lextra = do
         Lua.pushrawhsfunction lstate f
         Lua.setfield lstate (-2) name
 
-    Lua.setglobal lstate "kael"
+    Lua.setglobal lstate "alven"
   where
     funcs = API.funcTable lextra

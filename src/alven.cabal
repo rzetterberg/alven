@@ -1,4 +1,4 @@
-name:              kael
+name:              alven
 version:           0.1.0
 cabal-version:     >= 1.8
 build-type:        Simple
@@ -105,13 +105,13 @@ library
                  , yesod-text-markdown
                  , yesod-static
 
-executable kael
+executable alven
     if flag(library-only)
         Buildable: False
 
     main-is:           main.hs
     hs-source-dirs:    app
-    build-depends:     base, kael
+    build-depends:     base, alven
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N -Wall -Werror
 
@@ -143,7 +143,7 @@ test-suite test
                  , classy-prelude-yesod
                  , hspec
                  , HUnit
-                 , kael
+                 , alven
                  , monad-logger
                  , persistent
                  , persistent-postgresql
@@ -182,5 +182,5 @@ benchmark bench
                  , abstract-par
                  , base
                  , criterion
-                 , kael
+                 , alven
                  , text

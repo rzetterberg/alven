@@ -1,6 +1,6 @@
 {-# LANGUAGE PackageImports #-}
 
-import           "kael" Application (develMain)
+import           "alven" Application (develMain)
 import           Control.Monad (void)
 import           Prelude 
 

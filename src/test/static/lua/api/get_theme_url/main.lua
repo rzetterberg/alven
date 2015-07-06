@@ -1,1 +1,1 @@
-kael.output(kael.get_theme_url("test"))
+alven.output(alven.get_theme_url("test"))

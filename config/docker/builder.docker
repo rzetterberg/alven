@@ -6,36 +6,36 @@ RUN apt-get update --fix-missing && apt-get install libpq-dev gzip -y
 # | User setup
 # ==============================================================================
 
-RUN useradd -m -d /home/kael -s /bin/bash kael
+RUN useradd -m -d /home/alven -s /bin/bash alven
 RUN apt-get update && apt-get install -y sudo locales
-RUN usermod -a -G sudo kael
-RUN echo " kael      ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN usermod -a -G sudo alven
+RUN echo " alven      ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
-RUN mkdir /opt/kael && chown kael:kael /opt/kael
+RUN mkdir /opt/alven && chown alven:alven /opt/alven
 
-ENV PROJECT_ROOT /opt/kael
+ENV PROJECT_ROOT /opt/alven
 
-RUN echo "export APPROOT=http://\`hostname --ip-address\`:3000" >> /home/kael/.bashrc
+RUN echo "export APPROOT=http://\`hostname --ip-address\`:3000" >> /home/alven/.bashrc
 
-WORKDIR /opt/kael
-USER kael
+WORKDIR /opt/alven
+USER alven
 
 # ==============================================================================
 # | Haskell package setup
 # ==============================================================================
 
-ADD ./src/cabal.config /opt/kael/
-ADD ./src/kael.cabal /opt/kael/
+ADD ./src/cabal.config /opt/alven/
+ADD ./src/alven.cabal /opt/alven/
 
 RUN cabal update
-RUN cd /opt/kael && cabal install yesod-bin -j && cabal install \
+RUN cd /opt/alven && cabal install yesod-bin -j && cabal install \
     --enable-tests --enable-benchmarks --only-dep -j
 
-ENV PATH $PATH:/home/kael/.cabal/bin
+ENV PATH $PATH:/home/alven/.cabal/bin
 
 EXPOSE 3000

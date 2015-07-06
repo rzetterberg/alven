@@ -16,9 +16,9 @@ This file is ran when a user visists a page on the website.
 
 ## API functions
 
-All API functions can be accessed via the `kael` module. If you want to
+All API functions can be accessed via the `alven` module. If you want to
 call the function `output` with input `hello` you do this:
-`kael.output("hello")`.
+`alven.output("hello")`.
 
 ### void output(string)
 

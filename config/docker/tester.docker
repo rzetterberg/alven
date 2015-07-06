@@ -6,4 +6,4 @@ RUN pip install behave
 RUN pip install BeautifulSoup4
 RUN pip install PyYaml
 
-WORKDIR /opt/kael
+WORKDIR /opt/alven
