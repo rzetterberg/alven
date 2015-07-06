@@ -33,8 +33,8 @@ ADD ./src/cabal.config /opt/alven/
 ADD ./src/alven.cabal /opt/alven/
 
 RUN cabal update
-RUN cd /opt/alven && cabal install yesod-bin -j && cabal install \
-    --enable-tests --enable-benchmarks --only-dep -j
+RUN cd /opt/alven && cabal install yesod-bin 
+RUN cd /opt/alven && cabal install --enable-tests --enable-benchmarks --only-dep
 
 ENV PATH $PATH:/home/alven/.cabal/bin
 
