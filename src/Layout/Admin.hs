@@ -1,9 +1,19 @@
+{-|
+Layout rendering functionality for different types of layouts used in the admin
+interface. Contains helper functionality for rendering forms.
+
+All layouts are Bootstrap based which means grid units refer to the relative
+size of 1 to 12.
+-}
 module Layout.Admin where
 
 import           Import
 
 -------------------------------------------------------------------------------
 
+{-|
+1-column layout with content area of 12 grid units
+-}
 singleLarge :: Text -> Widget -> Handler Html
 singleLarge pageIdentifier content = do
     alertM                    <- getAlertT
@@ -14,9 +24,17 @@ singleLarge pageIdentifier content = do
 
         $(widgetFile "layout/admin/single_large")
 
+{-|
+Renders given form as a
+<http://getbootstrap.com/css/#forms-example Bootstrap Basic form>.
+-}
 renderForm :: AForm Handler a -> Form a
 renderForm f = renderBootstrap3 BootstrapBasicForm f
 
+{-|
+A boolean field adapted after how Bootstrap structures radio buttons.
+See <http://getbootstrap.com/css/#checkboxes-and-radios Checkboxes and radios>.
+-}
 bs3BoolField :: Monad m => RenderMessage (HandlerSite m) FormMessage => Field m Bool
 bs3BoolField = boolField
       { fieldView = \theId name attrs val isReq -> let attrs' = removeClass "form-control" attrs
@@ -42,6 +60,10 @@ $newline never
   where
     showVal = either (\_ -> False)
 
+{-|
+A field that cannot be filled in, only used to display values. See
+<http://getbootstrap.com/css/#forms-controls-static Static control>.
+-}
 bs3StaticTextField :: Monad m => RenderMessage (HandlerSite m) FormMessage => Field m Text
 bs3StaticTextField = textField
     { fieldView = \theId name _ val _ ->

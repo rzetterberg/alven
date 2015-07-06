@@ -1,3 +1,6 @@
+{-|
+Utilities that contains generic functionality that is needed by layout modules.
+-}
 module Layout.Util where
 
 import           Data.Text (Text)

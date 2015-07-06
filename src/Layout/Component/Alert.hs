@@ -1,5 +1,15 @@
 {-# LANGUAGE RecordWildCards #-}
 
+{-|
+Functionality for alert handling that supports different types of alerts.
+
+Can be used to display error, success, warning and info message boxes in
+conjunction with form handling.
+
+Supports supplying the message as Text or a translation type.
+
+Saves alert messages as session data that is cleared once shown to the client.
+-}
 module Layout.Component.Alert 
     ( Level(..)
     , Alert(..)
