@@ -12,23 +12,44 @@ import           Foreign.Lua.Types (LuaExtra(LuaExtra))
 -------------------------------------------------------------------------------
 
 spec :: Spec
-spec = withApp $ describe "lua theme output" $ do
-    it "outputs a simple 'hello'" $
-        checkTheme "test/static/lua/hello" "hello"
-    it "outputs page name from db" $ do
-        let expOutp = T.unpack (textPageName tmpPage1)
+spec = withApp $ do
+    describe "lua API interaction" $ do
+        it "output returns expected result" $
+            checkTheme "test/static/lua/api/output" "hello"
+        it "get_theme_url returns expected result" $
+            checkTheme "test/static/lua/api/get_theme_url" "nop"
+        it "get_current_page gets right page" $ do
+            let expOutp = T.unpack (textPageName tmpPage1)
 
-        void $ runDB $ insert tmpPage1
-    
-        checkTheme "test/static/lua/page_name" expOutp
-    it "outputs html page list from db using lustache template engine" $ do
-        let expOutp = T.unpack $ pagesToHTMLList [tmpPage1, tmpPage2]
+            runDB $ do
+                void $ insert tmpPage1
+                void $ insert tmpPage2
 
-        runDB $ do
-            void $ insert tmpPage1
-            void $ insert tmpPage2
-    
-        checkTheme "test/static/lua/lustache_page_list" expOutp
+            checkTheme "test/static/lua/api/get_current_page" expOutp
+        it "get_pages returns expected amount of pages" $ do
+            let expOutp = show (length [tmpPage1, tmpPage2])
+
+            runDB $ do
+                void $ insert tmpPage1
+                void $ insert tmpPage2
+
+            checkTheme "test/static/lua/api/get_pages" expOutp
+        it "read_theme_file successfully reads a css file" $ do
+            let expOutp = "body{color: red;}" :: Text
+
+            liftIO $
+                writeFile "test/static/lua/api/read_theme_file/main.css" expOutp
+
+            checkTheme "test/static/lua/api/read_theme_file" (T.unpack expOutp)
+    describe "lua common theme functionality" $ do
+        it "lustache based page list" $ do
+            let expOutp = T.unpack $ pagesToHTMLList [tmpPage1, tmpPage2]
+
+            runDB $ do
+                void $ insert tmpPage1
+                void $ insert tmpPage2
+
+            checkTheme "test/static/lua/examples/page_list" expOutp
   where
     tmpPage1  = TextPage "Test page 1" "test-page1" "" True Nothing
     tmpPage2  = TextPage "Test page 2" "test-page2" "" True Nothing
@@ -37,7 +58,8 @@ spec = withApp $ describe "lua theme output" $ do
         outputBuffer <- liftIO $ newIORef ""
 
         let urlRenderer _ = "nop"
-            lextra        = LuaExtra themeDir "" (runDBIO yesod)
+            currPlink     = (textPagePermalink tmpPage1)
+            lextra        = LuaExtra themeDir currPlink (runDBIO yesod)
                                      outputBuffer urlRenderer
 
         liftIO $ do
@@ -50,6 +72,12 @@ spec = withApp $ describe "lua theme output" $ do
 -------------------------------------------------------------------------------
 -- * Utils
 
+{-|
+Generates a HTML unordered list of pages without any spaces or line breaks.
+
+>>> pagesToHTMLList [TextPage "Page 1" "page1" "" True Nothing]
+"<ul><li>Page 1</li></ul>
+-}
 pagesToHTMLList :: [TextPage] -> Text
 pagesToHTMLList ps = T.intercalate "" $ "<ul>" : li ++ ["</ul>", "\n"]
   where
