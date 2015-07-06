@@ -26,7 +26,7 @@ a buffer that becomes the HTTP body after the theme has finished executing.
 Currently this buffer is simply an "IORef" to a "Text" value that is appended
 each time __output__ is called. 
 -}
-module Foreign.Lua (runThemeScript) where
+module Foreign.Lua where
 
 import           Import 
 import qualified Scripting.Lua as Lua
