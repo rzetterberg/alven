@@ -33,7 +33,8 @@ ADD ./src/cabal.config /opt/kael/
 ADD ./src/kael.cabal /opt/kael/
 
 RUN cabal update
-RUN cd /opt/kael && cabal install yesod-bin -j && cabal install --enable-tests --only-dep -j
+RUN cd /opt/kael && cabal install yesod-bin -j && cabal install \
+    --enable-tests --enable-benchmarks --only-dep -j
 
 ENV PATH $PATH:/home/kael/.cabal/bin
 

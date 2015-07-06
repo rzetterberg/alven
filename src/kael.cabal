@@ -154,3 +154,32 @@ test-suite test
                  , yesod
                  , yesod-core
                  , yesod-test
+
+benchmark bench
+    type:              exitcode-stdio-1.0
+    main-is:           Bench.hs
+    hs-source-dirs:    bench
+    ghc-options:       -Wall
+
+    extensions: TemplateHaskell
+                QuasiQuotes
+                OverloadedStrings
+                NoImplicitPrelude
+                CPP
+                MultiParamTypeClasses
+                TypeFamilies
+                GADTs
+                GeneralizedNewtypeDeriving
+                FlexibleContexts
+                EmptyDataDecls
+                NoMonomorphismRestriction
+                DeriveDataTypeable
+                ViewPatterns
+                TupleSections
+
+    build-depends: aeson
+                 , abstract-par
+                 , base
+                 , criterion
+                 , kael
+                 , text
