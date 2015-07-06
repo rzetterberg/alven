@@ -27,7 +27,7 @@ spec = withApp $ do
 
             checkTheme "test/static/lua/api/get_current_page" expOutp
         it "get_pages returns expected amount of pages" $ do
-            let expOutp = show (length [tmpPage1, tmpPage2])
+            let expOutp = show (length tmpPages)
 
             runDB $ do
                 void $ insert tmpPage1
@@ -43,7 +43,7 @@ spec = withApp $ do
             checkTheme "test/static/lua/api/read_theme_file" (T.unpack expOutp)
     describe "lua common theme functionality" $ do
         it "lustache based page list" $ do
-            let expOutp = T.unpack $ pagesToHTMLList [tmpPage1, tmpPage2]
+            let expOutp = T.unpack $ pagesToHTMLList tmpPages
 
             runDB $ do
                 void $ insert tmpPage1
@@ -51,8 +51,10 @@ spec = withApp $ do
 
             checkTheme "test/static/lua/examples/page_list" expOutp
   where
-    tmpPage1  = TextPage "Test page 1" "test-page1" "" True Nothing
-    tmpPage2  = TextPage "Test page 2" "test-page2" "" True Nothing
+    tmpPage1 = TextPage "Test page 1" "test-page1" "" True Nothing
+    tmpPage2 = TextPage "Test page 2" "test-page2" "" True Nothing
+    tmpPages = [tmpPage1, tmpPage2]
+    -- | Helper for checking the output running the given theme in `themeDir`
     checkTheme themeDir expOutp = do
         yesod        <- getTestYesod
         outputBuffer <- liftIO $ newIORef ""
