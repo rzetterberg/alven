@@ -25,11 +25,16 @@ getPageListFirstR = getPageListR 0
 {-|
 Lists pages by ID ascending order, does not provide pagination. Each page in the
 list can be viewed, edited and removed (except for the page with ID 1).
+
+Show 'itemsPerPage' pages.
 -}
 getPageListR :: Int -> Handler Html
 getPageListR pageNo = do
-    let offset = pageNo * itemsPerPage
-        limit  = (pageNo + 1) * itemsPerPage
+    pagesLen <- runDB $ count ([] :: [Filter TextPage])
+
+    let offset     = TextPageM.pageToOffset pageNo
+        limit      = TextPageM.pageToLimit pageNo
+        lastPageNo = TextPageM.lenToLastPage pagesLen
 
     pages <- runDB $ TextPageM.getPaginated offset limit
 
@@ -266,9 +271,3 @@ The id of the first page in the database.
 -}
 firstPageId :: TextPageId
 firstPageId = toSqlKey 1
-
-{-|
-Amount of items to show on each page list page
--}
-itemsPerPage :: Int
-itemsPerPage = 50

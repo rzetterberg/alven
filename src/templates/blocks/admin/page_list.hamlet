@@ -32,3 +32,12 @@ $else
             $if itemId /= firstPageId
               <form method=post action=@{PageRemoveConfirmR itemId}>
                 <input type="submit" ."btn btn-danger btn-block" value="_{MsgRemove}">
+
+<nav>
+  <ul class="pager">
+    $if pageNo /= 0
+      <li .previous>
+        <a href="@{PageListR (pageNo - 1)}">_{MsgPrevious}
+    $if lastPageNo /= pageNo
+      <li .next>
+        <a href="@{PageListR (pageNo + 1)}">_{MsgNext}
