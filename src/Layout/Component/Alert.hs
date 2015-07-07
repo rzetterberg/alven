@@ -30,6 +30,9 @@ import           Yesod hiding (setMessage, getMessage)
 
 ------------------------------------------------------------------------
 
+{-|
+The severity of the saved message
+-}
 data Level
     = Success 
     | Info 
@@ -38,6 +41,7 @@ data Level
       deriving Show
 
 instance ToMarkup Level where
+    -- | Translate the severity to Bootstrap CSS classes
     toMarkup = toMarkup . textLevel
       where
         textLevel :: Level -> Text
@@ -47,6 +51,9 @@ instance ToMarkup Level where
             Warning -> "alert-warning"
             Danger  -> "alert-danger"
 
+{-|
+The carrier data type for a saved alert message
+-}
 data Alert = Alert
     { alertLevel :: Level 
     , alertMsg   :: Text
@@ -55,9 +62,15 @@ data Alert = Alert
 $(deriveJSON defaultOptions ''Level)
 $(deriveJSON defaultOptions ''Alert)
 
+{-|
+Name of the session key to be used when saving a message in the client
+-}
 sessKey :: Text
 sessKey = "_ALERT"
 
+{-|
+Wrapper to 'setAlert' to allow usage of translatable messages. 
+-}
 setAlertI :: (MonadHandler m, RenderMessage (HandlerSite m) msg)
           => Level 
           -> msg
@@ -65,12 +78,23 @@ setAlertI :: (MonadHandler m, RenderMessage (HandlerSite m) msg)
 setAlertI lvl msg 
     = getMessageRender >>= \renderer -> setAlert lvl $ renderer msg
 
+{-|
+Saves the given message as the given severity in the clients browser as
+session data to be used in the next request.
+
+The message is encoded as JSON before saving it to provide both the literal
+message and the severity.
+-}
 setAlert :: MonadHandler m => Level -> Text -> m ()
 setAlert lvl msg = setSession sessKey $ 
     toSessionVal Alert{alertLevel = lvl, alertMsg = msg}
   where
     toSessionVal = TextL.toStrict . TextLE.decodeUtf8 . Aeson.encode
 
+{-|
+Retrives the current message from the client and deletes the session data so
+that it won't be displayed twice.
+-}
 getAlert :: MonadHandler m => m (Maybe Alert)
 getAlert = do
     valM <- lookupSession sessKey
@@ -80,6 +104,10 @@ getAlert = do
                 Nothing  -> Nothing
                 Just val -> Aeson.decodeStrict $ TextE.encodeUtf8 val
 
+{-|
+Wrapper for 'getAlert' to retrive the message and severity as a tuple instead
+of a 'Alert' data type.
+-}
 getAlertT :: MonadHandler m => m (Maybe (Html, Html))
 getAlertT = do
     alertM <- getAlert
