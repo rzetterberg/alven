@@ -30,13 +30,7 @@ Show 'itemsPerPage' pages.
 -}
 getPageListR :: Int -> Handler Html
 getPageListR pageNo = do
-    pagesLen <- runDB $ count ([] :: [Filter TextPage])
-
-    let offset     = TextPageM.pageToOffset pageNo
-        limit      = TextPageM.pageToLimit pageNo
-        lastPageNo = TextPageM.lenToLastPage pagesLen
-
-    pages <- runDB $ TextPageM.getPaginated offset limit
+    (Pagination{..}, pages) <- runDB $ TextPageM.getPaginated pageNo
 
     Layout.singleLarge "page-list" $ do
         setTitleI MsgPages

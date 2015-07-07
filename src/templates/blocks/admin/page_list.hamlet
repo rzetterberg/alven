@@ -37,7 +37,7 @@ $else
   <ul class="pager">
     $if pageNo /= 0
       <li .previous>
-        <a href="@{PageListR (pageNo - 1)}">_{MsgPrevious}
-    $if lastPageNo /= pageNo
+        <a href="@{PageListR paginationPrevPage}">_{MsgPrevious}
+    $if paginationLastPage /= pageNo
       <li .next>
-        <a href="@{PageListR (pageNo + 1)}">_{MsgNext}
+        <a href="@{PageListR paginationNextPage}">_{MsgNext}

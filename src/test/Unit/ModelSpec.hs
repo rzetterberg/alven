@@ -1,11 +1,8 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module Unit.Model.TextPageSpec (spec) where
+module Unit.ModelSpec (spec) where
 
 import           TestImport 
-
-import           Model.TextPage ( pageToOffset, pageToLimit, lenToLastPage
-                                , itemsPerPage)
 
 -------------------------------------------------------------------------------
 
