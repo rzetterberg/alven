@@ -1,3 +1,6 @@
+{-|
+Provides the handlers for the home page routes.
+-}
 module Handler.Public.Home where
 
 import           Import
@@ -7,6 +10,12 @@ import qualified Layout.Public as Layout
 
 -------------------------------------------------------------------------------
 
+{-|
+Shows the first page in the database by using id 1.
+
+NOTE: this should be changed to call the page view handler in
+"Handler.Public.Page".
+-}
 getHomeR :: Handler Html
 getHomeR = do
     page  <- runDB $ get404 (toSqlKey 1)
