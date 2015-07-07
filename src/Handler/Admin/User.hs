@@ -1,3 +1,8 @@
+{-|
+Provides the user management handlers for the admin interface. 
+
+These handlers provides functionality to list, edit, create and remove users.
+-}
 module Handler.Admin.User where
 
 import           Database.Persist.Sql (toSqlKey, fromSqlKey)
@@ -8,6 +13,10 @@ import qualified Layout.Admin as Layout
 
 -------------------------------------------------------------------------------
 
+{-|
+Lists users by ID ascending order, does not provide pagination. Each user in the
+list can be viewed, edited and removed (except for the first user created).
+-}
 getUserListR :: Handler Html
 getUserListR = do
     allUsers :: [Entity User] <- runDB $ selectList [] [Asc UserId]
@@ -17,6 +26,10 @@ getUserListR = do
 
         $(widgetFile "blocks/admin/user_list")
 
+{-|
+Provides an overview of the given user by id. Displays information such as if
+the user is an admin, if it is verified, etc.
+-}
 getUserViewR :: UserId -> Handler Html
 getUserViewR userId = do
     user <- runDB $ get404 userId
@@ -25,6 +38,13 @@ getUserViewR userId = do
         setTitleI MsgUser
         $(widgetFile "blocks/admin/user_view")
 
+{-|
+Provides a editing form for an existing user. This handle is used for displaying
+the form after the user has pressed the edit button of a user in the list.
+
+See 'postUserEditR' for the handler that takes care of form validation and
+saving the user in the database.
+-}
 getUserEditR :: UserId -> Handler Html
 getUserEditR userId = do
     user            <- runDB $ get404 userId
@@ -34,6 +54,14 @@ getUserEditR userId = do
         setTitleI MsgEditUser
         $(widgetFile "blocks/admin/user_edit")
 
+{-|
+Provides handling of submission of the edit form. Will display the form
+validation in one response without redirecting when something failed to
+validate.
+
+If the user (the data) was successfully saved the user (the visitor) is
+redirected back to the page list.
+-}
 postUserEditR :: UserId -> Handler Html
 postUserEditR userId = do
     user                      <- runDB $ get404 userId
@@ -62,6 +90,13 @@ postUserEditR userId = do
         setAlertI Success MsgUserUpdated
         redirect UserListR
 
+{-|
+Provides a create form for a new user. This handle is used for displaying
+the form after the user has pressed the "create" button on the page list.
+
+See 'postUserCreateR' for the handler that takes care of form validation and
+saving the user in the database.
+-}
 getUserCreateR :: Handler Html
 getUserCreateR = do
     (form, encType) <- generateFormPost userCreateForm 
@@ -70,6 +105,17 @@ getUserCreateR = do
         setTitleI MsgCreateUser
         $(widgetFile "blocks/admin/user_create")
 
+{-|
+Provides handling of submission of the create form. Will display the form
+validation in one response without redirecting when something failed to
+validate.
+
+If the user (the data) was successfully saved the user (the visitor) is
+redirected back to the page list.
+
+NOTE: does not check unique email collisions, will throw an duplicate key
+SqlError if a collision occured.
+-}
 postUserCreateR :: Handler Html
 postUserCreateR = do
     ((result, form), encType) <- runFormPost userCreateForm
@@ -95,6 +141,13 @@ postUserCreateR = do
         setAlertI Success MsgUserCreated
         redirect UserListR
 
+{-|
+Provides a confirm page where the user has to accept the removal of the given
+user. 
+
+When the "yes" button is pressed the user is redirected to the 'postUserRemoveR'
+handler for removal.
+-}
 postUserRemoveConfirmR :: UserId -> Handler Html
 postUserRemoveConfirmR userId = do
     user <- runDB $ get404 userId
@@ -103,6 +156,9 @@ postUserRemoveConfirmR userId = do
         setTitleI MsgRemoveUser
         $(widgetFile "blocks/admin/user_remove_confirm")
 
+{-|
+Removes the user by the given id and redirects the user back to the user list
+-}
 postUserRemoveR :: UserId -> Handler Html
 postUserRemoveR userId
     = if userId == firstUserId
@@ -118,14 +174,29 @@ postUserRemoveR userId
 ------------------------------------------------------------------------
 -- * Forms
 
-data UserEdit 
-    = UserEdit Text (Maybe Text) Bool
-      deriving Show
+{-|
+Partial data of a 'User' to be used in forms when editing a user. 
+-}
+data UserEdit = UserEdit
+    { userEditEmail    :: Text
+    , userEditPassword :: (Maybe Text)
+    , userEditAdmin    :: Bool
+    } deriving Show
 
-data UserCreate
-    = UserCreate Text Bool
-      deriving Show
+{-|
+Partial data of a 'User' to be used in forms when creating a user, differs
+from 'UserEdit' by not providing a password field since a link to the password
+choose page is sent to the users email.
+-}
+data UserCreate = UserCreate
+    { userCreateEmail :: Text
+    , userCreateAdmin :: Bool
+    } deriving Show
 
+{-|
+Provides a form for editable data of an existing 'User'. Can only be used when
+editing an existing user, see 'userCreateForm' for creating new users.
+-}
 userEditForm :: User -> Form UserEdit
 userEditForm user = Layout.renderForm $ UserEdit
     <$> areq Layout.bs3StaticTextField (bfs MsgEmail) emailM
@@ -136,12 +207,20 @@ userEditForm user = Layout.renderForm $ UserEdit
     emailM = Just (userEmail user)
     adminM = Just (userAdmin user)
 
+{-|
+Provides a form for editable data of a new 'User'. Can only be used when
+creating a new user.
+-}
 userCreateForm :: Form UserCreate
 userCreateForm = Layout.renderForm $ UserCreate
     <$> areq emailField (bfs MsgEmail) Nothing
     <*> areq Layout.bs3BoolField (bfs MsgIsAdmin) Nothing
     <*  bootstrapSubmit (BootstrapSubmit MsgSave "btn-success" [])
 
+{-|
+Provides a field where the password has to be filled in twice and be matching
+to avoid users filling in an invalid password.
+-}
 passwordConfirmField :: Field Handler Text
 passwordConfirmField = Field
     { fieldParse = \rawVals _fileVals ->
@@ -163,5 +242,8 @@ passwordConfirmField = Field
 ------------------------------------------------------------------------
 -- * Constants
 
+{-|
+The id of the first user in the database.
+-}
 firstUserId :: UserId
 firstUserId = toSqlKey 1
