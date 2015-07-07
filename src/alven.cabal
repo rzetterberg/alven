@@ -30,6 +30,7 @@ library
                      Layout.Admin
                      Layout.Public
                      Layout.Util
+                     Model.TextPage
                      Model
                      Settings
                      Settings.StaticFiles

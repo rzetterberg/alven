@@ -236,14 +236,11 @@ buildLayout widget = do
 
     withUrlRenderer $(hamletFile "templates/base.hamlet")
 
-type DBRunnerIO =  forall (m :: * -> *) a. MonadBaseControl IO m
+type DBRunnerIO =  forall (m :: * -> *) a. (MonadIO m, MonadBaseControl IO m)
                 => SqlPersistT (Control.Monad.Logger.LoggingT m) a
                 -> m a
 
-runDBIO :: forall (m :: * -> *) a. MonadBaseControl IO m
-        => App
-        -> SqlPersistT (Control.Monad.Logger.LoggingT m) a
-        -> m a
+runDBIO :: App -> DBRunnerIO
 runDBIO master@App{..} action = do
     let logFunc = messageLoggerSource master appLogger
 
