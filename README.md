@@ -75,7 +75,8 @@ preview functionality.
 Each page can be marked as public/private to allow work in progress pages that
 only are shown to logged in users.
 
-![Edit page](https://github.com/rzetterberg/alven/blob/master/docs/screenshots/page_edit_preview.png)
+![Edit page preview](https://github.com/rzetterberg/alven/blob/master/docs/screenshots/page_edit_preview.png)
+![Edit page write](https://github.com/rzetterberg/alven/blob/master/docs/screenshots/page_edit_write.png)
 
 ### User management
 
