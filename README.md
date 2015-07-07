@@ -75,6 +75,8 @@ preview functionality.
 Each page can be marked as public/private to allow work in progress pages that
 only are shown to logged in users.
 
+![Edit page](https://github.com/rzetterberg/alven/blob/master/docs/user/admin/page_edit_preview.png)
+
 ### User management
 
 As a user you can create, edit and remove users.
