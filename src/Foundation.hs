@@ -202,16 +202,18 @@ instance YesodBreadcrumbs App where
         returnI $ case r of
             AdminR
                 -> (MsgAdmin, Nothing)
-            PageListR
+            PageListFirstR
+                -> (MsgPages, Just AdminR)
+            (PageListR _)
                 -> (MsgPages, Just AdminR)
             PageCreateR
-                -> (MsgCreatePage, Just PageListR)
+                -> (MsgCreatePage, Just PageListFirstR)
             (PageViewR _)
-                -> (MsgViewPage, Just PageListR)
+                -> (MsgViewPage, Just PageListFirstR)
             (PageEditR _)
-                -> (MsgEditPage, Just PageListR)
+                -> (MsgEditPage, Just PageListFirstR)
             (PageRemoveConfirmR _)
-                -> (MsgRemovePage, Just PageListR)
+                -> (MsgRemovePage, Just PageListFirstR)
             (UserListR)
                 -> (MsgUsers, Just AdminR)
             UserCreateR

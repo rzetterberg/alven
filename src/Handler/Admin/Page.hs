@@ -11,17 +11,27 @@ import           Import
 import           Text.Markdown
 import           Yesod.Text.Markdown
 
+import qualified Model.TextPage as TextPageM
 import qualified Layout.Admin as Layout
 
 -------------------------------------------------------------------------------
 
 {-|
+Wrapper for 'getPageListR' that just supplies pageNo 0
+-}
+getPageListFirstR :: Handler Html
+getPageListFirstR = getPageListR 0
+
+{-|
 Lists pages by ID ascending order, does not provide pagination. Each page in the
 list can be viewed, edited and removed (except for the page with ID 1).
 -}
-getPageListR :: Handler Html
-getPageListR = do
-    allPages :: [Entity TextPage] <- runDB $ selectList [] [Asc TextPageId]
+getPageListR :: Int -> Handler Html
+getPageListR pageNo = do
+    let offset = pageNo * itemsPerPage
+        limit  = (pageNo + 1) * itemsPerPage
+
+    pages <- runDB $ TextPageM.getPaginated offset limit
 
     Layout.singleLarge "page-list" $ do
         setTitleI MsgPages
@@ -88,7 +98,7 @@ postPageEditR pageId = do
                               ]
         
         setAlertI Success MsgPageUpdated
-        redirect PageListR
+        redirect PageListFirstR
 
 {-|
 Provides a create form for a new page. This handle is used for displaying
@@ -156,7 +166,7 @@ postPageCreateR = do
                 _ <- runDB $ insert $ TextPage name plink body public Nothing
         
                 setAlertI Success MsgPageCreated
-                redirect PageListR
+                redirect PageListFirstR
 
 {-|
 Provides a confirm page where the user has to accept the removal of the given
@@ -182,7 +192,7 @@ postPageRemoveR pageId = do
         then setAlertI Danger MsgCantRemoveFirstPage
         else runDB (delete pageId) >> setAlertI Success MsgPageRemoved
 
-    redirect PageListR
+    redirect PageListFirstR
 
 ------------------------------------------------------------------------
 -- * Forms
@@ -256,3 +266,9 @@ The id of the first page in the database.
 -}
 firstPageId :: TextPageId
 firstPageId = toSqlKey 1
+
+{-|
+Amount of items to show on each page list page
+-}
+itemsPerPage :: Int
+itemsPerPage = 50

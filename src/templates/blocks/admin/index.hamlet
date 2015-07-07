@@ -2,4 +2,4 @@
 
 <p>
     <a ."btn btn-default" href=@{UserListR}>_{MsgUsers}
-    <a ."btn btn-default" href=@{PageListR}>_{MsgPages}
+    <a ."btn btn-default" href=@{PageListR 0}>_{MsgPages}

@@ -15,6 +15,7 @@
 /page/remove/confirm/#TextPageId PageRemoveConfirmR POST
 /page/remove/go/#TextPageId PageRemoveR POST
 /page/create PageCreateR GET POST
-/page PageListR GET
+/page/list/#Int PageListR GET
+/page PageListFirstR GET
 /admin AdminR GET
 / HomeR GET

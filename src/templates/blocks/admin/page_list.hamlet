@@ -6,7 +6,7 @@
 
 <hr>
 
-$if null allPages
+$if null pages
   <p>_{MsgNoPages}
 $else
   <table ."table table-striped">
@@ -18,7 +18,7 @@ $else
         <th ."col-lg-1 col-xs-2">
         <th ."col-lg-1 col-xs-2">
     <tbody>
-      $forall Entity itemId item <- allPages
+      $forall Entity itemId item <- pages
         <tr>
           <td ."visible-lg visible-md">#{fromSqlKey itemId}
           <td>#{textPageName item}
