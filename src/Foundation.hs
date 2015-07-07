@@ -214,16 +214,18 @@ instance YesodBreadcrumbs App where
                 -> (MsgEditPage, Just PageListFirstR)
             (PageRemoveConfirmR _)
                 -> (MsgRemovePage, Just PageListFirstR)
-            (UserListR)
+            (UserListR _)
+                -> (MsgUsers, Just AdminR)
+            UserListFirstR
                 -> (MsgUsers, Just AdminR)
             UserCreateR
-                -> (MsgCreateUser, Just UserListR)
+                -> (MsgCreateUser, Just UserListFirstR)
             (UserViewR _)
-                -> (MsgViewUser, Just UserListR)
+                -> (MsgViewUser, Just UserListFirstR)
             (UserEditR _)
-                -> (MsgEditUser, Just UserListR)
+                -> (MsgEditUser, Just UserListFirstR)
             (UserRemoveConfirmR _)
-                -> (MsgRemoveUser, Just UserListR)
+                -> (MsgRemoveUser, Just UserListFirstR)
             _
                 -> (MsgUnknown, Just AdminR)
 

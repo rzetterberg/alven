@@ -9,7 +9,8 @@
 /user/remove/confirm/#UserId UserRemoveConfirmR POST
 /user/remove/go/#UserId UserRemoveR POST
 /user/create UserCreateR GET POST
-/user UserListR GET
+/user/list/#Int UserListR GET
+/user UserListFirstR GET
 /page/edit/#TextPageId PageEditR GET POST
 /page/view/#Text PageViewR GET
 /page/remove/confirm/#TextPageId PageRemoveConfirmR POST

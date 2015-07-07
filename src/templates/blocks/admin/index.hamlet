@@ -1,5 +1,5 @@
 <h2>_{MsgAdmin}
 
 <p>
-    <a ."btn btn-default" href=@{UserListR}>_{MsgUsers}
-    <a ."btn btn-default" href=@{PageListR 0}>_{MsgPages}
+    <a ."btn btn-default" href=@{UserListFirstR}>_{MsgUsers}
+    <a ."btn btn-default" href=@{PageListFirstR}>_{MsgPages}

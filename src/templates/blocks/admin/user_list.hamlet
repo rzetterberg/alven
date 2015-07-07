@@ -6,7 +6,7 @@
 
 <hr>
 
-$if null allUsers
+$if null users
   <p>_{MsgNoUsers}
 $else
   <table ."table table-striped">
@@ -18,7 +18,7 @@ $else
         <th ."col-lg-1 col-xs-2">
         <th ."col-lg-1 col-xs-2">
     <tbody>
-      $forall Entity itemId item <- allUsers
+      $forall Entity itemId item <- users
         <tr>
           <td ."visible-lg visible-md">#{fromSqlKey itemId}
           <td>#{userEmail item}
@@ -32,3 +32,12 @@ $else
             $if itemId /= firstUserId
               <form method=post action=@{UserRemoveConfirmR itemId}>
                 <input type="submit" ."btn btn-danger btn-block" value="_{MsgRemove}">
+
+<nav>
+  <ul class="pager">
+    $if pageNo /= 0
+      <li .previous>
+        <a href="@{UserListR paginationPrevPage}">_{MsgPrevious}
+    $if paginationLastPage /= pageNo
+      <li .next>
+        <a href="@{UserListR paginationNextPage}">_{MsgNext}

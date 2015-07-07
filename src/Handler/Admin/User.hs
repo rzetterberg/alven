@@ -10,16 +10,25 @@ import           Import
 import qualified Yesod.Auth.Email as Auth
 
 import qualified Layout.Admin as Layout
+import qualified Model.User as UserM
 
 -------------------------------------------------------------------------------
 
 {-|
-Lists users by ID ascending order, does not provide pagination. Each user in the
-list can be viewed, edited and removed (except for the first user created).
+Wrapper for 'getUserListR' that just supplies pageNo 0
 -}
-getUserListR :: Handler Html
-getUserListR = do
-    allUsers :: [Entity User] <- runDB $ selectList [] [Asc UserId]
+getUserListFirstR :: Handler Html
+getUserListFirstR = getUserListR 0
+
+{-|
+Lists users by ID ascending order. Each user in the
+list can be viewed, edited and removed (except for the page with ID 1).
+
+Shows 'Model.itemsPerPage' users per page.
+-}
+getUserListR :: Int -> Handler Html
+getUserListR pageNo = do
+    (Pagination{..}, users) <- runDB $ UserM.getPaginated pageNo
 
     Layout.singleLarge "user-list" $ do
         setTitleI MsgUsers
@@ -88,7 +97,7 @@ postUserEditR userId = do
             [UserAdmin =. admin] ++ passChange
 
         setAlertI Success MsgUserUpdated
-        redirect UserListR
+        redirect UserListFirstR
 
 {-|
 Provides a create form for a new user. This handle is used for displaying
@@ -139,7 +148,7 @@ postUserCreateR = do
         Auth.sendVerifyEmail email vkey verUrl
 
         setAlertI Success MsgUserCreated
-        redirect UserListR
+        redirect UserListFirstR
 
 {-|
 Provides a confirm page where the user has to accept the removal of the given
@@ -164,12 +173,12 @@ postUserRemoveR userId
     = if userId == firstUserId
       then do
           setAlertI Danger MsgCantDeleteRoot
-          redirect UserListR
+          redirect UserListFirstR
       else do
           runDB $ delete userId
 
           setAlertI Success MsgUserRemoved
-          redirect UserListR
+          redirect UserListFirstR
 
 ------------------------------------------------------------------------
 -- * Forms
