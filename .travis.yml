@@ -11,7 +11,7 @@ before_install:
 install:
  - cabal update
  - cabal install happy==1.19.5 -j
- - cabal install alex ==3.1.4 -j
+ - cabal install alex==3.1.4 -j
  - cabal install --only-dep --enable-tests -j
 
 script:
