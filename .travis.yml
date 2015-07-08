@@ -1,0 +1,10 @@
+language: haskell
+ghc: 7.8
+before_install:
+- "cd src"
+install:
+- "cabal install --only-dependencies --enable-tests -j"
+script:
+- "cabal configure --enable-tests --enable-library-coverage && cabal build && cabal test"
+notifications:
+  email: false
