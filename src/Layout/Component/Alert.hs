@@ -9,6 +9,9 @@ conjunction with form handling.
 Supports supplying the message as Text or a translation type.
 
 Saves alert messages as session data that is cleared once shown to the client.
+
+Leverages the built-in Yesod 'getMessage'/'setMessage' functionality and builds
+on top of it by also supplying the severity of the message saved.
 -}
 module Layout.Component.Alert 
     ( Level(..)
@@ -26,7 +29,7 @@ import qualified Data.Text.Encoding as TextE
 import qualified Data.Aeson as Aeson
 import           Data.Aeson.TH
 import           Text.Blaze (ToMarkup(toMarkup))
-import           Yesod hiding (setMessage, getMessage)
+import           Yesod 
 
 ------------------------------------------------------------------------
 
@@ -63,10 +66,11 @@ $(deriveJSON defaultOptions ''Level)
 $(deriveJSON defaultOptions ''Alert)
 
 {-|
-Name of the session key to be used when saving a message in the client
+Same key that is used in the built-in Yesod 'getMessage' and 'setMessage'
+functionality.
 -}
 sessKey :: Text
-sessKey = "_ALERT"
+sessKey = "_MSG"
 
 {-|
 Wrapper to 'setAlert' to allow usage of translatable messages. 
@@ -94,6 +98,9 @@ setAlert lvl msg = setSession sessKey $
 {-|
 Retrives the current message from the client and deletes the session data so
 that it won't be displayed twice.
+
+Tries to decode JSOn data into an 'Alert', if it fails, it just uses the session
+data as message in a new 'Alert' that defaults 'Info' as alert level.
 -}
 getAlert :: MonadHandler m => m (Maybe Alert)
 getAlert = do
@@ -102,7 +109,11 @@ getAlert = do
 
     return $ case valM of
                 Nothing  -> Nothing
-                Just val -> Aeson.decodeStrict $ TextE.encodeUtf8 val
+                Just msg -> checkDecoding msg $
+                                Aeson.decodeStrict $ TextE.encodeUtf8 msg
+  where
+    checkDecoding msg Nothing = Just Alert{ alertLevel = Info, alertMsg = msg }
+    checkDecoding _ alertM    = alertM
 
 {-|
 Wrapper for 'getAlert' to retrive the message and severity as a tuple instead

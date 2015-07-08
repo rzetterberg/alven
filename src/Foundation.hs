@@ -11,6 +11,8 @@ import           Yesod.Default.Util   (addStaticContentExternal)
 import           Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
 
+import           Layout.Component.Alert (getAlertT)
+
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
 -- starts running, such as database connections. Every handler will have
@@ -119,9 +121,10 @@ instance YesodAuth App where
     type AuthId App = UserId
 
     authLayout content = buildLayout $ do 
-        let pageIdentifier = "login" :: Text
+        alertM <- getAlertT
 
-        mmsg <- getMessage
+        let pageIdentifier = "login" :: Text
+            alert = $(widgetFile "components/alert")
 
         toWidgetHead $(luciusFile "templates/layout/public/global.lucius")
 

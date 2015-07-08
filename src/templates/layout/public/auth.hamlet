@@ -11,9 +11,7 @@
         <div .col-lg-2>
 
         <div .col-lg-8>
-          $maybe msg <- mmsg
-            <div ."alert alert-danger">
-              ^{msg}
+          ^{alert}
           ^{content}
         <div .col-lg-2>
 
