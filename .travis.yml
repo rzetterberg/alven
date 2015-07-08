@@ -21,7 +21,7 @@ install:
  - cabal install --only-dep --enable-tests -j
 
 script:
- - cabal configure --enable-tests --enable-library-coverage
+ - cabal configure --enable-tests
  - cabal build
  - cabal test
 
