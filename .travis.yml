@@ -9,6 +9,7 @@ before_install:
  - cd src
 
 install:
+ - cabal update
  - cabal install --only-dep --enable-tests -j
 
 script:
