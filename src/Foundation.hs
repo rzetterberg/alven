@@ -128,7 +128,7 @@ instance YesodAuth App where
     -- Where to send a user after successful login
     loginDest _ = AdminR
     -- Where to send a user after logout
-    logoutDest _ = HomeR
+    logoutDest _ = AuthR LoginR
     -- Override the above two destinations when a Referer: header is present
     redirectToReferer _ = False
 

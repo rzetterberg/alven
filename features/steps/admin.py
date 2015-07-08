@@ -56,15 +56,7 @@ def login(context):
 
     b.submit()
 
-# ==============================================================================
-# General
- 
-@given(u'I am authorized')
-def step_impl(context):
-    login(context)
-
-@given(u'I am not authorized')
-def step_impl(context):
+def logout(context):
     b = context.browser
 
     context.open_url("admin")
@@ -76,6 +68,21 @@ def step_impl(context):
 
     b.select_form(name = "logout")
     b.submit()
+
+# ==============================================================================
+# General
+ 
+@given(u'I am authorized')
+def step_impl(context):
+    login(context)
+
+@given(u'I am not authorized')
+def step_impl(context):
+    logout(context)
+
+@when(u'I logout')
+def step_impl(context):
+    logout(context)
 
 @given(u'a page with slug "{slug}" does not exist')
 def step_impl(context, slug):
