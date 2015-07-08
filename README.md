@@ -9,4 +9,4 @@ fast, stable and easy to write themes for.
 
 **Version:** 0.1.0 (not suitable for production)
 
-![Build status](https://travis-ci.org/rzetterberg/alven.svg)
+[![Build Status](https://travis-ci.org/rzetterberg/alven.svg?branch=master)](https://travis-ci.org/rzetterberg/alven)
