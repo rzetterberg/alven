@@ -40,7 +40,7 @@ library
         cpp-options:   -DDEVELOPMENT
         ghc-options:   -Wall -fwarn-tabs -O0
     else
-        ld-options:    -pthread -static
+        ld-options:    -pthread
         ghc-options:   -Wall -Werror -fwarn-tabs -O2
 
     extensions: CPP
