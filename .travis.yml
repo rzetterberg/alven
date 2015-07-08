@@ -1,8 +1,8 @@
 env:
  global:
-   - PGUSER=travis
-   - PGPASS=testpass
-   - PGDATABASE=travis
+   - PGUSER="postgres"
+   - PGPASS=""
+   - PGDATABASE="travis_test"
  matrix:
    - GHCVER=7.8.4
 
@@ -20,8 +20,7 @@ install:
  - cabal install --only-dep --enable-tests -j
 
 before_script:
-  - psql -c "CREATE USER travis WITH SUPERUSER PASSWORD 'testpass';" -U postgres
-  - psql -c "create database travis owner travis;" -U postgres
+  - psql -c "create database travis_test;" -U postgres
 
 script:
  - cabal configure --enable-tests --enable-library-coverage
