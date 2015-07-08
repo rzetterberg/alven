@@ -20,8 +20,7 @@ install:
  - cabal install --only-dep --enable-tests -j
 
 before_script:
-
-  - psql -c "CREATE USER travis WITH SUPERUSER PASSWORD 'travis';"
+  - psql -c "CREATE USER travis WITH SUPERUSER PASSWORD 'testpass';" -U postgres
   - psql -c "create database travis owner travis;" -U postgres
 
 script:
