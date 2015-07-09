@@ -65,3 +65,7 @@ Permalink: Permalink
 PageSlugExists slug@Text: Page with slug "#{slug}" exists already
 Previous: Previous
 Next: Next
+
+Theme: Theme
+ExistingExports: Existing exports
+VersionIntroduced: Version introduced

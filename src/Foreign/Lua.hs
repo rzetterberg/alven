@@ -120,7 +120,7 @@ registerAPIFunctions :: LuaState
                      -> LuaExtra
                      -> IO ()
 registerAPIFunctions lstate lextra = do
-    let exports = API.exports lextra
+    let exports = API.getExports lextra
 
     Lua.createtable lstate 0 (length exports)
     

@@ -1,0 +1,14 @@
+<h2>_{MsgTheme}
+
+<h3>_{MsgExistingExports}
+
+<table ."table table-striped">
+  <thead>
+    <tr>
+      <th ."col-lg-12">_{MsgName}
+      <th ."col-lg-12">_{MsgVersionIntroduced}
+  <tbody>
+    $forall existingExport <- existingExports
+      <tr>
+        <td>#{getExportName existingExport}
+        <td>#{getExportVersionLit existingExport}

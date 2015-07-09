@@ -24,9 +24,9 @@ accessed in Lua such as:
 
 > alven.get_theme_url("main.css")
 -}
-exports :: LuaExtra
+getExports :: LuaExtra
         -> [LuaAPIExport]
-exports lextra 
+getExports lextra 
     = [ Exists "output"           (1, 0) (output lextra)
       , Exists "get_theme_url"    (1, 0) (getThemeURL lextra)
       , Exists "get_current_page" (1, 0) (getCurrentPage lextra)

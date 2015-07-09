@@ -3,3 +3,4 @@
 <p>
     <a ."btn btn-default" href=@{UserListFirstR}>_{MsgUsers}
     <a ."btn btn-default" href=@{PageListFirstR}>_{MsgPages}
+    <a ."btn btn-default" href=@{ThemeIndexR}>_{MsgTheme}

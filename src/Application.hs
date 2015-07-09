@@ -33,6 +33,7 @@ import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
 -- Don't forget to add new modules to your cabal file!
 import Handler.Admin
 import Handler.Admin.Page
+import Handler.Admin.Theme
 import Handler.Admin.User
 import Handler.Common
 import Handler.Public.Home

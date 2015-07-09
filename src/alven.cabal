@@ -30,6 +30,7 @@ library
                      Foundation
                      Handler.Admin
                      Handler.Admin.Page
+                     Handler.Admin.Theme
                      Handler.Admin.User
                      Handler.Common
                      Handler.Public.Home
