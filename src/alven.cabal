@@ -3,6 +3,16 @@ version:           0.1.0
 cabal-version:     >= 1.8
 build-type:        Simple
 
+data-files: static/combined/*.css
+          , static/css/*.css
+          , static/js/*.min.js
+          , static/js/*.js
+          , static/fonts/*.eot
+          , static/fonts/*.svg
+          , static/fonts/*.ttf
+          , static/fonts/*.woff
+          , config/*.yml
+
 Flag dev
     Description:   Turn on development settings, like auto-reload templates.
     Default:       False
