@@ -7,8 +7,6 @@
 `Alven` is a CMS written in [Haskell](https://www.haskell.org) that embeds
 [Lua](http://www.lua.org) for writing themes.
 
-`Alven` is based on the [Yesod Web Framework](http://www.yesodweb.com/).
-
 The project comes with an admin interface where the user can manage pages,
 accounts and navigation menus. 
 
@@ -28,26 +26,38 @@ does not need to be recompiled after changes. After the project has been
 deployed all you need to work on the theme is a text editor and a FTP client
 (or other means to upload changes to the server).
 
-## Development environment
+## Quick technical overview
 
-The whole project is built inside [docker containers](https://www.docker.com/)
-to allow easy setup of the development environment.
+`Alven` is written to be compiled with `GHC 7.8.*` using the
+[Stackage LTS](https://www.stackage.org/) version set.
 
-The project is written to be compiled with `GHC 7.8.*` and use
-[Stackage LTS](https://www.stackage.org/) for 3rd party package versions.
+It is based on the [Yesod Web Framework](http://www.yesodweb.com/).
+
+It is written to be deployed on `GNU/Linux`.
+
+Development and testing is performed inside docker containers to allow easy
+and consistent setup. All images used in the project are based on the offical
+[`haskell:7.8`](https://registry.hub.docker.com/_/haskell/) and 
+[`debian:jessie`](https://registry.hub.docker.com/_/debian/) images.
 
 There are 3 docker containers:
 
 - The builder which is used to build the whole project
-- The database which runs the postgres database for testing
+- The database which runs the postgres database for testing and development
 - The tester which is used to run the external acceptance tests
 
-The builder is based on the offical
-[`haskell`](https://registry.hub.docker.com/_/haskell/) image, which itself is based on
-the official [`debian:jessie`](https://registry.hub.docker.com/_/debian/) image.
-The database and tester images are based on `debian:jessie` directly.
+Testing is performed in 3 levels: unit, integration and acceptance.
 
-### Try out the project
+Unit and integration tests are written in `Haskell` and uses `hspec` for
+structure.
+
+Acceptance tests are written in `Python` and uses `cucumber` and `mechanize` to
+test the admin interface from a minimal browser (no javascript, css, etc.)
+point of view.
+
+The embedded [Lua intepreter](http://www.lua.org/manual/5.1/) is version `5.1.4`.
+
+## Try out the project
 
 To try out the project you first need to build the containers:
 
