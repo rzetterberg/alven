@@ -42,9 +42,10 @@ There are 3 docker containers:
 - The database which runs the postgres database for testing
 - The tester which is used to run the external acceptance tests
 
-The builder is based on the `haskell` image, which itself is based on
-`debian:jessie`. The database and tester image is based on `debian:jessie`
-directly.
+The builder is based on the offical
+[`haskell`](https://registry.hub.docker.com/_/haskell/) image, which itself is based on
+the official [`debian:jessie`](https://registry.hub.docker.com/_/debian/) image.
+The database and tester images are based on `debian:jessie` directly.
 
 ### Try out the project
 
@@ -53,6 +54,9 @@ To try out the project you first need to build the containers:
 ```bash
 ./build_docker.sh
 ```
+
+(If you want to verify the docker setup, you can view the
+dockerfiles in the `config/docker` directory for each image.)
 
 Then you start the builder and database containers:
 
