@@ -113,8 +113,8 @@ Register all API functions in the current state as the module "alven".
 See "API.exportedLuaFunctions" for the list of functions exported and the names
 they are exported as.
 
-For example the Haskell function `collectPrint` will be exported as `print`,
-which means you access it in Lua using `alven:print("Hello, testing output")`.
+For example a Haskell function `collectPrint` exported as `print`,
+will be accessable in Lua using `alven:print("Hello, testing output")`.
 -}
 registerAPIFunctions :: LuaState
                      -> LuaExtra
@@ -124,8 +124,11 @@ registerAPIFunctions lstate lextra = do
 
     Lua.createtable lstate 0 (length exports)
     
-    forM_ exports $ \e -> do
-        Lua.pushrawhsfunction lstate (exportedFunction e)
-        Lua.setfield lstate (-2) (luaFunctionName e)
+    forM_ exports add
 
     Lua.setglobal lstate "alven"
+  where
+    add e@Exists{} = do
+        Lua.pushrawhsfunction lstate (existsFunction e)
+        Lua.setfield lstate (-2) (existsName e)
+    add _          = return ()

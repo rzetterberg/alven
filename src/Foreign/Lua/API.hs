@@ -27,14 +27,13 @@ accessed in Lua such as:
 exports :: LuaExtra
         -> [LuaAPIExport]
 exports lextra 
-    = [ lexp "output"           (1, 0) (output lextra)
-      , lexp "get_theme_url"    (1, 0) (getThemeURL lextra)
-      , lexp "get_current_page" (1, 0) (getCurrentPage lextra)
-      , lexp "get_pages"        (1, 0) (getPages lextra)
-      , lexp "read_theme_file"  (1, 0) (readThemeFile lextra)
+    = [ Exists "output"           (1, 0) (output lextra)
+      , Exists "get_theme_url"    (1, 0) (getThemeURL lextra)
+      , Exists "get_current_page" (1, 0) (getCurrentPage lextra)
+      , Exists "get_pages"        (1, 0) (getPages lextra)
+      , Exists "read_theme_file"  (1, 0) (readThemeFile lextra)
+      , Removed "boffe"  (1, 0)
       ]
-  where
-    lexp = LuaAPIExport
 
 --------------------------------------------------------------------------------
 -- * Core

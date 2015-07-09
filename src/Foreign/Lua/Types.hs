@@ -18,16 +18,24 @@ type LuaAPIF = (LuaState -> IO CInt)
 Represents a function that is exported to Lua. Contains the name it can be
 accessed by in Lua, which version it was introduced and the actual Haskell
 function that is exported.
--}
-data LuaAPIExport = LuaAPIExport
-    { luaFunctionName   :: String
-    , versionIntroduced :: (Int, Int)
-    , exportedFunction  :: LuaAPIF
-    }
 
-instance Eq LuaAPIExport where
-    (==) a b = (luaFunctionName a) == (luaFunctionName b)
-    (/=) a b = not (a == b)
+Functions that are 
+-}
+data LuaAPIExport
+    = Exists
+      { existsName     :: String
+      , existsVersion  :: (Int, Int)
+      , existsFunction :: LuaAPIF
+      }
+    | Removed
+      { removedName    :: String
+      , removedVersion :: (Int, Int)
+      }
+    | Renamed
+      { renamedOldName :: String
+      , renamedNewName :: String
+      , renamedVersion :: (Int, Int)
+      }
 
 {-|
 The data type that carries all the resources (database access, output buffer,
