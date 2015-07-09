@@ -34,7 +34,7 @@ import           Scripting.Lua (LuaState)
 import           Filesystem.Path.CurrentOS (encodeString)
 
 import qualified Foreign.Lua.API as API
-import           Foreign.Lua.Types (LuaExtra(..))
+import           Foreign.Lua.Types (LuaExtra(..), LuaAPIExport(..))
 
 -------------------------------------------------------------------------------
 
@@ -120,12 +120,12 @@ registerAPIFunctions :: LuaState
                      -> LuaExtra
                      -> IO ()
 registerAPIFunctions lstate lextra = do
-    Lua.createtable lstate 0 (length funcs)
+    let exports = API.exports lextra
+
+    Lua.createtable lstate 0 (length exports)
     
-    forM_ funcs $ \(name, f) -> do
-        Lua.pushrawhsfunction lstate f
-        Lua.setfield lstate (-2) name
+    forM_ exports $ \e -> do
+        Lua.pushrawhsfunction lstate (exportedFunction e)
+        Lua.setfield lstate (-2) (luaFunctionName e)
 
     Lua.setglobal lstate "alven"
-  where
-    funcs = API.funcTable lextra
