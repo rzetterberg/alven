@@ -30,8 +30,8 @@ deployed all you need to work on the theme is a text editor and a FTP client
 
 ## Development environment
 
-The whole project is built inside a docker container to allow easy setup of
-the development environment.
+The whole project is built inside [docker containers](https://www.docker.com/)
+to allow easy setup of the development environment.
 
 The project is written to be compiled with `GHC 7.8.*` and use
 [Stackage LTS](https://www.stackage.org/) for 3rd party package versions.
@@ -83,7 +83,7 @@ the first link you click in the interface will redirect you to using the IP
 instead of localhost.
 
 To access the admin interface you goto `/admin`. Currently the project is setup
-to allow user registration to anyone. When a registration is submitted the
+to allow user registration for anyone. When a registration is submitted the
 verification link is printed to the console. Copy the link from the console and
 open it in your browser to finish the registration.
 
@@ -99,3 +99,6 @@ cp test/static/lua/examples/page_list static/theme -R
 
 Now you can create pages in the admin interface and view them to see how the
 theme renders the content.
+
+You can make changes to the theme and just refresh the page in your browser
+to see the changes.
