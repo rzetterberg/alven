@@ -2,3 +2,4 @@
 
 <p>
     <a ."btn btn-default" href=@{ThemeAPIReferenceR}>_{MsgAPIReference}
+    <a ."btn btn-default" href=@{ThemeCompabilityCheckR}>_{MsgCompabilityCheck}

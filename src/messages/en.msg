@@ -75,3 +75,4 @@ VersionRenamed: Renamed in version
 VersionRemoved: Removed in version
 NewName: New name
 APIReference: API Reference
+CompabilityCheck: Compability check

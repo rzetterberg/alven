@@ -27,6 +27,7 @@ library
                      Foreign.Lua
                      Foreign.Lua.API
                      Foreign.Lua.Types
+                     Foreign.Lua.Util
                      Foundation
                      Handler.Admin
                      Handler.Admin.Page
@@ -76,6 +77,7 @@ library
 
     build-depends: base                          
                  , aeson
+                 , attoparsec
                  , bytestring
                  , blaze-markup
                  , blaze-html
@@ -89,6 +91,7 @@ library
                  , esqueleto
                  , fast-logger
                  , file-embed
+                 , filemanip
                  , hjsmin
                  , hslua
                  , http-conduit

@@ -6,12 +6,14 @@ module Handler.Admin.Theme where
 import           Data.ByteString.Lazy (fromStrict)
 import           Data.FileEmbed (embedFile)
 import           Data.Text.Lazy.Encoding (decodeUtf8)
-import           Import hiding (decodeUtf8, fromStrict)
+import           Filesystem.Path.CurrentOS (encodeString)
+import           Import hiding (decodeUtf8, fromStrict, fileName)
 import           Text.Markdown (markdown)
 
-import qualified Layout.Admin as Layout
 import           Foreign.Lua.API (getExports)
 import           Foreign.Lua.Types 
+import           Foreign.Lua.Util (getSourcePaths, findFilesAPICalls) 
+import qualified Layout.Admin as Layout
 
 -------------------------------------------------------------------------------
 
@@ -48,7 +50,21 @@ getThemeAPIReferenceR = do
 
     let referenceContent = markdown def $ decodeUtf8 (fromStrict apiRef)
     
-    Layout.singleLarge "theme-docs" $ do
+    Layout.singleLarge "theme-api-reference" $ do
         setTitleI MsgAPIReference
 
         $(widgetFile "blocks/admin/theme_api_reference")
+
+{-|
+Checks if the current theme is compatible with the current version of the
+project.
+-}
+getThemeCompabilityCheckR :: Handler Html
+getThemeCompabilityCheckR = do
+    sourcePaths      <- liftIO $ getSourcePaths themeDir
+    processedSources <- liftIO $ findFilesAPICalls sourcePaths
+
+    Layout.singleLarge "theme-compability-check" $ do
+        setTitleI MsgCompabilityCheck
+
+        $(widgetFile "blocks/admin/theme_compability_check")

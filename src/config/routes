@@ -19,6 +19,7 @@
 /page/list/#Int PageListR GET
 /page PageListFirstR GET
 /theme/api_reference ThemeAPIReferenceR GET
+/theme/compability_check ThemeCompabilityCheckR GET
 /theme ThemeIndexR GET
 /admin AdminR GET
 / HomeR GET

@@ -1,0 +1,9 @@
+<h2>_{MsgCompabilityCheck}
+
+$forall (fpath, foundCalls) <- processedSources
+  $if not (null foundCalls)
+    <h3>#{encodeString fpath}
+
+    <pre>
+      $forall call <- foundCalls
+        #{call}<br>
