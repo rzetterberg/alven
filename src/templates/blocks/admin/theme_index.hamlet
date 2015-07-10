@@ -14,8 +14,9 @@
     $forall export <- existingExports
       $case export
         $of Exists name (majVer, minVer) _
-          <tr id="#{name}">
-            <td>#{name}
+          <tr>
+            <td>
+              <a href="##{name}">#{name}
             <td>#{majVer}.#{minVer}
         $of _
 
@@ -31,7 +32,7 @@
     $forall export <- renamedExports
       $case export
         $of Renamed name newName (majVer, minVer)
-          <tr id="#{name}">
+          <tr>
             <td>
               #{name}
               ->
@@ -51,7 +52,11 @@
     $forall export <- removedExports
       $case export
         $of Removed name (majVer, minVer)
-          <tr id="#{name}">
+          <tr>
             <td>#{name}
             <td>#{majVer}.#{minVer}
         $of _
+
+<hr>
+
+#{referenceContent}

@@ -4,6 +4,7 @@ Provides the functionality to facilitate the theme usage.
 module Handler.Admin.Theme where
 
 import           Import
+import           Text.Markdown (markdown)
 
 import qualified Layout.Admin as Layout
 import           Foreign.Lua.API (getExports)
@@ -27,6 +28,10 @@ getThemeIndexR = do
         existingExports = filter exportExists exports
         renamedExports  = filter exportRenamed exports
         removedExports  = filter exportRemoved exports
+
+    apiRef <- readFile "static/markdown/theme_api_reference.md"
+
+    let referenceContent = markdown def apiRef
     
     Layout.singleLarge "theme-index" $ do
         setTitleI MsgTheme

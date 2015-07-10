@@ -1,0 +1,9 @@
+$("a").click(function (e) {
+    $('*').removeClass('highlight');
+
+    var hashId = this.hash.substr(1);
+    var item   = $("a[name='" + hashId + "']");
+
+    if (item.length)
+        item.parent().addClass('highlight');           
+});
