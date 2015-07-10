@@ -4,6 +4,13 @@ $forall (fpath, foundCalls) <- processedSources
   $if not (null foundCalls)
     <h3>#{encodeString fpath}
 
-    <pre>
-      $forall call <- foundCalls
-        #{call}<br>
+    <table ."table table-striped">
+      <thead>
+        <tr>
+          <th ."col-lg-10">_{MsgName}
+          <th ."col-lg-2">
+      <tbody>
+        $forall call <- foundCalls
+          <tr>
+            <td>#{call}
+            <td>Not implemented
