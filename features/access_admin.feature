@@ -10,12 +10,14 @@ Feature: User accesses admin interface
     Then I should see the "<identifier>" page
     
     Examples: Main pages
-    | path         | identifier  |
-    | /admin       | admin-index |
-    | /page        | page-list   |
-    | /page/create | page-create |
-    | /user        | user-list   |
-    | /user/create | user-create |
+    | path                 | identifier  |
+    | /admin               | admin-index |
+    | /page                | page-list   |
+    | /page/create         | page-create |
+    | /user                | user-list   |
+    | /user/create         | user-create |
+    | /theme               | theme-index |
+    | /theme/documentation | theme-docs  |
 
   Scenario Outline: Unauthorized users does not have access
     Given I am not authorized
@@ -23,9 +25,11 @@ Feature: User accesses admin interface
     Then I should see the "login" page
 
     Examples: Main pages
-    | path         |
-    | /admin       |
-    | /page        |
-    | /page/create |
-    | /user        |
-    | /user/create |
+    | path                 |
+    | /admin               |
+    | /page                |
+    | /page/create         |
+    | /user                |
+    | /user/create         |
+    | /theme               |
+    | /theme/documentation |
