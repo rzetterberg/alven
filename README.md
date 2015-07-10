@@ -8,7 +8,9 @@
 [Lua](http://www.lua.org) for writing themes.
 
 The project comes with an admin interface where the user can manage pages,
-accounts and navigation menus. 
+accounts and navigation menus. The documentation for writing Lua themes is
+embedded in the admin interface along with a version compability table for
+all exported API functions.
 
 The Lua theme takes care of retrieving the content created in the admin
 interface and displaying it to the visitor of the website.
