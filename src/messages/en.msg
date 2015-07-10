@@ -68,4 +68,9 @@ Next: Next
 
 Theme: Theme
 ExistingExports: Existing exports
-VersionIntroduced: Version introduced
+RenamedExports: Renamed exports
+RemovedExports: Removed exports
+VersionIntroduced: Introduced in version
+VersionRenamed: Renamed in version
+VersionRemoved: Removed in version
+NewName: New name

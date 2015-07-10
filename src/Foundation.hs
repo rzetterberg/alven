@@ -245,6 +245,7 @@ unsafeHandler = Unsafe.fakeHandlerGetLogger appLogger
 buildLayout :: WidgetT App IO () -> HandlerT App IO Html
 buildLayout widget = do
     pc <- widgetToPageContent $ do
+        $(combineScripts 'StaticR [js_jquery_min_js])
         $(combineStylesheets 'StaticR [css_bootstrap_css])
         widget
 

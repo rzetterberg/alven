@@ -23,7 +23,10 @@ getThemeIndexR = do
 
     let lextra = LuaExtra themeDir "" (runDBIO yesod)
                           outputBuffer urlRenderer
-        existingExports = filter exportExists (getExports lextra)
+        exports = getExports lextra
+        existingExports = filter exportExists exports
+        renamedExports  = filter exportRenamed exports
+        removedExports  = filter exportRemoved exports
     
     Layout.singleLarge "theme-index" $ do
         setTitleI MsgTheme
