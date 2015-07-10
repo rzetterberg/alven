@@ -7,6 +7,7 @@ cd $script_dir
 
 cd src
 
+cabal clean
 cabal install --bindir=$script_dir/tmp --datasubdir=$script_dir/tmp
 
 echo "> Packaging complete"
