@@ -18,7 +18,7 @@
 /page/create PageCreateR GET POST
 /page/list/#Int PageListR GET
 /page PageListFirstR GET
-/theme/documentation ThemeDocumentationR GET
+/theme/api_reference ThemeAPIReferenceR GET
 /theme ThemeIndexR GET
 /admin AdminR GET
 / HomeR GET

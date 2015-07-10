@@ -236,8 +236,8 @@ instance YesodBreadcrumbs App where
                 -> (MsgRemoveUser, Just UserListFirstR)
             ThemeIndexR
                 -> (MsgTheme, Just AdminR)
-            ThemeDocumentationR
-                -> (MsgThemeDocumentation, Just ThemeIndexR)
+            ThemeAPIReferenceR
+                -> (MsgAPIReference, Just ThemeIndexR)
             _
                 -> (MsgUnknown, Just AdminR)
 

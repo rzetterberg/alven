@@ -67,7 +67,6 @@ Previous: Previous
 Next: Next
 
 Theme: Theme
-ThemeDocumentation: Theme documentation
 ExistingExports: Existing exports
 RenamedExports: Renamed exports
 RemovedExports: Removed exports

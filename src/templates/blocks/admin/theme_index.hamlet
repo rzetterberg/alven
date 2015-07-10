@@ -1,4 +1,4 @@
 <h2>_{MsgTheme}
 
 <p>
-    <a ."btn btn-default" href=@{ThemeDocumentationR}>_{MsgThemeDocumentation}
+    <a ."btn btn-default" href=@{ThemeAPIReferenceR}>_{MsgAPIReference}

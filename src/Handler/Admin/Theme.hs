@@ -32,8 +32,8 @@ their status. See 'LuaAPIExport' for more information.
 Provides the documentation for each function via the theme_api_reference.md file
 in the static/markdown directory.
 -}
-getThemeDocumentationR :: Handler Html
-getThemeDocumentationR = do
+getThemeAPIReferenceR :: Handler Html
+getThemeAPIReferenceR = do
     yesod        <- getYesod
     outputBuffer <- newIORef ""
     urlRenderer  <- getUrlRender
@@ -49,6 +49,6 @@ getThemeDocumentationR = do
     let referenceContent = markdown def $ decodeUtf8 (fromStrict apiRef)
     
     Layout.singleLarge "theme-docs" $ do
-        setTitleI MsgThemeDocumentation
+        setTitleI MsgAPIReference
 
-        $(widgetFile "blocks/admin/theme_documentation")
+        $(widgetFile "blocks/admin/theme_api_reference")
