@@ -27,6 +27,9 @@ The project exports a Lua module called `alven`, which can be used in the theme
 to get resources from the CMS (such as page lists, page content,
 internal URLs etc.)
 
+You can either try out the project, or 
+[watch me trying out the project.](https://www.youtube.com/watch?v=elRITuZgL7c)
+
 ## Quick technical overview
 
 `Alven` is written to be compiled with `GHC 7.8.*` using the
