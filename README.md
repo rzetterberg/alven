@@ -173,6 +173,8 @@ The embedded [Lua intepreter](http://www.lua.org/manual/5.1/) is version `5.1.4`
 
 ## Try out the project
 
+### 1. Build the Docker containers
+
 To try out the project you first need to build the containers:
 
 ```bash
@@ -185,6 +187,8 @@ dockerfiles in the `config/docker` directory for each image.)
 Note that building the containers can take quite a while since all cabal
 dependencies are installed during that process.
 
+### 2. Start the builder and database container
+
 Then you start the builder and database containers:
 
 ```bash
@@ -195,6 +199,8 @@ This will start the database container in the background, start the builder
 in the foreground and drop you into a shell inside it. Also, the project
 folder will be mount as volume in the container. Which means you can make
 changes to your project outside the container while it's running.
+
+### 3. Start the development server
 
 After that you simply start the development server:
 
@@ -217,6 +223,8 @@ To access the admin interface you goto `/admin`. Currently the project is setup
 to allow user registration for anyone. When a registration is submitted the
 verification link is printed to the console. Copy the link from the console and
 open it in your browser to finish the registration.
+
+### 4. Add a Lua theme
 
 By default the project does not come with a Lua theme, but you can use one of
 the example themes used in the integration tests.
