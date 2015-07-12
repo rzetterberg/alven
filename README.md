@@ -4,6 +4,10 @@
 
 **Version:** 0.1.0 (not suitable for production)
 
+**License:** MIT (see LICENSE file)
+
+--------------------------------------------------------------------------------
+
 `Alven` is a CMS written in [Haskell](https://www.haskell.org) that embeds
 [Lua](http://www.lua.org) for writing themes.
 
