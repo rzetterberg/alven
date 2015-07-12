@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/rzetterberg/alven.svg?branch=master)](https://travis-ci.org/rzetterberg/alven)
 
-**Version:** 0.1.0 (not suitable for production)
+**Version:** 0.2.0 (not suitable for production)
 
 **License:** MIT (see LICENSE file)
 
