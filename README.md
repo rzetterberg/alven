@@ -148,8 +148,9 @@ It is based on the [Yesod Web Framework](http://www.yesodweb.com/).
 
 It is written to be deployed on `GNU/Linux`.
 
-Development and testing is performed inside docker containers to allow easy
-and consistent setup. All images used in the project are based on the offical
+Development and testing is performed inside [Docker](https://www.docker.com/)
+containers to allow easy and consistent setup. All images used in the project
+are based on the offical
 [`haskell:7.8`](https://registry.hub.docker.com/_/haskell/) and 
 [`debian:jessie`](https://registry.hub.docker.com/_/debian/) images.
 
@@ -180,6 +181,9 @@ To try out the project you first need to build the containers:
 
 (If you want to verify the docker setup, you can view the
 dockerfiles in the `config/docker` directory for each image.)
+
+Note that building the containers can take quite a while since all cabal
+dependencies are installed during that process.
 
 Then you start the builder and database containers:
 
