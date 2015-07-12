@@ -11,7 +11,7 @@ import           Yesod.Default.Util   (addStaticContentExternal)
 import           Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
 
-import           Layout.Component.Alert (getAlertT, Level(Danger)) 
+import           Layout.Component.Alert (getAlertT, Level(Danger), changeAlertLevelT)
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -121,12 +121,12 @@ instance YesodAuth App where
     type AuthId App = UserId
 
     authLayout content = buildLayout $ do 
-        alertM' <- getAlertT
+        route  <- getCurrentRoute
+        alertM <- getAlertT >>= \alert -> return $ case route of
+            Just (AuthR LoginR) -> changeAlertLevelT Danger alert
+            _                   -> alert
 
-        -- We change the severity from default Info to Danger, since this view
-        -- will only have error messages.
-        let alertM         = fmap (\(_, msg) -> (toHtml Danger, msg)) alertM'
-            alert          = $(widgetFile "components/alert")
+        let alert          = $(widgetFile "components/alert")
             pageIdentifier = "login" :: Text
 
         toWidgetHead $(luciusFile "templates/layout/public/global.lucius")

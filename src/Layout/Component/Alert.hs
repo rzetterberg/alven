@@ -13,13 +13,7 @@ Saves alert messages as session data that is cleared once shown to the client.
 Leverages the built-in Yesod 'getMessage'/'setMessage' functionality and builds
 on top of it by also supplying the severity of the message saved.
 -}
-module Layout.Component.Alert 
-    ( Level(..)
-    , Alert(..)
-    , setAlert
-    , setAlertI
-    , getAlert
-    , getAlertT) where
+module Layout.Component.Alert where
 
 import           Prelude               
 import           Data.Text (Text)
@@ -126,3 +120,15 @@ getAlertT = do
     return $ case alertM of
                 Nothing        -> Nothing
                 Just Alert{..} -> Just (toHtml alertLevel, toHtml alertMsg)
+
+{-|
+Changes the given alert tuples' alert level to the given one
+-}
+changeAlertLevelT :: Level -> Maybe (Html, Html) -> Maybe (Html, Html)
+changeAlertLevelT lvl = fmap (\(_, msg) -> (toHtml lvl, msg))
+
+{-|
+Changes the given alert level to the given one
+-}
+changeAlertLevel :: Level -> Maybe Alert -> Maybe Alert
+changeAlertLevel lvl = fmap (\a -> a{ alertLevel = lvl })
