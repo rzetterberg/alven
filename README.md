@@ -8,25 +8,132 @@
 [Lua](http://www.lua.org) for writing themes.
 
 The project comes with an admin interface where the user can manage pages,
-accounts and navigation menus. The documentation for writing Lua themes is
-embedded in the admin interface along with a version compability table for
-all exported API functions.
+accounts and navigation menus. Pages are written in
+[Markdown](http://daringfireball.net/projects/markdown/) in the admin
+interface.
 
-The Lua theme takes care of retrieving the content created in the admin
-interface and displaying it to the visitor of the website.
+Showing the page content to the visitor is then handled by the Lua theme.
 
-This project tries to solve a specific problem: You want to use `Yesod` for your
-project, but you need to be able to change the way website layout and functionality
-without having to setup a development environment and know `Haskell/Yesod`.
+The project exports a Lua module called `alven`, which can be used in the theme
+to get resources from the CMS (such as page lists, page content,
+internal URLs etc.)
 
-By using `Haskell` and `Yesod` for the core functionality and the admin
-interface the project can achieve high performance and stability. If you compile
-the project statically you also get an application that is easy to deploy.
+Here's an example of a theme that uses [mustache](https://mustache.github.io/) to
+render a template to display the content of the current page: 
 
-By using `Lua` for themes it becomes really easy to write themes and the project
-does not need to be recompiled after changes. After the project has been
-deployed all you need to work on the theme is a text editor and a FTP client
-(or other means to upload changes to the server).
+```lua
+-- To add a 3rd party Lua library you just put the source files in the theme
+-- directory and use require
+local lustache = require "lustache"
+
+data = {
+    -- Retrieves a list of all the pages that exists in the CMS
+    page = alven.get_current_page();
+    -- Retrives the current page the user is visiting. The CMS handles the
+    -- routing and database calls to retrieve the content.
+    pages = alven.get_pages(),
+    -- A mustache lambda that can be used to render absolute URLs to files in
+    -- the theme, such as CSS-files and images.
+    theme_url = function (render, text)
+       return alven.get_theme_url(text)
+    end
+}
+
+-- Reads the whole mustache file and returns it as a string
+template = alven.read_theme_file("base.mustache")
+output = lustache:render(template, data)
+
+-- Appends the given string to the output buffer that becomes the HTTP response
+-- body after the Lua theme has finished execution.
+-- This function can be called multiple times to build up the response
+-- sequencially.
+alven.output(output)
+```
+
+And here's what the `mustache` template looks like:
+
+```html
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ page.name }}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  </head>
+  <body>
+    <img src="{{#theme_url}}img/logotype.png{{/theme_url}}" alt="Haskell logotype" />
+    <ul>
+      {{#pages}}
+        <li>
+          <a href="{{{url}}}">
+            {{name}}
+          </a>
+        </li>
+      {{/pages}}
+    </ul>
+
+    {{{ page.body }}}
+  </body>
+</html>
+```
+
+The theme directory has the following structure:
+
+```bash
+$ cd src/static/theme
+$ tree
+.
+├── base.mustache
+├── img
+│   └── logotype.png
+├── lustache
+│   ├── context.lua
+│   ├── renderer.lua
+│   └── scanner.lua
+├── lustache.lua
+└── main.lua
+
+2 directories, 7 files
+```
+
+With one page created in the CMS named "Index" and with the content:
+
+```markdown
+# Index 
+
+This is the index page, and it does not contain anything interesting yet.
+```
+
+After the theme has ben run the result will be:
+
+```html
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  </head>
+  <body>
+    <img src="http://ip-of-the-container:3000/static/theme/img/logotype.png" alt="Haskell logotype" />
+    <ul>
+      
+        <li>
+          <a href="http://ip-of-the-container:3000/page/view/index">
+            Index
+          </a>
+        </li>
+      
+    </ul>
+
+    <h1>Index</h1><p>This is the index page, and it does not contain anything interesting yet.</p>
+  </body>
+</html>
+```
 
 ## Quick technical overview
 
