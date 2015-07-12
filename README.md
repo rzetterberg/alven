@@ -9,7 +9,6 @@
 **Main goals:**
 - Easy to use
 - High performant
-- Well tested
 - Stable
 
 --------------------------------------------------------------------------------
