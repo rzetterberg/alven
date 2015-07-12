@@ -194,7 +194,7 @@ instance YesodAuthEmail App where
 
     getEmail uid = runDB (get uid) >>= return . fmap userEmail
 
-    afterPasswordRoute _ = HomeR
+    afterPasswordRoute _ = AdminR
 
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.
