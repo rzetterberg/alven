@@ -6,6 +6,12 @@
 
 **License:** MIT (see LICENSE file)
 
+**Main goals:**
+- Easy to use
+- High performant
+- Well tested
+- Stable
+
 --------------------------------------------------------------------------------
 
 `Alven` is a CMS written in [Haskell](https://www.haskell.org) that embeds
