@@ -30,6 +30,9 @@ internal URLs etc.)
 **You can either try out the project, or 
 [watch me trying out the project.](https://www.youtube.com/watch?v=elRITuZgL7c)**
 
+Note that the video skips setting up the development environment, since it's
+already setup for me.
+
 ## Quick technical overview
 
 `Alven` is written to be compiled with `GHC 7.8.*` using the
