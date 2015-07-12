@@ -196,7 +196,9 @@ benchmark bench
 
     build-depends: aeson
                  , abstract-par
-                 , base
-                 , criterion
                  , alven
+                 , base
+                 , bytestring
+                 , criterion
+                 , file-embed
                  , text

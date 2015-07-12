@@ -3,10 +3,12 @@ module Main where
 import           Criterion.Main (defaultMain)
 import           Prelude
 
-import qualified Layout.UtilBench as UtilBench
+import qualified Layout.UtilBench as LayoutUtilB
+import qualified Foreign.Lua.UtilBench as LuaUtilB
 
 --------------------------------------------------------------------------------
 
 main :: IO ()
-main = defaultMain [ UtilBench.benches
+main = defaultMain [ LayoutUtilB.benches
+                   , LuaUtilB.benches
                    ]
