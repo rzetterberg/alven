@@ -27,6 +27,113 @@ The project exports a Lua module called `alven`, which can be used in the theme
 to get resources from the CMS (such as page lists, page content,
 internal URLs etc.)
 
+## Quick technical overview
+
+`Alven` is written to be compiled with `GHC 7.8.*` using the
+[Stackage LTS](https://www.stackage.org/) version set.
+
+It is based on the [Yesod Web Framework](http://www.yesodweb.com/).
+
+It is written to be deployed on `GNU/Linux`.
+
+Development and testing is performed inside [Docker](https://www.docker.com/)
+containers to allow easy and consistent setup. All images used in the project
+are based on the offical
+[`haskell:7.8`](https://registry.hub.docker.com/_/haskell/) and 
+[`debian:jessie`](https://registry.hub.docker.com/_/debian/) images.
+
+There are 3 docker containers:
+
+- The builder which is used to build the whole project
+- The database which runs the postgres database for testing and development
+- The tester which is used to run the external acceptance tests
+
+Testing is performed in 3 levels: unit, integration and acceptance.
+
+Unit and integration tests are written in `Haskell` and uses `hspec` for
+structure.
+
+Acceptance tests are written in `Python` and uses `cucumber` and `mechanize` to
+test the admin interface from a minimal browser (no javascript, css, etc.)
+point of view.
+
+The embedded [Lua intepreter](http://www.lua.org/manual/5.1/) is version `5.1.4`.
+
+## Try out the project
+
+### 1. Build the Docker containers
+
+To try out the project you first need to build the containers:
+
+```bash
+./build_docker.sh
+```
+
+(If you want to verify the docker setup, you can view the
+dockerfiles in the `config/docker` directory for each image.)
+
+Note that building the containers can take quite a while since all cabal
+dependencies are installed during that process.
+
+### 2. Start the builder and database container
+
+Then you start the builder and database containers:
+
+```bash
+./start_builder.sh
+```
+
+This will start the database container in the background, start the builder
+in the foreground and drop you into a shell inside it. Also, the project
+folder will be mount as volume in the container. Which means you can make
+changes to your project outside the container while it's running.
+
+### 3. Start the development server
+
+After that you simply start the development server:
+
+```bash
+cd src
+yesod devel
+```
+
+(If you get an error saying the database is starting up, just re-run
+`yesod devel`)
+
+After the development server has started you can access the project in your
+webbrowser at [http://localhost:3000](http://localhost:3000).
+
+The development server is setup to use the builder containers' IP for URLs. So
+the first link you click in the interface will redirect you to using the IP
+instead of localhost.
+
+To access the admin interface you goto `/admin`. Currently the project is setup
+to allow user registration for anyone. When a registration is submitted the
+verification link is printed to the console. Copy the link from the console and
+open it in your browser to finish the registration.
+
+### 4. Add a Lua theme
+
+By default the project does not come with a Lua theme, but you can use one of
+the example themes used in the integration tests.
+
+`Alven` tries to open the file `main.lua` in the folder `static/theme`. So, to
+use the first example just run:
+
+```bash
+cp test/static/lua/examples/page_list static/theme -R
+```
+
+Now you can create pages in the admin interface and view them to see how the
+theme renders the content.
+
+You can make changes to the theme and just refresh the page in your browser
+to see the changes.
+
+You could also use the example theme below!
+
+## Example theme
+
 Here's an example of a theme that uses [mustache](https://mustache.github.io/) to
 render a template to display the content of the current page: 
 
@@ -143,106 +250,3 @@ After the theme has ben run the result will be:
   </body>
 </html>
 ```
-
-## Quick technical overview
-
-`Alven` is written to be compiled with `GHC 7.8.*` using the
-[Stackage LTS](https://www.stackage.org/) version set.
-
-It is based on the [Yesod Web Framework](http://www.yesodweb.com/).
-
-It is written to be deployed on `GNU/Linux`.
-
-Development and testing is performed inside [Docker](https://www.docker.com/)
-containers to allow easy and consistent setup. All images used in the project
-are based on the offical
-[`haskell:7.8`](https://registry.hub.docker.com/_/haskell/) and 
-[`debian:jessie`](https://registry.hub.docker.com/_/debian/) images.
-
-There are 3 docker containers:
-
-- The builder which is used to build the whole project
-- The database which runs the postgres database for testing and development
-- The tester which is used to run the external acceptance tests
-
-Testing is performed in 3 levels: unit, integration and acceptance.
-
-Unit and integration tests are written in `Haskell` and uses `hspec` for
-structure.
-
-Acceptance tests are written in `Python` and uses `cucumber` and `mechanize` to
-test the admin interface from a minimal browser (no javascript, css, etc.)
-point of view.
-
-The embedded [Lua intepreter](http://www.lua.org/manual/5.1/) is version `5.1.4`.
-
-## Try out the project
-
-### 1. Build the Docker containers
-
-To try out the project you first need to build the containers:
-
-```bash
-./build_docker.sh
-```
-
-(If you want to verify the docker setup, you can view the
-dockerfiles in the `config/docker` directory for each image.)
-
-Note that building the containers can take quite a while since all cabal
-dependencies are installed during that process.
-
-### 2. Start the builder and database container
-
-Then you start the builder and database containers:
-
-```bash
-./start_builder.sh
-```
-
-This will start the database container in the background, start the builder
-in the foreground and drop you into a shell inside it. Also, the project
-folder will be mount as volume in the container. Which means you can make
-changes to your project outside the container while it's running.
-
-### 3. Start the development server
-
-After that you simply start the development server:
-
-```bash
-cd src
-yesod devel
-```
-
-(If you get an error saying the database is starting up, just re-run
-`yesod devel`)
-
-After the development server has started you can access the project in your
-webbrowser at [http://localhost:3000](http://localhost:3000).
-
-The development server is setup to use the builder containers' IP for URLs. So
-the first link you click in the interface will redirect you to using the IP
-instead of localhost.
-
-To access the admin interface you goto `/admin`. Currently the project is setup
-to allow user registration for anyone. When a registration is submitted the
-verification link is printed to the console. Copy the link from the console and
-open it in your browser to finish the registration.
-
-### 4. Add a Lua theme
-
-By default the project does not come with a Lua theme, but you can use one of
-the example themes used in the integration tests.
-
-`Alven` tries to open the file `main.lua` in the folder `static/theme`. So, to
-use the first example just run:
-
-```bash
-cp test/static/lua/examples/page_list static/theme -R
-```
-
-Now you can create pages in the admin interface and view them to see how the
-theme renders the content.
-
-You can make changes to the theme and just refresh the page in your browser
-to see the changes.
