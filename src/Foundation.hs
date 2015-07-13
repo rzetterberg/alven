@@ -312,8 +312,8 @@ instance YesodBreadcrumbs App where
                 -> (MsgAPIReference, Just ThemeIndexR)
             ThemeCompabilityCheckR
                 -> (MsgAPIReference, Just ThemeIndexR)
-            (AuthR LoginR)
-                -> (MsgLogin, Just AdminR)
+            (AuthR _)
+                -> (MsgAuthentication, Nothing)
             _
                 -> (MsgUnknown, Just AdminR)
 
