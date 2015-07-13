@@ -4,11 +4,10 @@
       <div .row>
         <div .col-lg-6>
           <h1>
-            <a href=@{AdminR}>Alven
+            <a href=@{AdminR}>
+              <img src="@{StaticR img_alven_logotype_png}" alt="Alven logotype">
 
-          <p>
-            <b>Version:
-            #{currentVersion}
+          <b>Version: #{currentVersion}
         <div .col-lg-6>
           <form name="logout" method=post action=@{AuthR LogoutR}>
             <input type="submit" ."btn btn-info pull-right" value="_{MsgLogout}">

@@ -2,7 +2,8 @@ table { table-layout: fixed; }
 table th, table td { overflow: hidden; }
 
 #header {
-  background: #efefef;
+  color: #ececec;
+  background: #1B2332;
   padding: 10px 0 10px 0;
   border-bottom: 1px solid #eeeeee;
 

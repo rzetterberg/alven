@@ -4,7 +4,8 @@
       <div .row>
         <div .col-lg-12>
           <h1>
-            <a href=@{HomeR}>Logotype
+            <a href=@{AdminR}>
+              <img src="@{StaticR img_alven_logotype_png}" alt="Alven logotype">
   <div #content>
     <div .container>
       <div .row>
