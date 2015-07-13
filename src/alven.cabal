@@ -45,6 +45,8 @@ library
                      Model
                      Settings
                      Settings.StaticFiles
+                     Plugin.Auth.Email
+                     Plugin.PasswordStore
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -73,19 +75,25 @@ library
                 ViewPatterns
                 Rank2Types
 
-    build-depends: base                          
-                 , aeson
+    build-depends: aeson
                  , attoparsec
-                 , bytestring
-                 , blaze-markup
+                 , base
+                 , base16-bytestring
+                 , base64-bytestring
+                 , binary
                  , blaze-html
+                 , blaze-markup
+                 , byteable
+                 , bytestring
                  , classy-prelude
                  , classy-prelude-conduit
                  , classy-prelude-yesod
                  , conduit
                  , containers
+                 , cryptohash
                  , data-default
                  , directory
+                 , email-validate
                  , esqueleto
                  , fast-logger
                  , file-embed
@@ -96,10 +104,12 @@ library
                  , markdown
                  , monad-control
                  , monad-logger
+                 , nonce
                  , persistent
                  , persistent-postgresql
                  , persistent-template
                  , process
+                 , random
                  , safe
                  , shakespeare
                  , system-filepath
@@ -116,8 +126,8 @@ library
                  , yesod-auth
                  , yesod-core
                  , yesod-form
-                 , yesod-text-markdown
                  , yesod-static
+                 , yesod-text-markdown
 
 executable alven
     if flag(library-only)

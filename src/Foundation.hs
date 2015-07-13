@@ -6,10 +6,10 @@ import           Control.Monad.Logger (LoggingT, runLoggingT)
 import           Text.Hamlet          (hamletFile)
 import           Text.Lucius          (luciusFile)
 import           Text.Jasmine         (minifym)
-import           Yesod.Auth.Email 
 import           Yesod.Default.Util   (addStaticContentExternal)
 import           Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
+import           Plugin.Auth.Email 
 
 import           Layout.Component.Alert (getAlertT, Level(Danger), changeAlertLevelT)
 

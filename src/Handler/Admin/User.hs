@@ -7,7 +7,7 @@ module Handler.Admin.User where
 
 import           Database.Persist.Sql (toSqlKey, fromSqlKey)
 import           Import
-import qualified Yesod.Auth.Email as Auth
+import qualified Plugin.Auth.Email as Auth
 
 import qualified Layout.Admin as Layout
 import qualified Model.User as UserM
