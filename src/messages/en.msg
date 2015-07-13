@@ -76,3 +76,18 @@ VersionRemoved: Removed in version
 NewName: New name
 APIReference: API Reference
 CompabilityCheck: Compability check
+
+SetPass: Set a new password
+SetPassTitle: Set password
+CurrentPassword: Current password
+NewPass: New password
+ConfirmPass: Confirm
+
+PasswordResetTitle: Password Reset
+PasswordResetPrompt: Enter your e-mail address or username below, and a password reset e-mail will be sent to you.
+SendPasswordResetEmail: Send password reset email
+RegisterLong: Register a new account
+EnterEmail: Enter your e-mail address below, and a confirmation e-mail will be sent to you.
+Register: Register
+
+
