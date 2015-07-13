@@ -10,9 +10,11 @@
       tr {
         display: table-row;
 
+        > th {
+          padding: 0 0 16px 0;
+        }
         > td {
-          padding: 8px 0 8px 0;
-          line-height: 1.42857143;
+          padding: 0 0 16px 0;
           vertical-align: top;
 
           > input {
