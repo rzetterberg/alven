@@ -39,7 +39,6 @@ library
                      Import.NoFoundation
                      Layout.Component.Alert
                      Layout.Admin
-                     Layout.Public
                      Layout.Util
                      Model.TextPage
                      Model.User

@@ -6,6 +6,8 @@
           <h1>
             <a href=@{AdminR}>
               <img src="@{StaticR img_alven_logotype_png}" alt="Alven logotype">
+
+          <b>Version: #{currentVersion}
   <div #content>
     <div .container>
       <ol .breadcrumb>
@@ -18,5 +20,3 @@
         <div .col-lg-6>
           ^{alert}
           ^{content}
-        <div .col-lg-6>
-          <p>Info about user accounts
