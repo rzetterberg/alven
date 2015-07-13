@@ -1,5 +1,7 @@
 # Alven
 
+![Alven logotype](https://raw.githubusercontent.com/rzetterberg/alven/master/assets/alven-symbol-text.png)
+
 [![Build Status](https://travis-ci.org/rzetterberg/alven.svg?branch=master)](https://travis-ci.org/rzetterberg/alven)
 
 **Version:** 0.2.0 (not suitable for production)
