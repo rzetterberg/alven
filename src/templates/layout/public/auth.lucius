@@ -1,23 +1,25 @@
 #content {
-    padding-top: 20px;
+  form {
+    > table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 20px;
+      border-spacing: 0;
+      border-collapse: collapse;
 
-    form {
-        > table {
+      tr {
+        display: table-row;
+
+        > td {
+          padding: 8px 0 8px 0;
+          line-height: 1.42857143;
+          vertical-align: top;
+
+          > input {
             width: 100%;
-            max-width: 100%;
-            margin-bottom: 20px;
-            border-spacing: 0;
-            border-collapse: collapse;
-
-            tr {
-                display: table-row;
-
-                > td {
-                    padding: 8px;
-                    line-height: 1.42857143;
-                    vertical-align: top;
-                }
-            }
+          }
         }
+      }
     }
+  }
 }

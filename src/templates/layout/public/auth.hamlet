@@ -8,11 +8,15 @@
               <img src="@{StaticR img_alven_logotype_png}" alt="Alven logotype">
   <div #content>
     <div .container>
+      <ol .breadcrumb>
+        $forall bc <- parentCrumbs
+          <li>
+            <a href=@{fst bc}>#{snd bc}
+        <li ."active">
+          #{currCrumb}
       <div .row>
-        <div .col-lg-2>
-
-        <div .col-lg-8>
+        <div .col-lg-6>
           ^{alert}
           ^{content}
-        <div .col-lg-2>
-
+        <div .col-lg-6>
+          <p>Info about user accounts

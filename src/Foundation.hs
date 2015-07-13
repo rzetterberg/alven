@@ -120,18 +120,20 @@ instance YesodPersistRunner App where
 instance YesodAuth App where
     type AuthId App = UserId
 
-    authLayout content = buildLayout $ do 
+    authLayout content = do
+        (currCrumb, parentCrumbs) <- breadcrumbs
         route  <- getCurrentRoute
         alertM <- getAlertT >>= \alert -> return $ case route of
             Just (AuthR LoginR) -> changeAlertLevelT Danger alert
             _                   -> alert
 
-        let alert          = $(widgetFile "components/alert")
-            pageIdentifier = "login" :: Text
+        buildLayout $ do 
+            let alert          = $(widgetFile "components/alert")
+                pageIdentifier = "login" :: Text
 
-        toWidgetHead $(luciusFile "templates/layout/public/global.lucius")
+            toWidgetHead $(luciusFile "templates/layout/public/global.lucius")
 
-        $(widgetFile "layout/public/auth")
+            $(widgetFile "layout/public/auth")
 
     -- Where to send a user after successful login
     loginDest _ = AdminR
@@ -240,6 +242,8 @@ instance YesodBreadcrumbs App where
                 -> (MsgAPIReference, Just ThemeIndexR)
             ThemeCompabilityCheckR
                 -> (MsgAPIReference, Just ThemeIndexR)
+            (AuthR LoginR)
+                -> (MsgLogin, Just AdminR)
             _
                 -> (MsgUnknown, Just AdminR)
 
