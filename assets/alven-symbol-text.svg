@@ -28,7 +28,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="357.10353"
+     inkscape:cx="229.96067"
      inkscape:cy="-32.974886"
      inkscape:document-units="px"
      inkscape:current-layer="flowRoot3867"
@@ -50,7 +50,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -65,28 +65,28 @@
        id="flowRoot3867">
       <path
          d="m 384.568,721.02546 -35.856,-100.8 -17.424,0 -35.856,100.8 19.152,0 8.64,-24.336 33.552,0 8.64,24.336 19.152,0 m -34.128,-42.192 -20.88,0 10.368,-29.52 10.512,29.52"
-         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold"
+         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold;fill:#333333;fill-opacity:1"
          id="path3081" />
       <path
          d="m 418.44175,707.77746 c -7.05599,0 -8.64,-10e-6 -8.64,-11.52 l 0,-83.232 -17.856,0 0,90.576 c 0,10.36799 5.61601,18.864 18.432,18.864 l 6.48,0 1.584,-14.688"
-         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold"
+         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold;fill:#333333;fill-opacity:1"
          id="path3083" />
       <path
          d="m 491.71075,649.02546 -17.568,0 -17.712,49.824 -17.712,-49.824 -17.568,0 27.648,72 15.264,0 27.648,-72"
-         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold"
+         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold;fill:#333333;fill-opacity:1"
          id="path3085" />
       <path
          d="m 559.87,688.91346 c 0.72,-3.45599 1.152,-6.624 1.152,-9.792 0,-19.00798 -13.53602,-31.248 -31.68,-31.248 -22.17598,0 -34.56,17.28002 -34.56,37.296 0,20.15998 12.96003,37.296 39.024,37.296 10.22399,0 18.57601,-2.592 24.048,-5.472 l -0.864,-15.12 c -5.90399,3.168 -15.40801,5.904 -22.176,5.904 -9.50399,0 -19.44,-5.47201 -21.456,-18.864 l 46.512,0 m -29.952,-26.352 c 9.64799,0 12.96,7.77601 12.96,14.256 l -29.088,0 c 1.728,-8.20799 6.91201,-14.256 16.128,-14.256"
-         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold"
+         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold;fill:#333333;fill-opacity:1"
          id="path3087" />
       <path
          d="m 636.856,721.02546 0,-38.736 c 0,-20.30398 -8.20802,-34.416 -30.672,-34.416 -5.61599,0 -11.664,2.44801 -15.84,5.472 l -0.288,-4.32 -16.704,0 0,72 17.856,0 0,-52.272 c 3.312,-3.88799 7.48801,-6.192 13.536,-6.192 10.07999,0 14.256,6.33602 14.256,19.728 l 0,38.736 17.856,0"
-         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold"
+         style="font-size:144px;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Cabin;-inkscape-font-specification:Cabin Bold;fill:#333333;fill-opacity:1"
          id="path3089" />
     </g>
     <path
        inkscape:connector-curvature="0"
-       style="fill:#000000;fill-opacity:1;stroke:none"
+       style="fill:#333333;fill-opacity:1;stroke:none"
        d="m 463.13891,-0.72634732 -1.69008,0.0558 c -3.69396,0.0176 -5.71445,0.0627 -7.27349,0.25101 -32.30896,0.47916 -20.83423,61.88332532 -25.8198,43.86965032 -5.03804,-18.20331 -26.03472,-38.9206203 -25.19506,-32.30123 0.83968,6.61938 20.17543,28.17419 18.49609,52.169468 -1.67934,23.995268 7.53007,4.094128 7.53007,4.094128 0.67393,19.89641 7.09915,41.539401 10.49749,53.396601 3.82013,12.79026 15.11592,21.49696 15.11592,21.49696 l 0,-1.4335 c 0.0374,0.0234 0.11146,0.079 0.15618,0.10598 l -1.19365,-67.318861 -15.9526,-4.14991 c 0,0 -2.97193,-10.348518 -1.7124,-14.485635 1.2595,-4.13711 22.90816,1.840688 22.90816,1.840688 0,0 2.72744,10.547877 0.41833,15.305567 -2.03866,4.20048 2.29012,8.07257 3.33555,8.92454 0,0.001 0,0.251 0,0.251 0,0 0.094,-0.0693 0.16176,-0.12272 0.0145,0.011 0.0725,0.0558 0.0725,0.0558 0,0 0,-0.11679 0,-0.11713 1.04543,-0.85197 5.37421,-4.72406 3.33555,-8.92454 -2.30911,-4.75768 0.41833,-15.305565 0.41833,-15.305565 0,0 21.64866,-5.977798 22.90816,-1.840688 1.25952,4.137117 -1.7124,14.485633 -1.7124,14.485633 l -15.94702,4.14991 -1.19923,67.318861 c 0.0447,-0.027 0.11877,-0.0825 0.15618,-0.10597 l 0,1.4335 c 0,0 11.30137,-8.7067 15.1215,-21.49697 3.39833,-11.8572 9.81797,-33.500191 10.4919,-53.396591 0,0 9.215,19.90114 7.53565,-4.094136 -1.67934,-23.99527 17.65084,-45.55008 18.49052,-52.16946 0.83966,-6.6193903 -20.15702,14.09791 -25.19507,32.30123 -4.98556,18.013667 6.48917,-43.39050032 -25.81979,-43.86966032 -1.53236,-0.18511 -4.81981,-0.28671 -8.43926,-0.30678 -1.8e-4,-0.006 3.6e-4,-0.0634 0,-0.0669 z"
        id="path2985-3" />
   </g>
