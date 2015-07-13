@@ -229,7 +229,6 @@ $newline never
         <button type="submit" .btn .btn-success>_{MsgSetPassTitle}
 |]
 
-
     forgotPasswordHandler = do
         tp <- getRouteToParent
         lift $ authLayout $ do

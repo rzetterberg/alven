@@ -4,22 +4,21 @@ Provides the handlers for the home page routes.
 module Handler.Public.Home where
 
 import           Import
-import           Database.Persist.Sql (toSqlKey)
 
-import qualified Layout.Public as Layout
+import           Handler.Public.Page (getPageViewR)
 
 -------------------------------------------------------------------------------
 
 {-|
-Shows the first page in the database by using id 1.
-
-NOTE: this should be changed to call the page view handler in
-"Handler.Public.Page".
+Selects the first page in the database and runs 'getPageViewR' handler with the
+page slug. If no page is in the database and empty string is used.
 -}
 getHomeR :: Handler Html
 getHomeR = do
-    page  <- runDB $ get404 (toSqlKey 1)
+    page  <- runDB $ selectList [] [LimitTo 1]
+    
+    let pslug = case page of
+                    []    -> ""  
+                    (Entity _ p:_) -> textPagePermalink p
 
-    Layout.sidebar $ do
-        setTitle $ toHtml (textPageName page)
-        $(widgetFile "blocks/public/page_view")
+    getPageViewR pslug
