@@ -22,4 +22,4 @@
 /theme/compability_check ThemeCompabilityCheckR GET
 /theme ThemeIndexR GET
 /admin AdminR GET
-/ HomeR GET
+/ PageHomeR GET

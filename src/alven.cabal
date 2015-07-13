@@ -34,7 +34,6 @@ library
                      Handler.Admin.Theme
                      Handler.Admin.User
                      Handler.Common
-                     Handler.Public.Home
                      Handler.Public.Page
                      Import
                      Import.NoFoundation

@@ -10,6 +10,20 @@ import           Foreign.Lua.Types (LuaExtra(..))
 -------------------------------------------------------------------------------
 
 {-|
+Selects the first page in the database and runs 'getPageViewR' handler with the
+page slug. If no page is in the database and empty string is used.
+-}
+getPageHomeR :: Handler Html
+getPageHomeR = do
+    page  <- runDB $ selectList [] [LimitTo 1]
+    
+    let pslug = case page of
+                    []    -> ""  
+                    (Entity _ p:_) -> textPagePermalink p
+
+    getPageViewR pslug
+
+{-|
 Loads and executes the current Lua theme for the page of the given
 slug/permalink.
 

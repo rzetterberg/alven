@@ -66,7 +66,7 @@ instance Yesod App where
     -- Routes not requiring authentication.
     isAuthorized (AuthR _) _
         = return Authorized
-    isAuthorized HomeR _
+    isAuthorized PageHomeR _
         = return Authorized
     isAuthorized (PageViewR _) _
         = return Authorized

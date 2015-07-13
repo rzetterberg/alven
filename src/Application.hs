@@ -36,7 +36,6 @@ import Handler.Admin.Page
 import Handler.Admin.Theme
 import Handler.Admin.User
 import Handler.Common
-import Handler.Public.Home
 import Handler.Public.Page
 
 -- This line actually creates our YesodDispatch instance. It is the second half
