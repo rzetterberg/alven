@@ -301,17 +301,22 @@ getRegisterR = registerHandler
 -- Since: 1.2.6
 defaultRegisterHandler :: YesodAuthEmail master => AuthHandler master Html
 defaultRegisterHandler = do
-    email <- newIdent
     tp <- getRouteToParent
     lift $ authLayout $ do
         setTitleI Msg.RegisterLong
         [whamlet|
-            <p>_{Msg.EnterEmail}
-            <form method="post" action="@{tp registerR}">
-                <div id="registerForm">
-                    <label for=#{email}>_{Msg.Email}:
-                    <input ##{email} type="email" name="email" width="150" autofocus>
-                <button .btn>_{Msg.Register}
+$newline never
+<p>_{Msg.EnterEmail}
+<form method="post" action="@{tp registerR}">
+    <table>
+        <tr>
+            <th>_{Msg.Email}:
+            <td>
+                <input type="email" name="email" autofocus>
+        <tr>
+            <th>
+            <td>
+                <button type="submit" .btn .btn-success>_{Msg.Register}
         |]
 
 registerHelper :: YesodAuthEmail master
@@ -368,16 +373,21 @@ getForgotPasswordR = forgotPasswordHandler
 defaultForgotPasswordHandler :: YesodAuthEmail master => AuthHandler master Html
 defaultForgotPasswordHandler = do
     tp <- getRouteToParent
-    email <- newIdent
     lift $ authLayout $ do
         setTitleI Msg.PasswordResetTitle
         [whamlet|
-            <p>_{Msg.PasswordResetPrompt}
-            <form method="post" action="@{tp forgotPasswordR}">
-                <div id="registerForm">
-                    <label for=#{email}>_{Msg.ProvideIdentifier}
-                    <input ##{email} type=text name="email" width="150" autofocus>
-                <button .btn>_{Msg.SendPasswordResetEmail}
+$newline never
+<p>_{Msg.PasswordResetPrompt}
+<form method="post" action="@{tp forgotPasswordR}">
+    <table>
+        <th>
+            <th>_{Msg.ProvideIdentifier}
+            <td>
+                <input type=text name="email" autofocus>
+        <th>
+            <th>
+            <td>
+                <button type="submit" .btn .btn-success>_{Msg.SendPasswordResetEmail}
         |]
 
 postForgotPasswordR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) TypedContent
@@ -464,9 +474,6 @@ getPasswordR = do
 defaultSetPasswordHandler :: YesodAuthEmail master => Bool -> AuthHandler master TypedContent
 defaultSetPasswordHandler needOld = do
     tp <- getRouteToParent
-    pass0 <- newIdent
-    pass1 <- newIdent
-    pass2 <- newIdent
     mr <- lift getMessageRender
     selectRep $ do
       provideJsonMessage $ mr Msg.SetPass
@@ -479,22 +486,20 @@ $newline never
     <table>
         $if needOld
             <tr>
-                <th>
-                    <label for=#{pass0}>Current Password
+                <th>Current Password
                 <td>
-                    <input ##{pass0} type="password" name="current" autofocus>
+                    <input type="password" name="current" autofocus>
+        <tr>
+            <th>_{Msg.NewPass}
+            <td>
+                <input type="password" name="new" :not needOld:autofocus>
+        <tr>
+            <th>_{Msg.ConfirmPass}
+            <td>
+                <input type="password" name="confirm">
         <tr>
             <th>
-                <label for=#{pass1}>_{Msg.NewPass}
             <td>
-                <input ##{pass1} type="password" name="new" :not needOld:autofocus>
-        <tr>
-            <th>
-                <label for=#{pass2}>_{Msg.ConfirmPass}
-            <td>
-                <input ##{pass2} type="password" name="confirm">
-        <tr>
-            <td colspan="2">
                 <input type="submit" value=_{Msg.SetPassTitle}>
 |]
 
