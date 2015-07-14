@@ -28,7 +28,7 @@ to get resources from the CMS (such as page lists, page content,
 internal URLs etc.)
 
 **You can either try out the project, or 
-[watch me trying out the project.](https://www.youtube.com/watch?v=elRITuZgL7c)**
+[watch me trying out the project.](https://www.youtube.com/watch?v=2UEViLWUCRg)**
 
 Note that the video skips setting up the development environment, since it's
 already setup for me.
