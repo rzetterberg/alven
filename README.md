@@ -151,7 +151,7 @@ You could also use the example theme below!
 
 ## Try out the project (using pre-compiled binary)
 
-Here's how to deploy the current version on a `Debian Jessie x86_64` host. 
+Currently only available for `Debian Jessie x86_64` hosts.
 
 Download the package and unpack it:
 
