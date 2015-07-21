@@ -98,6 +98,7 @@ library
                  , esqueleto
                  , fast-logger
                  , file-embed
+                 , foreign-store
                  , filemanip
                  , hjsmin
                  , hslua
