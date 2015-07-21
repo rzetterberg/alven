@@ -164,17 +164,18 @@ test-suite test
                 TupleSections
 
     build-depends: aeson
+                 , HUnit
+                 , QuickCheck
+                 , alven
                  , base
                  , classy-prelude
                  , classy-prelude-yesod
                  , hspec
-                 , HUnit
-                 , alven
                  , monad-logger
                  , persistent
                  , persistent-postgresql
+                 , process
                  , resourcet
-                 , QuickCheck
                  , text
                  , transformers
                  , wai-extra
@@ -186,6 +187,7 @@ benchmark bench
     type:              exitcode-stdio-1.0
     main-is:           Bench.hs
     hs-source-dirs:    bench
+
     ghc-options:       -Wall
 
     extensions: TemplateHaskell
