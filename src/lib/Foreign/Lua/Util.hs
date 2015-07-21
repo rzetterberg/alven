@@ -21,12 +21,10 @@ getSourcePaths searchDir = do
     mapM (return . fromString) paths
 
 {-|
-Generates a list lines where calls to the Lua module alven was found for each
-file in the given list of file paths.
+Generates a list of Lua source files where each source file has a list of
+calls to the `alven` module.
 
-NOTE: Currently uses a very naive search function by just matching
-against the string "alven.". This should later be changed to either
-using a parser or a regexp.
+Uses 'findAPICalls' on each file for extraction of call occurances.
 -}
 findFilesAPICalls :: [FilePath] -> IO [(FilePath, [Text])]
 findFilesAPICalls = mapM processFile 
@@ -40,6 +38,8 @@ findFilesAPICalls = mapM processFile
 {-|
 Finds each place where the Lua API is used inside the given text blob. Returns a
 list of each function from the API found.
+
+See 'apiCallParser' for the parser definition.
 -}
 findAPICalls :: Text -> [Text]
 findAPICalls = go . (parse apiCallParser)
@@ -49,7 +49,8 @@ findAPICalls = go . (parse apiCallParser)
 
 {-|
 The parser used to find of API calls, matches against all data before the match
-which makes it suitable to use multiple times.
+which makes it suitable to use multiple times to find multiple occurances in a
+buffer.
 -}
 apiCallParser :: Parser Text
 apiCallParser = do
