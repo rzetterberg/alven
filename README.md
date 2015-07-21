@@ -27,11 +27,22 @@ The project exports a Lua module called `alven`, which can be used in the theme
 to get resources from the CMS (such as page lists, page content,
 internal URLs etc.)
 
-**You can either try out the project, or 
-[watch me trying out the project.](https://www.youtube.com/watch?v=2UEViLWUCRg)**
+## Want to know more?
 
-Note that the video skips setting up the development environment, since it's
-already setup for me.
+If you think this sounds interesting, you can
+[watch a screen recording](https://www.youtube.com/watch?v=2UEViLWUCRg)
+of me trying out the project using the development build.
+
+Or if you want to get your hands dirty, there are two options: use the
+development build or the pre-compiled binary.
+
+The development build takes longer to setup, but you can use it on any GNU/Linux
+distribution since everything is setup inside Docker containers.
+
+The pre-compiled binary is quick to setup, but is currently only compiled for
+Debian Jessie x86_64 hosts. 
+
+See chapters further down for instructions.
 
 ## Quick technical overview
 
@@ -65,7 +76,7 @@ point of view.
 
 The embedded [Lua intepreter](http://www.lua.org/manual/5.1/) is version `5.1.4`.
 
-## Try out the project
+## Try out the project (using development build)
 
 ### 1. Build the Docker containers
 
@@ -137,6 +148,50 @@ You can make changes to the theme and just refresh the page in your browser
 to see the changes.
 
 You could also use the example theme below!
+
+## Try out the project (using pre-compiled binary)
+
+Here's how to deploy the current version on a `Debian Jessie x86_64` host. 
+
+Download the package and unpack it:
+
+```bash
+wget https://github.com/rzetterberg/alven/releases/download/v0.3.0/alven-0.3.0-linux-x86_64.tar.gz
+tar xzf alven-0.3.0-linux-x86_64.tar.gz
+```
+
+This will create a directory called `alven` which contains the binary executable
+and the application data files.
+
+Install the dependencies needed to run the project:
+
+```bash
+sudo apt-get install -y postgresql-common postgresql-9.4
+```
+
+Then you need to setup the database and user. Let's say the database name and
+user will be `alven` and the password will be `testpass`.
+
+First you create the PostgreSQL user and database:
+
+```bash
+sudo -u postgres psql --command \
+    "CREATE USER alven WITH SUPERUSER PASSWORD 'testpass';" &&\
+    createdb -O alven alven
+```
+
+Then you update the projects main settings file `alven/config/settings.yml` with the
+right database credentials.
+
+Then you are ready to start the executable:
+
+```bash
+cd alven
+./alven config/settings.yml
+```
+
+By default `alven` will listen to port `3000`, but you can change that in the
+settings file. 
 
 ## Example theme
 
