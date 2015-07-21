@@ -1,3 +1,7 @@
 page = alven.get_current_page()
 
-alven.output(page["name"])
+if page == nil then
+   alven.output("")
+else
+   alven.output(page["name"])
+end
