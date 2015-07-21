@@ -23,7 +23,7 @@ Flag library-only
     Default:       False
 
 library
-    hs-source-dirs: ., app
+    hs-source-dirs: lib, app
     exposed-modules: Application
                      Foreign.Lua
                      Foreign.Lua.API
