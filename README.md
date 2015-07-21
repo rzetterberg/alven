@@ -156,8 +156,8 @@ Currently only available for `Debian Jessie x86_64` hosts.
 Download the package and unpack it:
 
 ```bash
-wget https://github.com/rzetterberg/alven/releases/download/v0.3.0/alven-0.3.0-linux-x86_64.tar.gz
-tar xzf alven-0.3.0-linux-x86_64.tar.gz
+wget https://github.com/rzetterberg/alven/releases/download/v0.3.0/alven-0.3.0-linux-x86_64.tar.gz && \
+    tar xzf alven-0.3.0-linux-x86_64.tar.gz
 ```
 
 This will create a directory called `alven` which contains the binary executable
