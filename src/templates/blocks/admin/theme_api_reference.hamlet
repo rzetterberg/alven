@@ -11,7 +11,7 @@
       <th ."col-lg-10">_{MsgName}
       <th ."col-lg-2">_{MsgVersionIntroduced}
   <tbody>
-    $forall export <- existingExports
+    $forall export <- exports
       $case export
         $of Exists name (majVer, minVer) _
           <tr>
@@ -29,7 +29,7 @@
       <th ."col-lg-10">_{MsgName}
       <th ."col-lg-2">_{MsgVersionRenamed}
   <tbody>
-    $forall export <- renamedExports
+    $forall export <- exports
       $case export
         $of Renamed name newName (majVer, minVer)
           <tr>
@@ -49,7 +49,7 @@
       <th ."col-lg-10">_{MsgName}
       <th ."col-lg-2">_{MsgVersionRemoved}
   <tbody>
-    $forall export <- removedExports
+    $forall export <- exports
       $case export
         $of Removed name (majVer, minVer)
           <tr>

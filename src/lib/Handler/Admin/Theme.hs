@@ -40,13 +40,10 @@ getThemeAPIReferenceR = do
     outputBuffer <- newIORef ""
     urlRenderer  <- getUrlRender
 
-    let lextra = LuaExtra themeDir "" (runDBIO yesod)
-                          outputBuffer urlRenderer
+    let lextra  = LuaExtra themeDir "" (runDBIO yesod)
+                           outputBuffer urlRenderer
         exports = getExports lextra
-        existingExports = filter exportExists exports
-        renamedExports  = filter exportRenamed exports
-        removedExports  = filter exportRemoved exports
-        apiRef = $(embedFile "static/markdown/theme_api_reference.md")
+        apiRef  = $(embedFile "static/markdown/theme_api_reference.md")
 
     let referenceContent = markdown def $ decodeUtf8 (fromStrict apiRef)
     
