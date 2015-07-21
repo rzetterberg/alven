@@ -63,6 +63,46 @@ spec = withApp $ do
             case pages of
                 [] -> return ()
                 _  -> liftIO $ assertFailure "invalid amount of pages retrieved"
+    describe "getPublic" $ do
+        it "using 2 public pages" $ do
+            runDB $ do
+                void $ insert tmpPage1
+                void $ insert tmpPage2
+
+            pages <- runDB $ TextPageM.getPublic
+
+            liftIO $ assertEqual "got 2 pages back" 2 (length pages) 
+        it "using 1 public page and 1 private page" $ do
+            runDB $ do
+                void $ insert tmpPage1
+                void $ insert tmpPage2{ textPagePublic = False }
+
+            pages <- runDB $ TextPageM.getPublic
+
+            liftIO $ assertEqual "got 1 page back" 1 (length pages) 
+    describe "getCurrPublic" $ do
+        it "using 1 public page" $ do
+            runDB $ do
+                void $ insert tmpPage1
+
+            pageM <- runDB $ TextPageM.getCurrPublic (textPagePermalink tmpPage1)
+
+            liftIO $ case pageM of
+                Nothing
+                    -> assertFailure "no page returned"
+                Just (Entity _ resPage)
+                    -> assertEqual "is expected page" tmpPage1 resPage
+        it "using 1 private page" $ do
+            runDB $ do
+                void $ insert tmpPage1{ textPagePublic = False }
+
+            pageM <- runDB $ TextPageM.getCurrPublic (textPagePermalink tmpPage1)
+
+            liftIO $ case pageM of
+                Nothing
+                    -> return ()
+                _
+                    -> assertFailure "private page was returned"
   where
     tmpPage1 = TextPage "Test page 1" "test-page1" "" True Nothing
     tmpPage2 = TextPage "Test page 2" "test-page2" "" True Nothing

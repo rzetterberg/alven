@@ -26,12 +26,12 @@ spec = withApp $ do
                 void $ insert tmpPage2
 
             checkTheme "test/static/lua/api/get_current_page" expOutp
-        it "get_pages returns expected amount of pages" $ do
-            let expOutp = show (length tmpPages)
+        it "get_pages returns expected amount of public pages" $ do
+            let expOutp = "1" 
 
             runDB $ do
                 void $ insert tmpPage1
-                void $ insert tmpPage2
+                void $ insert tmpPage2{ textPagePublic = False }
 
             checkTheme "test/static/lua/api/get_pages" expOutp
         it "read_theme_file successfully reads a css file" $ do

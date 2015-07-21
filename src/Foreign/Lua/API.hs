@@ -10,6 +10,7 @@ import           Text.Blaze.Html.Renderer.String (renderHtml)
 import qualified Scripting.Lua as Lua
 import           Scripting.Lua (LuaState)
 
+import qualified Model.TextPage as TextPageM
 import           Foreign.Lua.Types (LuaExtra(..), LuaAPIF, LuaAPIExport(..))
 
 --------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ if the page was not found in the database.
 getCurrentPage :: LuaExtra
                -> LuaAPIF
 getCurrentPage lextra@LuaExtra{..} lstate = do
-    pageM <- dbRunner $ getBy (UniquePageLink permaLink)
+    pageM <- dbRunner $ TextPageM.getCurrPublic permaLink
 
     case pageM of
         Nothing           -> Lua.pushnil lstate
@@ -87,13 +88,13 @@ getCurrentPage lextra@LuaExtra{..} lstate = do
     return 1
 
 {-|
-Retrieves a list of all pages in the database. Can be used to render site
+Retrieves a list of all public pages in the database. Can be used to render site
 navigation.
 -}
 getPages :: LuaExtra
          -> LuaAPIF
 getPages lextra@LuaExtra{..} lstate = do
-    pages <- dbRunner (selectList [] [])
+    pages <- dbRunner TextPageM.getPublic
 
     Lua.newtable lstate
 

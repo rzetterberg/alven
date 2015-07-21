@@ -23,7 +23,7 @@ getFirst = do
         (p:_) -> Just p
 
 {-|
-Retrives a list of pages in ascending order by id for the current list page
+Retrives a list of pages by 'defaultSort' for the current list page
 -}
 getPaginated :: (MonadIO m)
              => Int
@@ -39,6 +39,27 @@ getPaginated pageNo = do
                            ]
 
     return (pagination, pages)
+
+{-|
+Retrives a list of public pages by 'defaultSort'.
+-}
+getPublic :: (MonadIO m) => SqlPersistT m [Entity TextPage]
+getPublic = selectList [TextPagePublic ==. True] [defaultSort]
+
+{-|
+Retrives a page by the given slug, returns "Nothing" if the page is not found
+or if it's private.
+-}
+getCurrPublic :: (MonadIO m)
+              => Text
+              -> SqlPersistT m (Maybe (Entity TextPage))
+getCurrPublic slug = do
+    matches <- selectList [ TextPagePublic ==. True
+                          , TextPagePermalink ==. slug] []
+
+    return $ case matches of
+        (p:_) -> Just p
+        _     -> Nothing
 
 -------------------------------------------------------------------------------
 -- * Constants
