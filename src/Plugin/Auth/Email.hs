@@ -500,7 +500,7 @@ $newline never
         <tr>
             <th>
             <td>
-                <input type="submit" value=_{Msg.SetPassTitle}>
+                <button type="submit" .btn .btn-success>_{Msg.SetPassTitle}
 |]
 
 postPasswordR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) TypedContent
