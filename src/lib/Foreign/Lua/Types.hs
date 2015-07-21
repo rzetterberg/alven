@@ -19,8 +19,6 @@ type LuaAPIF = (LuaState -> IO CInt)
 Represents a function that is exported to Lua. Contains the name it can be
 accessed by in Lua, which version it was introduced and the actual Haskell
 function that is exported.
-
-Functions that are 
 -}
 data LuaAPIExport
     = Exists
@@ -38,20 +36,17 @@ data LuaAPIExport
       , removedVersion :: (Int, Int)
       }
 
--- | Checks if the given export is an existing one
-exportExists :: LuaAPIExport -> Bool
-exportExists Exists{} = True
-exportExists _        = False
+instance Eq LuaAPIExport where
+    (==) Exists{ existsName = aname} Exists{ existsName = bname} = aname == bname
+    (==) Renamed{ renamedName = aname} Renamed{ renamedName = bname} = aname == bname
+    (==) Removed{ removedName = aname} Removed{ removedName = bname} = aname == bname
+    (==) _ _ = False
+    (/=) a b = not (a == b)
 
--- | Checks if the given export is a renamed one
-exportRenamed :: LuaAPIExport -> Bool
-exportRenamed Renamed{} = True
-exportRenamed _         = False
-
--- | Checks if the given export is an removed one
-exportRemoved :: LuaAPIExport -> Bool
-exportRemoved Removed{} = True
-exportRemoved _         = False
+instance Show LuaAPIExport where
+    show Exists{ existsName = n } = "Exists: " ++ n
+    show Renamed{ renamedName = n } = "Renamed: " ++ n
+    show Removed{ removedName = n } = "Removed: " ++ n
 
 -- | Helper for getting the name of an export regardless of type
 getExportName :: LuaAPIExport -> String
@@ -69,6 +64,14 @@ getExportVersion Removed{ removedVersion = v } = v
 getExportVersionLit :: LuaAPIExport -> Text
 getExportVersionLit e = let (major, minor) = getExportVersion e
                         in T.pack $ show major ++ "." ++ show minor
+
+-- | Tries to find an export by the given literal name
+getExportByName :: String -> [LuaAPIExport] -> Maybe LuaAPIExport
+getExportByName wantedName es = case (filter byName es) of
+    (e:_) -> Just e
+    _     -> Nothing
+  where
+    byName e = (getExportName e) == wantedName
 
 {-|
 The data type that carries all the resources (database access, output buffer,
