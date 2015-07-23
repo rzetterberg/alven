@@ -3,11 +3,14 @@ Provides utility functionality related to Lua themes and API
 -}
 module Foreign.Lua.Util where
 
+import qualified Data.Text as T
 import           Data.Attoparsec.Text
 import           Filesystem.Path.CurrentOS (encodeString)
 import           Import hiding (fileName)
 import qualified System.FilePath.Find as Find
 import           System.FilePath.Find ((~~?), always, fileName)
+
+import           Foreign.Lua.Types
 
 --------------------------------------------------------------------------------
 
@@ -59,3 +62,28 @@ apiCallParser = do
         void $ manyTill anyChar (char ')')
 
         return (pack fname)
+
+-- | Helper for getting the name of an export regardless of type
+getExportName :: LuaAPIExport -> String
+getExportName Exists{ existsName = n }   = n
+getExportName Renamed{ renamedName = n } = n
+getExportName Removed{ removedName = n } = n
+
+-- | Helper for getting the version of an export regardless of type
+getExportVersion :: LuaAPIExport -> (Int, Int)
+getExportVersion Exists{ existsVersion = v }   = v
+getExportVersion Renamed{ renamedVersion = v } = v
+getExportVersion Removed{ removedVersion = v } = v
+
+-- | Helper for getting the version as a literal of an export regardless of type
+getExportVersionLit :: LuaAPIExport -> Text
+getExportVersionLit e = let (major, minor) = getExportVersion e
+                        in T.pack $ show major ++ "." ++ show minor
+
+-- | Tries to find an export by the given literal name
+getExportByName :: String -> [LuaAPIExport] -> Maybe LuaAPIExport
+getExportByName wantedName es = case (filter byName es) of
+    (e:_) -> Just e
+    _     -> Nothing
+  where
+    byName e = (getExportName e) == wantedName
