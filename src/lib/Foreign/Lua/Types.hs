@@ -12,7 +12,7 @@ import           Scripting.Lua (LuaState)
 {-|
 The alias for Haskell functions that are called from Lua
 -}
-type LuaAPIF = (LuaState -> IO CInt)
+type LuaAPIF = (LuaExtra -> LuaState -> IO CInt)
 
 {-|
 Represents a function that is exported to Lua. Contains the name it can be

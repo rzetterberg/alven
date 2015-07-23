@@ -57,7 +57,7 @@ spec = do
             (getExportByName "asdasd21" allExps) `shouldBe` Nothing
             (getExportByName "exists1" allExps) `shouldBe` Nothing
   where
-    existsExp  = Exists "exists" (1, 0) (\_ -> return 0)
+    existsExp  = Exists "exists" (1, 0) (\_ _ -> return 0)
     renamedExp = Renamed "renamed" "renamed_new" (2, 0)
     removedExp = Removed "removed" (3, 0)
     allExps    = [existsExp, renamedExp, removedExp]

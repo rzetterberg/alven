@@ -36,21 +36,14 @@ in the static/markdown directory.
 -}
 getThemeAPIReferenceR :: Handler Html
 getThemeAPIReferenceR = do
-    yesod        <- getYesod
-    outputBuffer <- newIORef ""
-    urlRenderer  <- getUrlRender
-
-    let lextra  = LuaExtra themeDir "" (runDBIO yesod)
-                           outputBuffer urlRenderer
-        exports = getExports lextra
-        apiRef  = $(embedFile "static/markdown/theme_api_reference.md")
-
-    let referenceContent = markdown def $ decodeUtf8 (fromStrict apiRef)
-    
     Layout.singleLarge "theme-api-reference" $ do
         setTitleI MsgAPIReference
 
         $(widgetFile "blocks/admin/theme_api_reference")
+  where
+    exports          = getExports
+    apiRef           = $(embedFile "static/markdown/theme_api_reference.md")
+    referenceContent = markdown def $ decodeUtf8 (fromStrict apiRef)
 
 {-|
 Checks if the current theme is compatible with the current version of the

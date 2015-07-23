@@ -1,5 +1,9 @@
 {-|
 Provies all the API functions that can be called from Lua to run Haskell code.
+
+The function 'getExports' contains a list of all existing, renamed and removed
+API functions. View the source of this module to see what Lua names they are
+exported as.
 -}
 module Foreign.Lua.API where
 
@@ -25,14 +29,13 @@ accessed in Lua such as:
 
 > alven.get_theme_url("main.css")
 -}
-getExports :: LuaExtra
-        -> [LuaAPIExport]
-getExports lextra 
-    = [ Exists "output"           (1, 0) (output lextra)
-      , Exists "get_theme_url"    (1, 0) (getThemeURL lextra)
-      , Exists "get_current_page" (1, 0) (getCurrentPage lextra)
-      , Exists "get_pages"        (1, 0) (getPages lextra)
-      , Exists "read_theme_file"  (1, 0) (readThemeFile lextra)
+getExports :: [LuaAPIExport]
+getExports 
+    = [ Exists "output"           (1, 0) output
+      , Exists "get_theme_url"    (1, 0) getThemeURL
+      , Exists "get_current_page" (1, 0) getCurrentPage
+      , Exists "get_pages"        (1, 0) getPages
+      , Exists "read_theme_file"  (1, 0) readThemeFile
       ]
 
 --------------------------------------------------------------------------------
@@ -42,8 +45,7 @@ getExports lextra
 Appends a string to the output buffer. This buffer will become the HTTP body of
 the current response.
 -}
-output :: LuaExtra
-       -> LuaAPIF
+output :: LuaAPIF
 output LuaExtra{..} lstate = do
     luaData <- Lua.tostring lstate 1
 
@@ -56,8 +58,7 @@ Retrives the absolute URL to a file within the current theme.
 
 Can be used to link to static content such as images, css, javascript.
 -}
-getThemeURL :: LuaExtra
-            -> LuaAPIF
+getThemeURL :: LuaAPIF
 getThemeURL LuaExtra{..} lstate = do
     fname <- Lua.tostring lstate 1
 
@@ -76,8 +77,7 @@ getThemeURL LuaExtra{..} lstate = do
 Retrieves the current page by slug. Returns the page as a table or nil
 if the page was not found in the database.
 -}
-getCurrentPage :: LuaExtra
-               -> LuaAPIF
+getCurrentPage :: LuaAPIF
 getCurrentPage lextra@LuaExtra{..} lstate = do
     pageM <- dbRunner $ TextPageM.getCurrPublic slug
 
@@ -91,8 +91,7 @@ getCurrentPage lextra@LuaExtra{..} lstate = do
 Retrieves a list of all public pages in the database. Can be used to render site
 navigation.
 -}
-getPages :: LuaExtra
-         -> LuaAPIF
+getPages :: LuaAPIF
 getPages lextra@LuaExtra{..} lstate = do
     pages <- dbRunner TextPageM.getPublic
 
@@ -118,8 +117,7 @@ getPages lextra@LuaExtra{..} lstate = do
 Reads a file in the theme folder and returns it as a string, throws error if
 read failed.
 -}
-readThemeFile :: LuaExtra
-              -> LuaAPIF
+readThemeFile :: LuaAPIF
 readThemeFile lextra lstate = do
     relPath <- Lua.tostring lstate 1
 

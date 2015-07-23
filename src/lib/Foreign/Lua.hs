@@ -120,7 +120,7 @@ registerAPIFunctions :: LuaState
                      -> LuaExtra
                      -> IO ()
 registerAPIFunctions lstate lextra = do
-    let exports = API.getExports lextra
+    let exports = API.getExports
 
     Lua.createtable lstate 0 (length exports)
     
@@ -128,7 +128,7 @@ registerAPIFunctions lstate lextra = do
 
     Lua.setglobal lstate "alven"
   where
-    add e@Exists{} = do
-        Lua.pushrawhsfunction lstate (existsFunction e)
-        Lua.setfield lstate (-2) (existsName e)
+    add Exists{..} = do
+        Lua.pushrawhsfunction lstate (existsFunction lextra)
+        Lua.setfield lstate (-2) existsName
     add _          = return ()
