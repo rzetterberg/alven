@@ -73,13 +73,13 @@ getThemeURL LuaExtra{..} lstate = do
 -- * Page retrieval
 
 {-|
-Retrieves the current page by permalink. Returns the page as a table or nil
+Retrieves the current page by slug. Returns the page as a table or nil
 if the page was not found in the database.
 -}
 getCurrentPage :: LuaExtra
                -> LuaAPIF
 getCurrentPage lextra@LuaExtra{..} lstate = do
-    pageM <- dbRunner $ TextPageM.getCurrPublic permaLink
+    pageM <- dbRunner $ TextPageM.getCurrPublic slug
 
     case pageM of
         Nothing           -> Lua.pushnil lstate
@@ -141,7 +141,7 @@ readThemeFile lextra lstate = do
 -- * Data type marshalling
 
 {-|
-Converts the given `TextPage` into a Lua table with fields name, permalink, body
+Converts the given `TextPage` into a Lua table with fields name, slug, body
 and url.
 
 Note: Url is not part of the original `TextPage`, but is added for convinience.
@@ -156,8 +156,8 @@ textPageToLua LuaExtra{..} lstate TextPage{..} = do
     Lua.pushstring lstate (T.unpack textPageName)
     Lua.setfield lstate (-2) "name"
 
-    Lua.pushstring lstate (T.unpack textPagePermalink)
-    Lua.setfield lstate (-2) "permalink"
+    Lua.pushstring lstate (T.unpack textPageSlug)
+    Lua.setfield lstate (-2) "slug"
 
     let tbody = renderHtml $ toHtml textPageBody
 
@@ -167,7 +167,7 @@ textPageToLua LuaExtra{..} lstate TextPage{..} = do
     Lua.pushboolean lstate textPagePublic
     Lua.setfield lstate (-2) "is_public"
 
-    let absPageURL = urlRenderer (PageViewR textPagePermalink)
+    let absPageURL = urlRenderer (PageViewR textPageSlug)
 
     Lua.pushstring lstate (T.unpack absPageURL)
     Lua.setfield lstate (-2) "url"

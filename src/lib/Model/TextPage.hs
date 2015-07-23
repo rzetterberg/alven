@@ -55,7 +55,7 @@ getCurrPublic :: (MonadIO m)
               -> SqlPersistT m (Maybe (Entity TextPage))
 getCurrPublic slug = do
     matches <- selectList [ TextPagePublic ==. True
-                          , TextPagePermalink ==. slug] []
+                          , TextPageSlug   ==. slug] []
 
     return $ case matches of
         (p:_) -> Just p

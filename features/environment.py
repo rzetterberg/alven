@@ -140,7 +140,7 @@ def reset_db(context):
 
     curs.execute(
         "INSERT INTO public.text_page " +
-        "(name, permalink, body, public) " +
+        "(name, slug, body, public) " +
         "VALUES ('Index', 'index', '', true);"
     )
 

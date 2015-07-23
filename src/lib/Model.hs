@@ -12,7 +12,7 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"]
 
 
 instance Eq TextPage where
-    (==) a b = (textPagePermalink a) == (textPagePermalink b)
+    (==) a b = (textPageSlug a) == (textPageSlug b)
     (/=) a b = not (a == b)
 
 {-|

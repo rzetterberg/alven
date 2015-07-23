@@ -23,7 +23,7 @@ $else
           <td ."visible-lg visible-md">#{fromSqlKey itemId}
           <td>#{textPageName item}
           <td>
-            <a ."btn btn-default btn-block" href=@{PageViewR (textPagePermalink item)}>
+            <a ."btn btn-default btn-block" href=@{PageViewR (textPageSlug item)}>
               _{MsgView}
           <td>
             <a ."btn btn-info btn-block" href=@{PageEditR itemId}>

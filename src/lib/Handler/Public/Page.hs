@@ -19,7 +19,7 @@ getPageHomeR = do
     
     let pslug = case page of
                     []    -> ""  
-                    (Entity _ p:_) -> textPagePermalink p
+                    (Entity _ p:_) -> textPageSlug p
 
     getPageViewR pslug
 
@@ -35,12 +35,12 @@ NOTE: showing errors should be disabled in production systems, see
 for more information.
 -}
 getPageViewR :: Text -> Handler Html
-getPageViewR permalink = do
+getPageViewR slug = do
     yesod        <- getYesod
     outputBuffer <- newIORef ""
     urlRenderer  <- getUrlRender
 
-    let lextra = LuaExtra themeDir permalink (runDBIO yesod)
+    let lextra = LuaExtra themeDir slug (runDBIO yesod)
                           outputBuffer urlRenderer
     
     result <- liftIO $ Lua.runThemeScript lextra

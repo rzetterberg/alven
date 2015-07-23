@@ -39,7 +39,7 @@ spec = withApp $ do
                 void $ insert tmpPage2
 
             runDB $ deleteWhere
-                [TextPagePermalink ==. (textPagePermalink tmpPage1)]
+                [TextPageSlug ==. (textPageSlug tmpPage1)]
 
             firstPageM <- runDB $ TextPageM.getFirst
 
@@ -85,7 +85,7 @@ spec = withApp $ do
             runDB $ do
                 void $ insert tmpPage1
 
-            pageM <- runDB $ TextPageM.getCurrPublic (textPagePermalink tmpPage1)
+            pageM <- runDB $ TextPageM.getCurrPublic (textPageSlug tmpPage1)
 
             liftIO $ case pageM of
                 Nothing
@@ -96,7 +96,7 @@ spec = withApp $ do
             runDB $ do
                 void $ insert tmpPage1{ textPagePublic = False }
 
-            pageM <- runDB $ TextPageM.getCurrPublic (textPagePermalink tmpPage1)
+            pageM <- runDB $ TextPageM.getCurrPublic (textPageSlug tmpPage1)
 
             liftIO $ case pageM of
                 Nothing

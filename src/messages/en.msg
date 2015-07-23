@@ -61,7 +61,7 @@ SureRemovePage name@Text: Are you sure you want to remove page #{name}?
 CantRemoveFirstPage: Can't remove the first page
 PageRemoved: Page removed
 ViewPage: View page
-Permalink: Permalink
+Slug: Slug
 PageSlugExists slug@Text: Page with slug "#{slug}" exists already
 Previous: Previous
 Next: Next

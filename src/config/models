@@ -9,10 +9,10 @@ User
 
 TextPage
     name Text
-    permalink Text
+    slug Text
     body Markdown
     public Bool
     parent TextPageId Maybe
     UniquePageName name
-    UniquePageLink permalink
+    UniquePageLink slug
     deriving Typeable Show

@@ -46,7 +46,7 @@ Page is a table that represents a normal text page created in the admin panel.
 It consists of the following fields:
 
  - string name
- - string permalink
+ - string slug
  - string body
  - boolean is\_public
  - string url

@@ -71,7 +71,7 @@ spec = withApp $ do
 
         let themeDir'     = "test/static/lua/" </> themeDir
             urlRenderer _ = "nop"
-            currPlink     = (textPagePermalink tmpPage1)
+            currPlink     = (textPageSlug tmpPage1)
             lextra        = LuaExtra themeDir' currPlink (runDBIO yesod)
                                      outputBuffer urlRenderer
 

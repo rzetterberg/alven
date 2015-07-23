@@ -88,7 +88,7 @@ def step_impl(context):
 def step_impl(context, slug):
     curs = context.db.cursor()
 
-    curs.execute("DELETE FROM text_page WHERE permalink = '%s';" % slug)
+    curs.execute("DELETE FROM text_page WHERE slug = '%s';" % slug)
 
     context.db.commit()
     curs.close()
@@ -207,7 +207,7 @@ def step_impl(context, visibility, slug):
     fields = context.get_hident_fields()
 
     context.assign_hident(fields, "name", slug)
-    context.assign_hident(fields, "permalink", slug)
+    context.assign_hident(fields, "slug", slug)
     context.assign_hident(fields, "body", "Is this my body?")
 
     if visibility == "public":

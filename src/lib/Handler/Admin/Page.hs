@@ -90,10 +90,10 @@ postPageEditR pageId = do
     pageTitle = MsgEditPage
     formUrl   = PageEditR pageId
     save (PageEdit name plink body public) = do
-        runDB $ update pageId [ TextPageName      =. name
-                              , TextPagePermalink =. plink
-                              , TextPageBody      =. body
-                              , TextPagePublic    =. public
+        runDB $ update pageId [ TextPageName   =. name
+                              , TextPageSlug   =. plink
+                              , TextPageBody   =. body
+                              , TextPagePublic =. public
                               ]
         
         setAlertI Success MsgPageUpdated
@@ -200,10 +200,10 @@ postPageRemoveR pageId = do
 Partial data of a 'TextPage' to be used in forms
 -}
 data PageEdit = PageEdit
-    { pageEditName      :: Text
-    , pageEditPermalink :: Text
-    , pageEditBody      :: Markdown
-    , pageEditPublic    :: Bool
+    { pageEditName   :: Text
+    , pageEditSlug   :: Text
+    , pageEditBody   :: Markdown
+    , pageEditPublic :: Bool
     } deriving (Show)
 
 {-|
@@ -235,9 +235,9 @@ pageForm :: Maybe Text     -- ^ Name
          -> Maybe Markdown -- ^ Body
          -> Maybe Bool     -- ^ Is the page public?
          -> Form PageEdit
-pageForm nameM linkM bodyM publicM = Layout.renderForm $ PageEdit
+pageForm nameM slugM bodyM publicM = Layout.renderForm $ PageEdit
     <$> areq textField (bfs MsgName) nameM
-    <*> areq textField (bfs MsgPermalink) linkM
+    <*> areq textField (bfs MsgSlug) slugM
     <*> areq markdownField markdownSettings bodyM
     <*> areq Layout.bs3BoolField (bfs MsgIsPublic) publicM
     <*  bootstrapSubmit (BootstrapSubmit MsgSave "btn-success" [])
