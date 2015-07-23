@@ -25,7 +25,7 @@ This function retrieves the page that the user is currently visiting. The core
 handles the routing and selects the current page from the database.
 
 A `table` that represents the current page is returned, or `nil` if no page was
-found or if the requested page is private.
+found or if the requested page was private.
 
 **<a name="get_pages"></a> [Page] get\_pages(void)**
 
