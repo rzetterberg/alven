@@ -50,3 +50,4 @@ It consists of the following fields:
  - string body
  - boolean is\_public
  - string url
+ - boolean is_\active

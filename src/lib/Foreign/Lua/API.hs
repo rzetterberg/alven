@@ -31,11 +31,11 @@ accessed in Lua such as:
 -}
 getExports :: [LuaAPIExport]
 getExports 
-    = [ Exists "output"           (1, 0) output
-      , Exists "get_theme_url"    (1, 0) getThemeURL
-      , Exists "get_current_page" (1, 0) getCurrentPage
-      , Exists "get_pages"        (1, 0) getPages
-      , Exists "read_theme_file"  (1, 0) readThemeFile
+    = [ Exists "output"           (0, 1) output
+      , Exists "get_theme_url"    (0, 1) getThemeURL
+      , Exists "get_current_page" (0, 1) getCurrentPage
+      , Exists "get_pages"        (0, 1) getPages
+      , Exists "read_theme_file"  (0, 1) readThemeFile
       ]
 
 --------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ textPageToLua :: LuaExtra
               -> TextPage
               -> IO ()
 textPageToLua LuaExtra{..} lstate TextPage{..} = do
-    Lua.createtable lstate 0 3
+    Lua.createtable lstate 0 6
 
     Lua.pushstring lstate (T.unpack textPageName)
     Lua.setfield lstate (-2) "name"
@@ -169,3 +169,6 @@ textPageToLua LuaExtra{..} lstate TextPage{..} = do
 
     Lua.pushstring lstate (T.unpack absPageURL)
     Lua.setfield lstate (-2) "url"
+
+    Lua.pushboolean lstate (textPageSlug == slug)
+    Lua.setfield lstate (-2) "is_active"
