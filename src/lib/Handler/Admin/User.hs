@@ -84,17 +84,14 @@ postUserEditR userId = do
         setTitleI MsgEditUser
         $(widgetFile "blocks/admin/user_edit")
   where
-    save (UserEdit _ passM admin) = do
-        passChange <- case passM of
-            Nothing -> return []
+    save (UserEdit _ passM) = do
+        case passM of
+            Nothing -> return ()
             Just p  -> if null p
-                then return []
+                then return ()
                 else do
                     spass <- liftIO $ Auth.saltPass p
-                    return [UserPassword =. (Just spass)]
-
-        runDB $ update userId $
-            [UserAdmin =. admin] ++ passChange
+                    runDB $ update userId [UserPassword =. (Just spass)]
 
         setAlertI Success MsgUserUpdated
         redirect UserListFirstR
@@ -137,11 +134,11 @@ postUserCreateR = do
         setTitleI MsgCreateUser
         $(widgetFile "blocks/admin/user_create")
   where
-    save (UserCreate email admin) = do
+    save (UserCreate email) = do
         master <- getYesod
         vkey   <- liftIO $ Auth.randomKey master
         render <- getUrlRender
-        newUID <- runDB $ insert $ User email Nothing (Just vkey) False admin
+        newUID <- runDB $ insert $ User email Nothing (Just vkey) False 
 
         let verUrl = render $ AuthR $ PluginR "email" ["verify", (toPathPiece newUID), vkey]
 
@@ -189,7 +186,6 @@ Partial data of a 'User' to be used in forms when editing a user.
 data UserEdit = UserEdit
     { userEditEmail    :: Text
     , userEditPassword :: (Maybe Text)
-    , userEditAdmin    :: Bool
     } deriving Show
 
 {-|
@@ -199,7 +195,6 @@ choose page is sent to the users email.
 -}
 data UserCreate = UserCreate
     { userCreateEmail :: Text
-    , userCreateAdmin :: Bool
     } deriving Show
 
 {-|
@@ -210,11 +205,9 @@ userEditForm :: User -> Form UserEdit
 userEditForm user = Layout.renderForm $ UserEdit
     <$> areq Layout.bs3StaticTextField (bfs MsgEmail) emailM
     <*> aopt passwordConfirmField (bfs MsgNewPassword) Nothing
-    <*> areq Layout.bs3BoolField (bfs MsgIsAdmin) adminM
     <*  bootstrapSubmit (BootstrapSubmit MsgSave "btn-success" [])
   where
     emailM = Just (userEmail user)
-    adminM = Just (userAdmin user)
 
 {-|
 Provides a form for editable data of a new 'User'. Can only be used when
@@ -223,7 +216,6 @@ creating a new user.
 userCreateForm :: Form UserCreate
 userCreateForm = Layout.renderForm $ UserCreate
     <$> areq emailField (bfs MsgEmail) Nothing
-    <*> areq Layout.bs3BoolField (bfs MsgIsAdmin) Nothing
     <*  bootstrapSubmit (BootstrapSubmit MsgSave "btn-success" [])
 
 {-|

@@ -3,7 +3,6 @@ User
     password Text Maybe
     verkey Text Maybe
     verified Bool
-    admin Bool
     UniqueUser email
     deriving Typeable
 

@@ -18,11 +18,3 @@
             _{MsgYes}
         $else
             _{MsgNo}
-    <tr>
-      <td>  
-        <strong>_{MsgIsAdmin}
-      <td>
-        $if (userAdmin user)
-            _{MsgYes}
-        $else
-            _{MsgNo}

@@ -160,7 +160,7 @@ instance YesodAuthEmail App where
     type AuthEmailId App = UserId
 
     addUnverified email verkey = runDB $ insert $ 
-        User email Nothing (Just verkey) False False
+        User email Nothing (Just verkey) False
 
     sendVerifyEmail _ _ vurl = liftIO $ do
         putStrLn "================="
