@@ -276,10 +276,14 @@ $newline never
                 <button type="submit" .btn .btn-success>
                     _{Msg.LoginViaEmail}
                 &nbsp;
-                <a href="@{tm registerR}" .btn .btn-default>
-                    _{Msg.RegisterLong}
                 <a href="@{tm forgotPasswordR}" .btn .btn-default>
                     _{Msg.PasswordResetTitle}
+        $if showRegister
+            <tr>
+                <th>
+                <td>
+                    <a href="@{tm registerR}" .btn .btn-default>
+                        _{Msg.RegisterLong}
 |]
   where
     dispatch "GET" ["register"] = getRegisterR >>= sendResponse
@@ -294,6 +298,11 @@ $newline never
     dispatch "GET" ["set-password"] = getPasswordR >>= sendResponse
     dispatch "POST" ["set-password"] = postPasswordR >>= sendResponse
     dispatch _ _ = notFound
+#if DEVELOPMENT
+    showRegister = True
+#else
+    showRegister = False
+#endif
 
 getRegisterR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) Html
 getRegisterR = registerHandler
