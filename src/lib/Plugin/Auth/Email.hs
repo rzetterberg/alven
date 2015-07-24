@@ -278,6 +278,8 @@ $newline never
                 &nbsp;
                 <a href="@{tm registerR}" .btn .btn-default>
                     _{Msg.RegisterLong}
+                <a href="@{tm forgotPasswordR}" .btn .btn-default>
+                    _{Msg.PasswordResetTitle}
 |]
   where
     dispatch "GET" ["register"] = getRegisterR >>= sendResponse
@@ -380,15 +382,15 @@ $newline never
 <p>_{Msg.PasswordResetPrompt}
 <form method="post" action="@{tp forgotPasswordR}">
     <table>
-        <th>
+        <tr>
             <th>_{Msg.ProvideIdentifier}
             <td>
                 <input type=text name="email" autofocus>
-        <th>
+        <tr>
             <th>
             <td>
                 <button type="submit" .btn .btn-success>_{Msg.SendPasswordResetEmail}
-        |]
+|]
 
 postForgotPasswordR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) TypedContent
 postForgotPasswordR = registerHelper True forgotPasswordR
