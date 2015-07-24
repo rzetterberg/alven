@@ -153,8 +153,8 @@ def reset_db(context):
 
     curs.execute(
         "INSERT INTO public.user " +
-        "(email, password, verkey, verified, admin) " +
-        "VALUES ('%s', '%s', '', true, true);" % user_data
+        "(email, password, verkey, verified) " +
+        "VALUES ('%s', '%s', '', true);" % user_data
     )
 
     context.db.commit()

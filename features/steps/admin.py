@@ -154,7 +154,6 @@ def step_impl(context, email):
     fields = context.get_hident_fields()
 
     context.assign_hident(fields, "email", email)
-    context.assign_hident(fields, "is_admin", ["no"])
 
     b.submit()
 

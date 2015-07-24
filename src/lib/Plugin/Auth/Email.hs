@@ -261,29 +261,35 @@ authEmail =
         [whamlet|
 $newline never
 <form method="post" action="@{tm loginR}">
-    <table>
-        <tr>
-            <th>_{Msg.Email}
-            <td>
-                <input type="email" name="email" required>
-        <tr>
-            <th>_{Msg.Password}
-            <td>
-                <input type="password" name="password" required>
-        <tr>
-            <th>
-            <td>
-                <button type="submit" .btn .btn-success>
-                    _{Msg.LoginViaEmail}
-                &nbsp;
-                <a href="@{tm forgotPasswordR}" .btn .btn-default>
-                    _{Msg.PasswordResetTitle}
-        $if showRegister
-            <tr>
-                <th>
-                <td>
-                    <a href="@{tm registerR}" .btn .btn-default>
-                        _{Msg.RegisterLong}
+  <table>
+    <tr>
+      <th>_{Msg.Email}
+      <td>
+        <input type="email" name="email" required>
+    <tr>
+      <th>_{Msg.Password}
+      <td>
+        <input type="password" name="password" required>
+    <tr>
+      <th>
+      <td>
+        <button type="submit" .btn .btn-success>
+          _{Msg.LoginViaEmail}
+        &nbsp;
+        <a href="@{tm forgotPasswordR}" .btn .btn-default>
+          _{Msg.PasswordResetTitle}
+    $if showRegister
+      <tr>
+        <th>
+        <td>
+          <div .alert .alert-danger>
+            <p>
+              <strong>Development feature 
+            <p>
+              This feature is only active in development builds
+            <p>
+              <a href="@{tm registerR}" .btn .btn-danger>
+                _{Msg.RegisterLong}
 |]
   where
     dispatch "GET" ["register"] = getRegisterR >>= sendResponse
@@ -305,7 +311,11 @@ $newline never
 #endif
 
 getRegisterR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) Html
+#if DEVELOPMENT
 getRegisterR = registerHandler
+#else
+getRegisterR = redirect loginR
+#endif
 
 -- | Default implementation of 'registerHandler'.
 --
@@ -319,16 +329,16 @@ defaultRegisterHandler = do
 $newline never
 <p>_{Msg.EnterEmail}
 <form method="post" action="@{tp registerR}">
-    <table>
-        <tr>
-            <th>_{Msg.Email}:
-            <td>
-                <input type="email" name="email" autofocus>
-        <tr>
-            <th>
-            <td>
-                <button type="submit" .btn .btn-success>_{Msg.Register}
-        |]
+  <table>
+    <tr>
+      <th>_{Msg.Email}:
+      <td>
+        <input type="email" name="email" autofocus>
+    <tr>
+      <th>
+      <td>
+        <button type="submit" .btn .btn-success>_{Msg.Register}
+|]
 
 registerHelper :: YesodAuthEmail master
                => Bool -- ^ allow usernames?
@@ -373,7 +383,11 @@ registerHelper allowUsername dest = do
                     lift $ confirmationEmailSentResponse identifier
 
 postRegisterR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) TypedContent
+#if DEVELOPMENT
 postRegisterR = registerHelper False registerR
+#else
+postRegisterR = redirect loginR
+#endif
 
 getForgotPasswordR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) Html
 getForgotPasswordR = forgotPasswordHandler
@@ -390,15 +404,15 @@ defaultForgotPasswordHandler = do
 $newline never
 <p>_{Msg.PasswordResetPrompt}
 <form method="post" action="@{tp forgotPasswordR}">
-    <table>
-        <tr>
-            <th>_{Msg.ProvideIdentifier}
-            <td>
-                <input type=text name="email" autofocus>
-        <tr>
-            <th>
-            <td>
-                <button type="submit" .btn .btn-success>_{Msg.SendPasswordResetEmail}
+  <table>
+    <tr>
+      <th>_{Msg.ProvideIdentifier}
+      <td>
+        <input type=text name="email" autofocus>
+    <tr>
+      <th>
+      <td>
+        <button type="submit" .btn .btn-success>_{Msg.SendPasswordResetEmail}
 |]
 
 postForgotPasswordR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) TypedContent
@@ -494,24 +508,24 @@ defaultSetPasswordHandler needOld = do
 $newline never
 <h3>_{Msg.SetPass}
 <form method="post" action="@{tp setpassR}">
-    <table>
-        $if needOld
-            <tr>
-                <th>Current Password
-                <td>
-                    <input type="password" name="current" autofocus>
-        <tr>
-            <th>_{Msg.NewPass}
-            <td>
-                <input type="password" name="new" :not needOld:autofocus>
-        <tr>
-            <th>_{Msg.ConfirmPass}
-            <td>
-                <input type="password" name="confirm">
-        <tr>
-            <th>
-            <td>
-                <button type="submit" .btn .btn-success>_{Msg.SetPassTitle}
+  <table>
+    $if needOld
+      <tr>
+        <th>Current Password
+        <td>
+          <input type="password" name="current" autofocus>
+    <tr>
+      <th>_{Msg.NewPass}
+      <td>
+        <input type="password" name="new" :not needOld:autofocus>
+    <tr>
+      <th>_{Msg.ConfirmPass}
+      <td>
+        <input type="password" name="confirm">
+    <tr>
+      <th>
+      <td>
+        <button type="submit" .btn .btn-success>_{Msg.SetPassTitle}
 |]
 
 postPasswordR :: YesodAuthEmail master => HandlerT Auth (HandlerT master IO) TypedContent
