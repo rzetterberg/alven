@@ -13,7 +13,7 @@ def get_page_row(table, slug):
 
     for row in rows:
         cols      = row.find_all("td")
-        view_link = cols[2].find("a")
+        view_link = cols[3].find("a")
         view_url  = view_link["href"]
         url_parts = view_url.split("/")
         page_slug = url_parts[len(url_parts) - 1]
@@ -227,7 +227,7 @@ def step_impl(context, slug):
     table       = soup.find("table")
     row         = get_page_row(table, slug)
     cols        = row.find_all("td")
-    remove_link = cols[4].find("form")
+    remove_link = cols[5].find("form")
     remove_url  = remove_link["action"]
 
     for form in b.forms():

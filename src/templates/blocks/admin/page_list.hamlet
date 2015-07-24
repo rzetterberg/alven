@@ -1,8 +1,8 @@
 <h2>_{MsgPages}
 
 <p>
-    <a ."btn btn-success" href=@{PageCreateR}>
-      _{MsgNewPage}
+  <a ."btn btn-success" href=@{PageCreateR}>
+    _{MsgNewPage}
 
 <hr>
 
@@ -13,7 +13,8 @@ $else
     <thead>
       <tr>
         <th ."col-lg-1 visible-lg visible-md">_{MsgId}
-        <th ."col-lg-8 col-xs-6">_{MsgName}
+        <th ."col-lg-7 col-xs-4">_{MsgName}
+        <th ."col-lg-1 col-xs-2">_{MsgIsPublic}
         <th ."col-lg-1 col-xs-2">
         <th ."col-lg-1 col-xs-2">
         <th ."col-lg-1 col-xs-2">
@@ -22,6 +23,11 @@ $else
         <tr>
           <td ."visible-lg visible-md">#{fromSqlKey itemId}
           <td>#{textPageName item}
+          <td>
+            $if (textPagePublic item)
+              <span class="label label-success">_{MsgYes}
+            $else
+              <span class="label label-danger">_{MsgNo}
           <td>
             <a ."btn btn-default btn-block" href=@{PageViewR (textPageSlug item)}>
               _{MsgView}
