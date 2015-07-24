@@ -35,9 +35,8 @@ $else
             <a ."btn btn-info btn-block" href=@{PageEditR itemId}>
               _{MsgEdit}
           <td>
-            $if itemId /= firstPageId
-              <form method=post action=@{PageRemoveConfirmR itemId}>
-                <input type="submit" ."btn btn-danger btn-block" value="_{MsgRemove}">
+            <form method=post action=@{PageRemoveConfirmR itemId}>
+              <input type="submit" ."btn btn-danger btn-block" value="_{MsgRemove}">
 
 <nav>
   <ul class="pager">
