@@ -25,9 +25,9 @@ spec = withApp $ do
                 [] -> return ()
                 _  -> liftIO $ assertFailure "invalid amount of users retrieved"
   where
-    tmpUser1 = User "tester1@test.com" Nothing Nothing False False
-    tmpUser2 = User "tester2@test.com" Nothing Nothing False False
-    tmpUser3 = User "tester3@test.com" Nothing Nothing False False
-    tmpUser4 = User "tester4@test.com" Nothing Nothing False False
+    tmpUser1 = User "tester1@test.com" Nothing Nothing False 
+    tmpUser2 = User "tester2@test.com" Nothing Nothing False
+    tmpUser3 = User "tester3@test.com" Nothing Nothing False
+    tmpUser4 = User "tester4@test.com" Nothing Nothing False
     tmpUsers = [tmpUser1, tmpUser2, tmpUser3, tmpUser4]
     addAll   = runDB $ forM_ tmpUsers (void . insert)
