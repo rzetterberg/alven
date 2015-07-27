@@ -7,3 +7,5 @@ RUN pip install BeautifulSoup4
 RUN pip install PyYaml
 
 WORKDIR /opt/alven
+
+CMD ["behave"]
